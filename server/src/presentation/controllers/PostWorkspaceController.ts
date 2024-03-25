@@ -14,7 +14,7 @@ const requestBodySchema = z.object({
   tag: z.string().min(1),
 });
 
-export default class AddWorkspaceController implements Controller {
+export default class PostWorkspaceController implements Controller {
   private addWorkspace: AddWorkspace;
 
   constructor(addWorkspace: AddWorkspace) {
