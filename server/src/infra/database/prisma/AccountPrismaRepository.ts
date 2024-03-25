@@ -12,6 +12,10 @@ import {
   ILoadAccountByEmailRepository,
   ILoadAccountByEmailRepositoryOutput,
 } from 'infra/protocols/repositories/ILoadAccountByEmailRepository';
+import {
+  ILoadAccountByToken,
+  ILoadAccountByTokenOutput,
+} from 'infra/protocols/repositories/ILoadAccountByToken';
 import { IUpdateAccessTokenRepository } from 'infra/protocols/repositories/IUpdateAccessTokenRepository';
 
 export default class AccountPrismaRepository
@@ -19,7 +23,8 @@ export default class AccountPrismaRepository
     IAddAccountRepository,
     ICheckAccountByEmailRepository,
     ILoadAccountByEmailRepository,
-    IUpdateAccessTokenRepository
+    IUpdateAccessTokenRepository,
+    ILoadAccountByToken
 {
   async add(
     user: IAddAccountRepositoryInput,
@@ -41,7 +46,14 @@ export default class AccountPrismaRepository
     return await prisma.user.findFirst({ where: { email } });
   }
 
-  async updateAccessToken(id: string, token: string): Promise<void> {
+  async loadByToken(token: string): Promise<ILoadAccountByTokenOutput> {
+    const account = await prisma.user.findFirst({ where: { token } });
+    if (!account) return null;
+
+    return { id: account.id };
+  }
+
+  async updateAccessToken(id: string, token: string | null): Promise<void> {
     await prisma.user.update({ where: { id }, data: { token } });
   }
 }

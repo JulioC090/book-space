@@ -1,6 +1,6 @@
 import { IHttpResponse } from 'presentation/protocols/Http';
 
-export const ok = (data: unknown): IHttpResponse => ({
+export const ok = (data: unknown = ''): IHttpResponse => ({
   status: 200,
   body: data,
 });
