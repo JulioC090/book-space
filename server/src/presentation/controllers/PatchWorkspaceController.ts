@@ -35,8 +35,8 @@ export default class PatchWorkspaceController implements Controller {
     if (!validatedRequestBody.success)
       return badRequest(validatedRequestBody.error.issues);
 
-    if (Object.keys(validatedRequestBody).length === 0)
-      return badRequest('Invalid body');
+    if (Object.keys(validatedRequestBody.data).length === 0)
+      return badRequest({ error: 'Invalid body' });
 
     const { accountId } = request as { accountId: string };
 
