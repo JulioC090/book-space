@@ -22,7 +22,10 @@ export default class DeleteWorkspaceController implements Controller {
     if (!validatedRequestParams.success)
       return badRequest(validatedRequestParams.error.issues);
 
+    const { accountId } = request as { accountId: string };
+
     const response = await this.deleteWorkspace.delete(
+      accountId,
       validatedRequestParams.data.workspaceId,
     );
 

@@ -7,7 +7,7 @@ export default class DeleteWorkspace {
     this.deleteWorkspaceRepository = deleteWorkspaceRepository;
   }
 
-  async delete(workspaceId: string): Promise<boolean> {
-    return this.deleteWorkspaceRepository.delete(workspaceId);
+  async delete(userId: string, workspaceId: string): Promise<boolean> {
+    return this.deleteWorkspaceRepository.delete(userId, workspaceId);
   }
 }

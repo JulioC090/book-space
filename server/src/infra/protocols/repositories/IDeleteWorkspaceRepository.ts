@@ -1,3 +1,3 @@
 export default interface IDeleteWorkspaceRepository {
-  delete(workspaceId: string): Promise<boolean>;
+  delete(userId: string, workspaceId: string): Promise<boolean>;
 }

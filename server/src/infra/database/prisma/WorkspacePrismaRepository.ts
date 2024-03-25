@@ -22,9 +22,9 @@ export default class WorkspacePrimaRepository
     return !!result;
   }
 
-  async delete(workspaceId: string): Promise<boolean> {
+  async delete(userId: string, workspaceId: string): Promise<boolean> {
     const deletedUsers = await prisma.workspace.deleteMany({
-      where: { id: workspaceId },
+      where: { id: workspaceId, ownerId: userId },
     });
 
     return deletedUsers.count > 0;
