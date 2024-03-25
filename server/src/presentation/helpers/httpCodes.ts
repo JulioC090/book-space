@@ -13,3 +13,5 @@ export const badRequest = (error: unknown): IHttpResponse => ({
 });
 
 export const unauthorized = (): IHttpResponse => ({ status: 401 });
+
+export const internalServerError = (): IHttpResponse => ({ status: 500 });
