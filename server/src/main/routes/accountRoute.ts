@@ -2,7 +2,7 @@ import AddAccount from 'domain/usecases/AddAccount';
 import Authentication from 'domain/usecases/Authentication';
 import Logout from 'domain/usecases/Logout';
 import { FastifyInstance } from 'fastify';
-import { BcryptAdapter } from 'infra/cryptography/BcryptAdapter';
+import BcryptAdapter from 'infra/cryptography/BcryptAdapter';
 import JWTAdapter from 'infra/cryptography/JWTAdapter';
 import AccountPrismaRepository from 'infra/database/prisma/AccountPrismaRepository';
 import { adaptMiddleware } from 'main/adapters/fastifyMiddlewareAdapter';

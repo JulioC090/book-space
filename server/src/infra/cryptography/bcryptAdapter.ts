@@ -2,7 +2,7 @@ import bcrypt from 'bcrypt';
 import { IHashComparer } from 'infra/protocols/cryptography/IHashComparer';
 import { IHasher } from 'infra/protocols/cryptography/IHasher';
 
-export class BcryptAdapter implements IHasher, IHashComparer {
+export default class BcryptAdapter implements IHasher, IHashComparer {
   private readonly salt: number;
 
   constructor(salt: number) {
