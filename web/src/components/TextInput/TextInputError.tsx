@@ -1,5 +1,5 @@
 export interface TextInputErrorProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
 }
 
 export default function TextInputError({ children }: TextInputErrorProps) {
