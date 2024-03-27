@@ -6,4 +6,9 @@ body {
   background: #09090b;
   color: #fafafa;
   min-height: 100dvh;
+  inset: 0px;
+}
+
+.default-focus {
+  @apply focus:outline-none focus:ring-2 ring-[#18A15D] ring-offset-2 ring-offset-zinc-950;
 }
