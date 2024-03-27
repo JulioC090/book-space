@@ -50,7 +50,7 @@ export default function LoginPage() {
         <Button className="mt-8 w-full">Cadastrar-se</Button>
       </form>
       <p className="text-sm mt-4">
-        Já possuí uma conta?{' '}
+        Você já possui uma conta?{' '}
         <Link
           href={'/login'}
           className="text-green-haze-600 default-focus rounded hover:text-green-500 focus:text-green-500"
