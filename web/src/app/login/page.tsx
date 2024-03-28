@@ -14,7 +14,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 interface ILoginFields {
   email: string;
   password: string;
-  server: unknown;
 }
 
 export default function LoginPage() {
@@ -23,13 +22,23 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
     setError,
+    clearErrors,
   } = useForm<ILoginFields>();
   const { signIn } = useContext(AuthContext);
 
   const handleLogin: SubmitHandler<ILoginFields> = async (data) => {
     const response = await signIn(data);
     if (response === false) {
-      setError('server', { type: 'user-password-incorrect' });
+      const formError = { type: 'server' };
+      setError('email', formError);
+      setError('password', formError);
+    }
+  };
+
+  const clearServerError = () => {
+    if (errors.email?.type === 'server') {
+      clearErrors('email');
+      clearErrors('password');
     }
   };
 
@@ -44,6 +53,7 @@ export default function LoginPage() {
       <h1 className="text-2xl font-bold mb-12">Entrar no Book Space</h1>
       <form
         onSubmit={handleSubmit(handleLogin)}
+        onChange={clearServerError}
         className="flex flex-col items-center max-w-md w-full gap-3 p-4"
       >
         <TextInput.Root>
@@ -84,7 +94,7 @@ export default function LoginPage() {
             {errors.password?.type === 'required' && 'A senha é obrigatória'}
           </TextInput.Error>
         </TextInput.Root>
-        {errors.server?.type === 'user-password-incorrect' && (
+        {errors.email?.type === 'server' && (
           <div className="bg-red-300 py-3 px-4 w-full text-sm text-red-700 border-red-400 border-2 font-bold rounded">
             Usuário ou senha incorretos
           </div>
