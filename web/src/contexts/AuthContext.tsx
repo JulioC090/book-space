@@ -33,7 +33,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function signIn(user: ISignInGatewayInput) {
     const response = await authGateway.signin(user);
 
-    if (response.status === 401) return false;
+    if (response.status !== 200) return false;
 
     Cookie.set('auth_token', response.body!.token);
     router.push('/');
