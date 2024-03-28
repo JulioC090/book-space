@@ -3,10 +3,12 @@
 import Button from '@/components/Button';
 import Center from '@/components/Center';
 import { TextInput } from '@/components/TextInput';
+import { AuthContext } from '@/contexts/AuthContext';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ILoginFields {
@@ -22,10 +24,13 @@ export default function LoginPage() {
     formState: { errors },
     setError,
   } = useForm<ILoginFields>();
+  const { signIn } = useContext(AuthContext);
 
   const handleLogin: SubmitHandler<ILoginFields> = async (data) => {
-    console.log(data);
-    setError('server', { type: 'user-password-incorrect' });
+    const response = await signIn(data);
+    if (response === false) {
+      setError('server', { type: 'user-password-incorrect' });
+    }
   };
 
   return (

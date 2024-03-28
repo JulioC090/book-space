@@ -3,10 +3,15 @@
 import Button from '@/components/Button';
 import Center from '@/components/Center';
 import { TextInput } from '@/components/TextInput';
+import { AuthContext } from '@/contexts/AuthContext';
+import AuthGateway from '@/infra/gateways/AuthGateway';
+import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
+import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple, User } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ISignUpFields {
@@ -15,6 +20,13 @@ interface ISignUpFields {
   password: string;
 }
 
+const urlReplaceParams = new UrlReplaceParams();
+const httpClient = new AxiosHttpClient(
+  process.env.NEXT_PUBLIC_API_URL || '',
+  urlReplaceParams,
+);
+const signupGateway = new AuthGateway(httpClient);
+
 export default function SignUpPage() {
   const {
     register,
@@ -22,10 +34,15 @@ export default function SignUpPage() {
     formState: { errors },
     setError,
   } = useForm<ISignUpFields>();
+  const { signIn } = useContext(AuthContext);
 
   const handleSignUp: SubmitHandler<ISignUpFields> = async (data) => {
-    console.log(data);
-    setError('email', { type: 'email-exists' });
+    const response = await signupGateway.signup(data);
+    if (!response) {
+      setError('email', { type: 'email-exists' });
+      return;
+    }
+    await signIn(data);
   };
 
   return (
