@@ -40,6 +40,7 @@ export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
       >
         <Modal
           title="Editar Workspace"
+          hasForm
           trigger={
             <FloatingMenu.Item
               icon={<Notebook />}

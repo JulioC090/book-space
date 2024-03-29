@@ -41,6 +41,8 @@ export default function WorkspaceForm({
     let response: boolean = false;
     if (!workspace) {
       response = await workspaceGateway.add(data);
+    } else {
+      response = await workspaceGateway.update(workspace.id, data);
     }
 
     if (!response) {
