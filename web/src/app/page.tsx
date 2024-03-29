@@ -22,6 +22,7 @@ export default function Home() {
         <Modal
           title="Adicionar Workspace"
           trigger={<Button>Adicionar Workspace</Button>}
+          hasForm
         >
           <WorkspaceForm />
         </Modal>

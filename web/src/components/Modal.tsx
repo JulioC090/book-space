@@ -1,16 +1,28 @@
+'use client';
+
 import { IconButton } from '@/components/IconButton';
 import { X } from '@phosphor-icons/react/dist/ssr';
 import * as Dialog from '@radix-ui/react-dialog';
+import { Slot } from '@radix-ui/react-slot';
+import { useState } from 'react';
 
 export interface ModalProps {
   title: string;
   trigger: React.ReactNode;
   children: React.ReactNode;
+  hasForm?: boolean;
 }
 
-export default function Modal({ title, trigger, children }: ModalProps) {
+export default function Modal({
+  title,
+  trigger,
+  hasForm,
+  children,
+}: ModalProps) {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <Dialog.Root>
+    <Dialog.Root open={open} onOpenChange={setOpen}>
       <Dialog.Trigger asChild>{trigger}</Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="w-screen h-screen bg-black/80 fixed inset-0 z-40" />
@@ -23,7 +35,12 @@ export default function Modal({ title, trigger, children }: ModalProps) {
           <Dialog.Title className="text-2xl font-bold text-center mb-4">
             {title}
           </Dialog.Title>
-          {children}
+
+          {hasForm ? (
+            <Slot onSubmit={() => setOpen(false)}>{children}</Slot>
+          ) : (
+            <>{children}</>
+          )}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

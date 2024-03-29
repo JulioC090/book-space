@@ -1,11 +1,15 @@
 import Button from '@/components/Button';
 import { TextInput } from '@/components/TextInput';
+import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
+import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
+import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { Workspace } from '@/models/Workspace';
 import { BookmarkSimple, Notebook } from '@phosphor-icons/react/dist/ssr';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export interface WorkspaceFormProps {
   workspace?: Workspace;
+  onSubmit?(): void;
 }
 
 interface IWorkspaceFields {
@@ -13,17 +17,40 @@ interface IWorkspaceFields {
   tag: string;
 }
 
-export default function WorkspaceForm({ workspace }: WorkspaceFormProps) {
+const urlReplaceParams = new UrlReplaceParams();
+const axiosHttpClient = new AxiosHttpClient(
+  process.env.NEXT_PUBLIC_API_URL || '',
+  urlReplaceParams,
+);
+const workspaceGateway = new WorkspaceGateway(axiosHttpClient);
+
+export default function WorkspaceForm({
+  workspace,
+  onSubmit,
+}: WorkspaceFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<IWorkspaceFields>();
 
   const handleWorkspaceSubmit: SubmitHandler<IWorkspaceFields> = async (
     data,
   ) => {
-    console.log(data);
+    let response: boolean = false;
+    if (!workspace) {
+      response = await workspaceGateway.add(data);
+    }
+
+    if (!response) {
+      const formError = { type: 'server' };
+      setError('name', formError);
+      setError('tag', formError);
+      return;
+    }
+
+    onSubmit && onSubmit();
   };
 
   return (
@@ -66,6 +93,12 @@ export default function WorkspaceForm({ workspace }: WorkspaceFormProps) {
             'A tag precisa ter pelo menos dois caracteres'}
         </TextInput.Error>
       </TextInput.Root>
+
+      {errors.name?.type === 'server' && (
+        <div className="bg-red-300 py-3 px-4 w-full text-sm text-red-700 border-red-400 border-2 font-bold rounded">
+          Lamentamos, mas parece que ocorreu algum erro no servidor
+        </div>
+      )}
 
       <Button className="mt-8 w-full">
         {!workspace ? 'Adicionar Workspace' : 'Editar Workspace'}
