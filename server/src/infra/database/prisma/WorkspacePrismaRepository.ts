@@ -2,6 +2,7 @@ import Workspace from 'domain/models/Workspace';
 import { prisma } from 'infra/database/prisma/prismaClient';
 import IAddWorkspaceRepository, {
   IAddWorkspaceRepositoryInput,
+  IAddWorkspaceRepositoryOutput,
 } from 'infra/protocols/repositories/IAddWorkspaceRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
 import ILoadWorkspacesRepository, {
@@ -20,9 +21,11 @@ export default class WorkspacePrimaRepository
     return await prisma.workspace.findMany({ where: { ownerId: userId } });
   }
 
-  async add(workspace: IAddWorkspaceRepositoryInput): Promise<boolean> {
+  async add(
+    workspace: IAddWorkspaceRepositoryInput,
+  ): Promise<IAddWorkspaceRepositoryOutput> {
     const result = await prisma.workspace.create({ data: workspace });
-    return !!result;
+    return { workspaceId: result.id };
   }
 
   async update(

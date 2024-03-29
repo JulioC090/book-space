@@ -5,7 +5,10 @@ export const ok = (data: unknown = ''): IHttpResponse => ({
   body: data,
 });
 
-export const created = (): IHttpResponse => ({ status: 201 });
+export const created = (data: unknown = ''): IHttpResponse => ({
+  status: 201,
+  body: data,
+});
 
 export const badRequest = (error: unknown): IHttpResponse => ({
   status: 400,

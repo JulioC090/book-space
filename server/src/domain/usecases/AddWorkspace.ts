@@ -1,5 +1,7 @@
 import Workspace from 'domain/models/Workspace';
-import IAddWorkspaceRepository from 'infra/protocols/repositories/IAddWorkspaceRepository';
+import IAddWorkspaceRepository, {
+  IAddWorkspaceRepositoryOutput,
+} from 'infra/protocols/repositories/IAddWorkspaceRepository';
 
 export default class AddWorkspace {
   private addWorkspaceRepository: IAddWorkspaceRepository;
@@ -8,7 +10,9 @@ export default class AddWorkspace {
     this.addWorkspaceRepository = addWorkspaceRepository;
   }
 
-  async add(workspace: Omit<Workspace, 'id'>): Promise<boolean> {
-    return this.addWorkspaceRepository.add(workspace);
+  async add(
+    workspace: Omit<Workspace, 'id'>,
+  ): Promise<IAddWorkspaceRepositoryOutput> {
+    return await this.addWorkspaceRepository.add(workspace);
   }
 }

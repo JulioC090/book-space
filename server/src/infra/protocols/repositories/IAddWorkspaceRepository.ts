@@ -1,7 +1,7 @@
 import Workspace from 'domain/models/Workspace';
 
 export type IAddWorkspaceRepositoryInput = Omit<Workspace, 'id'>;
-export type IAddWorkspaceRepositoryOutput = boolean;
+export type IAddWorkspaceRepositoryOutput = { workspaceId: string };
 
 export default interface IAddWorkspaceRepository {
   add(

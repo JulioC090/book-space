@@ -33,6 +33,6 @@ export default class PostWorkspaceController implements Controller {
     });
 
     if (!response) return internalServerError();
-    return created();
+    return created(response);
   }
 }
