@@ -9,9 +9,8 @@ import { IHttpRequest, IHttpResponse } from 'presentation/protocols/Http';
 import { z } from 'zod';
 
 const requestBodySchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(8),
-  tag: z.string().min(1),
+  name: z.string().min(2),
+  tag: z.string().min(2),
 });
 
 export default class PostWorkspaceController implements Controller {

@@ -9,9 +9,8 @@ const requestParamsSchema = z.object({
 });
 
 const requestBodySchema = z.object({
-  name: z.string().min(1),
-  description: z.string().min(8),
-  tag: z.string().min(1),
+  name: z.string().min(2),
+  tag: z.string().min(2),
 });
 
 export default class PatchWorkspaceController implements Controller {

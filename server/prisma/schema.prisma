@@ -20,11 +20,10 @@ model User {
 }
 
 model Workspace {
-  id          String @id @default(uuid())
-  ownerId     String
-  name        String
-  description String
-  tag         String
+  id      String @id @default(uuid())
+  ownerId String
+  name    String
+  tag     String
 
   owner User @relation(fields: [ownerId], references: [id])
 
