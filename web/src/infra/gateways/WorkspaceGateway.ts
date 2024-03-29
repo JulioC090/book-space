@@ -1,4 +1,6 @@
-import IAddWorkspaceGateway from '@/infra/protocols/gateways/IAddWorkspaceGateway';
+import IAddWorkspaceGateway, {
+  IAddWorkspaceGatewayOutput,
+} from '@/infra/protocols/gateways/IAddWorkspaceGateway';
 import IDeleteWorkspace from '@/infra/protocols/gateways/IDeleteWorkspaceGateway';
 import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
@@ -26,12 +28,15 @@ export default class WorkspaceGateway
     return response ? response.body! : [];
   }
 
-  async add(workspace: Omit<Workspace, 'id'>): Promise<boolean> {
+  async add(
+    workspace: Omit<Workspace, 'id'>,
+  ): Promise<IAddWorkspaceGatewayOutput> {
     const httpClientResponse = await this.httpClient.post<
-      Omit<Workspace, 'id'>
+      Omit<Workspace, 'id'>,
+      IAddWorkspaceGatewayOutput
     >({ url: '/workspace', body: workspace });
 
-    return httpClientResponse.status === 201;
+    return httpClientResponse.body;
   }
 
   async update(

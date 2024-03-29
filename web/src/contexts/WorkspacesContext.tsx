@@ -44,29 +44,38 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   async function addWorkspace(
     workspace: Omit<Workspace, 'id'>,
   ): Promise<boolean> {
-    if (!(await workspaceGateway.add(workspace))) return false;
+    const response = await workspaceGateway.add(workspace);
+    if (!response) return false;
 
-    const workspaces = await workspaceGateway.load();
-    setWorkspaces(workspaces);
+    setWorkspaces((prevWorkspaces) => [
+      ...prevWorkspaces,
+      { id: response.workspaceId, ...workspace },
+    ]);
     return true;
   }
 
   async function updateWorkspace(
     workspaceId: string,
-    workspace: Omit<Workspace, 'id'>,
+    updatedWorkspace: Omit<Workspace, 'id'>,
   ): Promise<boolean> {
-    if (!(await workspaceGateway.update(workspaceId, workspace))) return false;
+    if (!(await workspaceGateway.update(workspaceId, updatedWorkspace)))
+      return false;
 
-    const workspaces = await workspaceGateway.load();
-    setWorkspaces(workspaces);
+    setWorkspaces((prevWorkspaces) =>
+      prevWorkspaces.map((workspace) => {
+        if (workspace.id !== workspaceId) return workspace;
+        return { id: workspaceId, ...updatedWorkspace };
+      }),
+    );
     return true;
   }
 
   async function deleteWorkspace(workspaceId: string): Promise<boolean> {
     if (!(await workspaceGateway.delete(workspaceId))) return false;
 
-    const workspaces = await workspaceGateway.load();
-    setWorkspaces(workspaces);
+    setWorkspaces((prevWorkspaces) =>
+      prevWorkspaces.filter((workspace) => workspace.id !== workspaceId),
+    );
     return true;
   }
 
