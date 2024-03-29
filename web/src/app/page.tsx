@@ -23,11 +23,18 @@ export default function Home() {
           <WorkspaceForm />
         </Modal>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-8 gap-8">
-        {workspaces.map((workspace) => (
-          <WorkspaceCard key={workspace.id} workspace={workspace} />
-        ))}
-      </div>
+      {workspaces.length === 0 ? (
+        <div className="text-center text-zinc-500 flex-grow flex flex-col justify-center">
+          <p>Nenhum workspace encontrado.</p>
+          <p>Adicione um novo workspace usando o botão acima.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-8 gap-8">
+          {workspaces.map((workspace) => (
+            <WorkspaceCard key={workspace.id} workspace={workspace} />
+          ))}
+        </div>
+      )}
     </Container>
   );
 }

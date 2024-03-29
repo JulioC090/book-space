@@ -34,7 +34,7 @@ export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
       </div>
       <div className="flex flex-col items-center justify-center gap-2">
         <h2 className="text-lg font-semibold">{workspace.name}</h2>
-        <span className="text-gray-500 text-sm">{workspace.tag}</span>
+        <span className="text-zinc-500 text-sm">{workspace.tag}</span>
       </div>
 
       <FloatingMenu.Root
