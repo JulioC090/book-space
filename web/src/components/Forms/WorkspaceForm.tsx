@@ -1,10 +1,9 @@
 import Button from '@/components/Button';
 import { TextInput } from '@/components/TextInput';
-import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
-import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
-import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
+import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { Workspace } from '@/models/Workspace';
 import { BookmarkSimple, Notebook } from '@phosphor-icons/react/dist/ssr';
+import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export interface WorkspaceFormProps {
@@ -17,13 +16,6 @@ interface IWorkspaceFields {
   tag: string;
 }
 
-const urlReplaceParams = new UrlReplaceParams();
-const axiosHttpClient = new AxiosHttpClient(
-  process.env.NEXT_PUBLIC_API_URL || '',
-  urlReplaceParams,
-);
-const workspaceGateway = new WorkspaceGateway(axiosHttpClient);
-
 export default function WorkspaceForm({
   workspace,
   onSubmit,
@@ -34,15 +26,16 @@ export default function WorkspaceForm({
     formState: { errors },
     setError,
   } = useForm<IWorkspaceFields>();
+  const { addWorkspace, updateWorkspace } = useContext(WorkspaceContext);
 
   const handleWorkspaceSubmit: SubmitHandler<IWorkspaceFields> = async (
     data,
   ) => {
     let response: boolean = false;
     if (!workspace) {
-      response = await workspaceGateway.add(data);
+      response = await addWorkspace(data);
     } else {
-      response = await workspaceGateway.update(workspace.id, data);
+      response = await updateWorkspace(workspace.id, data);
     }
 
     if (!response) {

@@ -23,7 +23,7 @@ export interface WorkspaceCardProps {
 export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   return (
     <div className="flex flex-col justify-between items-center gap-8 bg-zinc-900 border-zinc-800 border-2 shadow-sm p-4 pt-8 rounded relative">
-      <div className="bg-green-haze-500 p-8 w-fit rounded font-bold text-xl">
+      <div className="bg-green-haze-500 size-24 p-8 rounded font-bold text-xl flex justify-center items-center">
         {getInitials(workspace.name)}
       </div>
       <div className="flex flex-col items-center justify-center gap-2">

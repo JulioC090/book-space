@@ -1,15 +1,27 @@
 import IAddWorkspaceGateway from '@/infra/protocols/gateways/IAddWorkspaceGateway';
+import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
 import { Workspace } from '@/models/Workspace';
 
 export default class WorkspaceGateway
-  implements IAddWorkspaceGateway, IUpdateWorkspaceGateway
+  implements
+    IAddWorkspaceGateway,
+    IUpdateWorkspaceGateway,
+    ILoadWorkspaceGateway
 {
   private httpClient: IHttpClient;
 
   constructor(httpClient: IHttpClient) {
     this.httpClient = httpClient;
+  }
+
+  async load(): Promise<Array<Workspace>> {
+    const response = await this.httpClient.get<Array<Workspace>>({
+      url: '/workspaces',
+    });
+
+    return response ? response.body! : [];
   }
 
   async add(workspace: Omit<Workspace, 'id'>): Promise<boolean> {

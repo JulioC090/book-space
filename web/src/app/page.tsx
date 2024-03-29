@@ -5,15 +5,11 @@ import Container from '@/components/Container';
 import WorkspaceForm from '@/components/Forms/WorkspaceForm';
 import Modal from '@/components/Modal';
 import WorkspaceCard from '@/components/WorkspaceCard';
+import { WorkspaceContext } from '@/contexts/WorkspacesContext';
+import { useContext } from 'react';
 
 export default function Home() {
-  const workspaces = [
-    { id: '1', name: 'Workspace 1', tag: 'tag 1', acronym: 'W1' },
-    { id: '2', name: 'Workspace de Teste', tag: 'tag 2', acronym: 'W2' },
-    { id: '3', name: 'Workspace', tag: 'tag 3', acronym: 'W3' },
-    { id: '4', name: 'Workspace 4', tag: 'tag 4', acronym: 'W4' },
-    { id: '5', name: 'Workspace 5', tag: 'tag 5', acronym: 'W5' },
-  ];
+  const { workspaces } = useContext(WorkspaceContext);
 
   return (
     <Container>
