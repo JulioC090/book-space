@@ -1,7 +1,10 @@
+'use client';
+
 import { FloatingMenu } from '@/components/FloatingMenu';
 import WorkspaceForm from '@/components/Forms/WorkspaceForm';
 import { IconButton } from '@/components/IconButton';
 import Modal from '@/components/Modal';
+import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { Workspace } from '@/models/Workspace';
 import getInitials from '@/utils/getInitials';
 import {
@@ -15,12 +18,15 @@ import {
   User,
   Users,
 } from '@phosphor-icons/react/dist/ssr';
+import { useContext } from 'react';
 
 export interface WorkspaceCardProps {
   workspace: Workspace;
 }
 
 export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
+  const { deleteWorkspace } = useContext(WorkspaceContext);
+
   return (
     <div className="flex flex-col justify-between items-center gap-8 bg-zinc-900 border-zinc-800 border-2 shadow-sm p-4 pt-8 rounded relative">
       <div className="bg-green-haze-500 size-24 p-8 rounded font-bold text-xl flex justify-center items-center">
@@ -72,7 +78,11 @@ export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
 
         <FloatingMenu.Separator />
 
-        <FloatingMenu.Item icon={<TrashSimple />} label="Excluir Workspace" />
+        <FloatingMenu.Item
+          onSelect={() => deleteWorkspace(workspace.id)}
+          icon={<TrashSimple />}
+          label="Excluir Workspace"
+        />
       </FloatingMenu.Root>
     </div>
   );

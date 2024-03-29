@@ -1,4 +1,5 @@
 import IAddWorkspaceGateway from '@/infra/protocols/gateways/IAddWorkspaceGateway';
+import IDeleteWorkspace from '@/infra/protocols/gateways/IDeleteWorkspaceGateway';
 import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
@@ -8,7 +9,8 @@ export default class WorkspaceGateway
   implements
     IAddWorkspaceGateway,
     IUpdateWorkspaceGateway,
-    ILoadWorkspaceGateway
+    ILoadWorkspaceGateway,
+    IDeleteWorkspace
 {
   private httpClient: IHttpClient;
 
@@ -45,5 +47,14 @@ export default class WorkspaceGateway
     });
 
     return httpClientResponse.status === 200;
+  }
+
+  async delete(workspaceId: string): Promise<boolean> {
+    const response = await this.httpClient.delete({
+      url: '/workspace/:workspaceId',
+      params: { workspaceId },
+    });
+
+    return response.status === 200;
   }
 }

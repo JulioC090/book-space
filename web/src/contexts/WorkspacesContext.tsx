@@ -14,6 +14,7 @@ interface WorkspacesContextType {
     workspaceId: string,
     workspace: Omit<Workspace, 'id'>,
   ): Promise<boolean>;
+  deleteWorkspace(workspaceId: string): Promise<boolean>;
 }
 
 interface WorkspacesProviderProps {
@@ -61,9 +62,17 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
     return true;
   }
 
+  async function deleteWorkspace(workspaceId: string): Promise<boolean> {
+    if (!(await workspaceGateway.delete(workspaceId))) return false;
+
+    const workspaces = await workspaceGateway.load();
+    setWorkspaces(workspaces);
+    return true;
+  }
+
   return (
     <WorkspaceContext.Provider
-      value={{ workspaces, addWorkspace, updateWorkspace }}
+      value={{ workspaces, addWorkspace, updateWorkspace, deleteWorkspace }}
     >
       {children}
     </WorkspaceContext.Provider>
