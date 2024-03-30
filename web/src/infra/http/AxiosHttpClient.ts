@@ -11,8 +11,6 @@ export default class AxiosHttpClient implements IHttpClient {
   private urlReplaceParams: IUrlReplaceParams;
 
   constructor(baseURl: string, urlReplaceParams: IUrlReplaceParams) {
-    const token = Cookie.get('auth_token');
-
     this.urlReplaceParams = urlReplaceParams;
 
     this.axios = axios.create({
@@ -22,6 +20,12 @@ export default class AxiosHttpClient implements IHttpClient {
         return status < 500;
       },
     });
+
+    this.loadToken();
+  }
+
+  loadToken() {
+    const token = Cookie.get('auth_token');
 
     if (token) {
       this.axios.defaults.headers['Authorization'] = `Bearer ${token}`;
@@ -34,6 +38,8 @@ export default class AxiosHttpClient implements IHttpClient {
     const url = params.params
       ? this.urlReplaceParams.replace(params.url, params.params)
       : params.url;
+
+    this.loadToken();
 
     const response = await this.axios.get(url, {
       headers: params.headers,
@@ -50,6 +56,8 @@ export default class AxiosHttpClient implements IHttpClient {
       ? this.urlReplaceParams.replace(params.url, params.params)
       : params.url;
 
+    this.loadToken();
+
     const response = await this.axios.post(url, params.body, {
       headers: params.headers,
       params: params.query,
@@ -64,6 +72,8 @@ export default class AxiosHttpClient implements IHttpClient {
     const url = params.params
       ? this.urlReplaceParams.replace(params.url, params.params)
       : params.url;
+
+    this.loadToken();
 
     const response = await this.axios.put(url, params.body, {
       headers: params.headers,
@@ -80,6 +90,8 @@ export default class AxiosHttpClient implements IHttpClient {
       ? this.urlReplaceParams.replace(params.url, params.params)
       : params.url;
 
+    this.loadToken();
+
     const response = await this.axios.patch(url, params.body, {
       headers: params.headers,
       params: params.query,
@@ -94,6 +106,8 @@ export default class AxiosHttpClient implements IHttpClient {
     const url = params.params
       ? this.urlReplaceParams.replace(params.url, params.params)
       : params.url;
+
+    this.loadToken();
 
     const response = await this.axios.delete(url, {
       headers: params.headers,
