@@ -10,6 +10,7 @@ export type AuthenticationInput = {
 
 export type AuthenticationOutput = {
   token: string;
+  name: string;
 } | null;
 
 export default class Authentication {
@@ -45,6 +46,6 @@ export default class Authentication {
     const token = await this.encrypter.encrypt(account.id);
     await this.updateAccessTokenRepository.updateAccessToken(account.id, token);
 
-    return { token };
+    return { token, name: account.name };
   }
 }
