@@ -11,14 +11,14 @@ export interface SideMenuLayoutProps {
 }
 
 export default function SideMenuLayout({ children }: SideMenuLayoutProps) {
-  const { logout } = useContext(AuthContext);
+  const { userInfo, logout } = useContext(AuthContext);
+
+  if (!userInfo) return;
 
   return (
     <div className="flex flex-col-reverse h-screen sm:h-fit sm:flex-row w-screen">
       <SideMenu.Root>
-        <SideMenu.Header
-          user={{ name: 'Teste da silva', email: 'teste32@email.com' }}
-        />
+        <SideMenu.Header user={userInfo!} />
         <SideMenu.List>
           <SideMenu.LinkItem
             icon={<HouseSimple />}

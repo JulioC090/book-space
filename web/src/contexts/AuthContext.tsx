@@ -5,11 +5,13 @@ import AuthGateway from '@/infra/gateways/AuthGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
 import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
+import { User } from '@/models/User';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { createContext } from 'react';
+import { createContext, useState } from 'react';
 
 interface AuthContextType {
+  userInfo: Omit<User, 'id' | 'password'> | undefined;
   signIn(user: ISignInGatewayInput): Promise<false | undefined>;
   logout(): void;
 }
@@ -29,24 +31,27 @@ const authGateway = new AuthGateway(httpClient);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
+  const [userInfo, setUserInfo] = useState<Omit<User, 'id' | 'password'>>();
 
   async function signIn(user: ISignInGatewayInput) {
     const response = await authGateway.signin(user);
 
     if (response.status !== 200) return false;
 
+    setUserInfo({ email: user.email, name: response.body!.name });
     Cookie.set('auth_token', response.body!.token);
     router.push('/');
   }
 
   async function logout() {
     await authGateway.logout();
+    setUserInfo(undefined);
     Cookie.remove('auth_token');
     router.push('/login');
   }
 
   return (
-    <AuthContext.Provider value={{ signIn, logout }}>
+    <AuthContext.Provider value={{ userInfo, signIn, logout }}>
       {children}
     </AuthContext.Provider>
   );

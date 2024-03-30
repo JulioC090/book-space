@@ -6,6 +6,7 @@ export type ISignInGatewayInput = Omit<User, 'id' | 'name'>;
 
 export type ISignInGatewayOutput = {
   token: string;
+  name: string;
 };
 
 export default interface ISignInGateway {
