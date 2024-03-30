@@ -1,5 +1,6 @@
 'use client';
 
+import useLocalStorage from '@/hooks/useLocalStorage';
 /* eslint-disable no-unused-vars */
 import AuthGateway from '@/infra/gateways/AuthGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
@@ -8,7 +9,7 @@ import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
 import { User } from '@/models/User';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { createContext, useState } from 'react';
+import { createContext } from 'react';
 
 interface AuthContextType {
   userInfo: Omit<User, 'id' | 'password'> | undefined;
@@ -31,7 +32,8 @@ const authGateway = new AuthGateway(httpClient);
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
-  const [userInfo, setUserInfo] = useState<Omit<User, 'id' | 'password'>>();
+  const [userInfo, setUserInfo] =
+    useLocalStorage<Omit<User, 'id' | 'password'>>('userInfo');
 
   async function signIn(user: ISignInGatewayInput) {
     const response = await authGateway.signin(user);
@@ -45,7 +47,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function logout() {
     await authGateway.logout();
-    setUserInfo(undefined);
+    setUserInfo();
     Cookie.remove('auth_token');
     router.push('/login');
   }
