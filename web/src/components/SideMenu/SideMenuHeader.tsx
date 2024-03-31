@@ -7,7 +7,7 @@ export interface SideMenuHeaderProps {
 
 export default function SideMenuHeader({ user }: SideMenuHeaderProps) {
   return (
-    <header className="sm:flex gap-4 items-center justify-center hidden">
+    <header className="sm:flex gap-4 items-center hidden">
       <div className="flex justify-center items-center rounded-full p-3 size-9 bg-zinc-500 lg:p-4 lg:size-12">
         {getInitials(user.name, 1)}
       </div>
