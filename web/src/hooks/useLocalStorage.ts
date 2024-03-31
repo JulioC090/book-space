@@ -11,7 +11,11 @@ export default function useLocalStorage<T>(
   );
 
   function setLocal(item?: T): void {
-    localStorage.setItem(localStorageKey, JSON.stringify(item));
+    if (!item) {
+      localStorage.removeItem(localStorageKey);
+    } else {
+      localStorage.setItem(localStorageKey, JSON.stringify(item));
+    }
     setItem(item);
   }
 
