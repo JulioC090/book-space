@@ -1,6 +1,5 @@
-import ILoadWorkspacesRepository, {
-  ILoadWorkspacesRepositoryOutput,
-} from 'infra/protocols/repositories/ILoadWorkspacesRepository';
+import Workspace from 'domain/models/Workspace';
+import ILoadWorkspacesRepository from 'infra/protocols/repositories/ILoadWorkspacesRepository';
 
 export default class LoadWorkspaces {
   private loadWorkspacesRepository: ILoadWorkspacesRepository;
@@ -9,7 +8,11 @@ export default class LoadWorkspaces {
     this.loadWorkspacesRepository = loadWorkspacesRepository;
   }
 
-  async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
-    return await this.loadWorkspacesRepository.load(userId);
+  async load(userId: string): Promise<Array<Workspace>> {
+    const workspaces = await this.loadWorkspacesRepository.load(userId);
+    return workspaces.map((workspace) => ({
+      ...workspace,
+      role: workspace.ownerId === userId ? 'OWNER' : 'DEFAULT',
+    }));
   }
 }

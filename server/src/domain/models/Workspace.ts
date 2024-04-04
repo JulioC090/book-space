@@ -3,4 +3,5 @@ export default interface Workspace {
   ownerId: string;
   name: string;
   tag: string;
+  role: 'OWNER' | 'DEFAULT';
 }

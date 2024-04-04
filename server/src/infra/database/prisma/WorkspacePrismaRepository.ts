@@ -26,7 +26,9 @@ export default class WorkspacePrimaRepository
     IDeleteUserInWorkspaceRepository
 {
   async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
-    return await prisma.workspace.findMany({ where: { ownerId: userId } });
+    return await prisma.workspace.findMany({
+      where: { OR: [{ ownerId: userId }, { users: { some: { userId } } }] },
+    });
   }
 
   async add(
@@ -66,7 +68,7 @@ export default class WorkspacePrimaRepository
     return !!user;
   }
 
-  async loadById(workspaceId: string): Promise<Workspace | null> {
+  async loadById(workspaceId: string): Promise<Omit<Workspace, 'role'> | null> {
     const workspace = await prisma.workspace.findFirst({
       where: { id: workspaceId },
     });
