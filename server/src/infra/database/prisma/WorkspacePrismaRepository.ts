@@ -51,11 +51,13 @@ export default class WorkspacePrimaRepository
   }
 
   async delete(userId: string, workspaceId: string): Promise<boolean> {
-    const deletedUsers = await prisma.workspace.deleteMany({
+    await prisma.usersOnWorkspace.deleteMany({ where: { workspaceId } });
+
+    const deletedWorkspaces = await prisma.workspace.deleteMany({
       where: { id: workspaceId, ownerId: userId },
     });
 
-    return deletedUsers.count > 0;
+    return deletedWorkspaces.count > 0;
   }
 
   async checkUserInWorkspace(
