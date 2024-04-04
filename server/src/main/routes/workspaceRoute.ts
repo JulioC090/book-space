@@ -1,5 +1,6 @@
 import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
 import AddWorkspace from 'domain/usecases/AddWorkspace';
+import DeleteUserInWorkspace from 'domain/usecases/DeleteUserInWorkspace';
 import DeleteWorkspace from 'domain/usecases/DeleteWorkspace';
 import LoadWorkspaces from 'domain/usecases/LoadWorkspaces';
 import UpdateWorkspace from 'domain/usecases/UpdateWorkspace';
@@ -8,6 +9,7 @@ import AccountPrismaRepository from 'infra/database/prisma/AccountPrismaReposito
 import WorkspacePrimaRepository from 'infra/database/prisma/WorkspacePrismaRepository';
 import { adaptMiddleware } from 'main/adapters/fastifyMiddlewareAdapter';
 import { adaptRoute } from 'main/adapters/fastifyRouteAdapter';
+import DeleteUserInWorkspaceController from 'presentation/controllers/DeleteUserInWorkspaceController';
 import DeleteWorkspaceController from 'presentation/controllers/DeleteWorkspaceController';
 import GetWorkspacesController from 'presentation/controllers/GetWorkspacesController';
 import PatchWorkspaceController from 'presentation/controllers/PatchWorkspaceController';
@@ -44,6 +46,16 @@ const postUserToWorkspaceController = new PostUserToWorkspaceController(
   addUserToWorkspace,
 );
 
+const deleteUserInWorkspace = new DeleteUserInWorkspace(
+  workspaceRepository,
+  workspaceRepository,
+  accountRepository,
+  workspaceRepository,
+);
+const deleteUserInWorkspaceController = new DeleteUserInWorkspaceController(
+  deleteUserInWorkspace,
+);
+
 export default async function (app: FastifyInstance) {
   app.addHook('preHandler', adaptMiddleware(authMiddleware));
 
@@ -55,5 +67,9 @@ export default async function (app: FastifyInstance) {
   app.post(
     '/workspace/:workspaceId/user',
     adaptRoute(postUserToWorkspaceController),
+  );
+  app.delete(
+    '/workspace/:workspaceId/user',
+    adaptRoute(deleteUserInWorkspaceController),
   );
 }

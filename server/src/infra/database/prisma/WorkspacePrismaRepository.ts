@@ -6,6 +6,7 @@ import IAddWorkspaceRepository, {
   IAddWorkspaceRepositoryOutput,
 } from 'infra/protocols/repositories/IAddWorkspaceRepository';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
+import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
 import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
 import ILoadWorkspacesRepository, {
@@ -21,7 +22,8 @@ export default class WorkspacePrimaRepository
     IDeleteWorkspaceRepository,
     ILoadWorkspaceById,
     ICheckUserExistInWorkspaceRepository,
-    IAddUserToWorkspaceRepository
+    IAddUserToWorkspaceRepository,
+    IDeleteUserInWorkspaceRepository
 {
   async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
     return await prisma.workspace.findMany({ where: { ownerId: userId } });
@@ -79,5 +81,16 @@ export default class WorkspacePrimaRepository
       data: { userId, workspaceId },
     });
     return !!createdUserOnWorkspace;
+  }
+
+  async deleteUserInWorkspace(
+    workspaceId: string,
+    userId: string,
+  ): Promise<boolean> {
+    const deletedUser = await prisma.usersOnWorkspace.deleteMany({
+      where: { userId, workspaceId },
+    });
+
+    return !!deletedUser;
   }
 }
