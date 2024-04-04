@@ -22,6 +22,6 @@ export default class AuthMiddleware implements Middleware {
     const response = await this.loadAccountByToken.loadByToken(token);
     if (!response) return unauthorized();
 
-    return ok({ accountId: response.id });
+    return ok({ accountId: response.id, account: response });
   }
 }

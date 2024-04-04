@@ -48,9 +48,7 @@ export default class AccountPrismaRepository
 
   async loadByToken(token: string): Promise<ILoadAccountByTokenOutput> {
     const account = await prisma.user.findFirst({ where: { token } });
-    if (!account) return null;
-
-    return { id: account.id };
+    return account;
   }
 
   async updateAccessToken(id: string, token: string | null): Promise<void> {

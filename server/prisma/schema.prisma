@@ -14,7 +14,8 @@ model User {
   email    String  @unique
   password String
 
-  workspaces Workspace[]
+  ownWorkspaces Workspace[]
+  workspaces    UsersOnWorkspace[]
 
   @@map("users")
 }
@@ -25,7 +26,19 @@ model Workspace {
   name    String
   tag     String
 
-  owner User @relation(fields: [ownerId], references: [id])
+  owner User               @relation(fields: [ownerId], references: [id])
+  users UsersOnWorkspace[]
 
   @@map("workspaces")
+}
+
+model UsersOnWorkspace {
+  userId      String
+  workspaceId String
+
+  user      User      @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
+
+  @@id([userId, workspaceId])
+  @@map("workspaces_users")
 }

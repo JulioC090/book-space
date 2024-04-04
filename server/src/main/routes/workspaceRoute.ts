@@ -1,3 +1,4 @@
+import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
 import AddWorkspace from 'domain/usecases/AddWorkspace';
 import DeleteWorkspace from 'domain/usecases/DeleteWorkspace';
 import LoadWorkspaces from 'domain/usecases/LoadWorkspaces';
@@ -10,6 +11,7 @@ import { adaptRoute } from 'main/adapters/fastifyRouteAdapter';
 import DeleteWorkspaceController from 'presentation/controllers/DeleteWorkspaceController';
 import GetWorkspacesController from 'presentation/controllers/GetWorkspacesController';
 import PatchWorkspaceController from 'presentation/controllers/PatchWorkspaceController';
+import PostUserToWorkspaceController from 'presentation/controllers/PostUserToWorkspaceController';
 import PostWorkspaceController from 'presentation/controllers/PostWorkspaceController';
 import AuthMiddleware from 'presentation/middleware/AuthMiddleware';
 
@@ -32,6 +34,16 @@ const deleteWorkspaceController = new DeleteWorkspaceController(
   deleteWorkspace,
 );
 
+const addUserToWorkspace = new AddUserToWorkspace(
+  workspaceRepository,
+  accountRepository,
+  workspaceRepository,
+  workspaceRepository,
+);
+const postUserToWorkspaceController = new PostUserToWorkspaceController(
+  addUserToWorkspace,
+);
+
 export default async function (app: FastifyInstance) {
   app.addHook('preHandler', adaptMiddleware(authMiddleware));
 
@@ -39,4 +51,9 @@ export default async function (app: FastifyInstance) {
   app.post('/workspace', adaptRoute(postWorkspaceController));
   app.patch('/workspace/:workspaceId', adaptRoute(patchWorkspaceController));
   app.delete('/workspace/:workspaceId', adaptRoute(deleteWorkspaceController));
+
+  app.post(
+    '/workspace/:workspaceId/user',
+    adaptRoute(postUserToWorkspaceController),
+  );
 }
