@@ -31,7 +31,10 @@ const postWorkspaceController = new PostWorkspaceController(addWorkspace);
 const updateWorkspace = new UpdateWorkspace(workspaceRepository);
 const patchWorkspaceController = new PatchWorkspaceController(updateWorkspace);
 
-const deleteWorkspace = new DeleteWorkspace(workspaceRepository);
+const deleteWorkspace = new DeleteWorkspace(
+  workspaceRepository,
+  workspaceRepository,
+);
 const deleteWorkspaceController = new DeleteWorkspaceController(
   deleteWorkspace,
 );

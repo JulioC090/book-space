@@ -54,7 +54,7 @@ export default class WorkspacePrimaRepository
     await prisma.usersOnWorkspace.deleteMany({ where: { workspaceId } });
 
     const deletedWorkspaces = await prisma.workspace.deleteMany({
-      where: { id: workspaceId, ownerId: userId },
+      where: { AND: [{ id: workspaceId }, { ownerId: userId }] },
     });
 
     return deletedWorkspaces.count > 0;
