@@ -4,7 +4,7 @@ import Button from '@/components/Button';
 import Container from '@/components/Container';
 import WorkspaceForm from '@/components/Forms/WorkspaceForm';
 import Modal from '@/components/Modal';
-import WorkspaceCard from '@/components/WorkspaceCard';
+import WorkspaceCard from '@/components/WorkspaceCard/WorkspaceCard';
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { useContext } from 'react';
 
