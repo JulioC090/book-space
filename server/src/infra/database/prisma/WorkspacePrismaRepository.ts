@@ -9,6 +9,7 @@ import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/I
 import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
 import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
+import ILoadWorkspaceDetailsRepository from 'infra/protocols/repositories/ILoadWorkspaceDetailsRepository';
 import ILoadWorkspacesRepository, {
   ILoadWorkspacesRepositoryOutput,
 } from 'infra/protocols/repositories/ILoadWorkspacesRepository';
@@ -23,7 +24,8 @@ export default class WorkspacePrimaRepository
     ILoadWorkspaceById,
     ICheckUserExistInWorkspaceRepository,
     IAddUserToWorkspaceRepository,
-    IDeleteUserInWorkspaceRepository
+    IDeleteUserInWorkspaceRepository,
+    ILoadWorkspaceDetailsRepository
 {
   async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
     return await prisma.workspace.findMany({
@@ -64,10 +66,20 @@ export default class WorkspacePrimaRepository
     workspaceId: string,
     userId: string,
   ): Promise<boolean> {
-    const user = await prisma.usersOnWorkspace.findFirst({
+    const workspace = await prisma.workspace.findFirst({
+      where: {
+        id: workspaceId,
+        ownerId: userId,
+      },
+    });
+
+    if (workspace) return true;
+
+    const userOnWorkspace = await prisma.usersOnWorkspace.findFirst({
       where: { workspaceId, userId },
     });
-    return !!user;
+
+    return !!userOnWorkspace;
   }
 
   async loadById(workspaceId: string): Promise<Omit<Workspace, 'role'> | null> {
@@ -75,6 +87,23 @@ export default class WorkspacePrimaRepository
       where: { id: workspaceId },
     });
     return workspace;
+  }
+
+  async loadWorkspaceDetails(
+    workspaceId: string,
+  ): Promise<Required<Omit<Workspace, 'role'>> | null> {
+    const workspace = await prisma.workspace.findFirst({
+      include: {
+        users: {
+          select: { user: { select: { id: true, email: true, name: true } } },
+        },
+      },
+      where: { id: workspaceId },
+    });
+
+    if (!workspace) return null;
+
+    return { ...workspace, users: workspace.users.map((user) => user.user) };
   }
 
   async addUserToWorkspace(

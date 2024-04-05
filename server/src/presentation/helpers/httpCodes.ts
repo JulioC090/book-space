@@ -19,4 +19,6 @@ export const unauthorized = (): IHttpResponse => ({ status: 401 });
 
 export const forbidden = (): IHttpResponse => ({ status: 403 });
 
+export const notFound = (): IHttpResponse => ({ status: 404 });
+
 export const internalServerError = (): IHttpResponse => ({ status: 500 });

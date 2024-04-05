@@ -2,6 +2,7 @@ import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
 import AddWorkspace from 'domain/usecases/AddWorkspace';
 import DeleteUserInWorkspace from 'domain/usecases/DeleteUserInWorkspace';
 import DeleteWorkspace from 'domain/usecases/DeleteWorkspace';
+import LoadWorkspaceDetails from 'domain/usecases/LoadWorkspaceDetails';
 import LoadWorkspaces from 'domain/usecases/LoadWorkspaces';
 import UpdateWorkspace from 'domain/usecases/UpdateWorkspace';
 import { FastifyInstance } from 'fastify';
@@ -11,6 +12,7 @@ import { adaptMiddleware } from 'main/adapters/fastifyMiddlewareAdapter';
 import { adaptRoute } from 'main/adapters/fastifyRouteAdapter';
 import DeleteUserInWorkspaceController from 'presentation/controllers/DeleteUserInWorkspaceController';
 import DeleteWorkspaceController from 'presentation/controllers/DeleteWorkspaceController';
+import GetWorkspaceDetailsController from 'presentation/controllers/GetWorkspaceDetailsController';
 import GetWorkspacesController from 'presentation/controllers/GetWorkspacesController';
 import PatchWorkspaceController from 'presentation/controllers/PatchWorkspaceController';
 import PostUserToWorkspaceController from 'presentation/controllers/PostUserToWorkspaceController';
@@ -39,6 +41,14 @@ const deleteWorkspaceController = new DeleteWorkspaceController(
   deleteWorkspace,
 );
 
+const loadWorkspaceDetails = new LoadWorkspaceDetails(
+  workspaceRepository,
+  workspaceRepository,
+);
+const getWorkspaceDetailsController = new GetWorkspaceDetailsController(
+  loadWorkspaceDetails,
+);
+
 const addUserToWorkspace = new AddUserToWorkspace(
   workspaceRepository,
   accountRepository,
@@ -63,6 +73,7 @@ export default async function (app: FastifyInstance) {
   app.addHook('preHandler', adaptMiddleware(authMiddleware));
 
   app.get('/workspaces', adaptRoute(getWorkspacesController));
+  app.get('/workspace/:workspaceId', adaptRoute(getWorkspaceDetailsController));
   app.post('/workspace', adaptRoute(postWorkspaceController));
   app.patch('/workspace/:workspaceId', adaptRoute(patchWorkspaceController));
   app.delete('/workspace/:workspaceId', adaptRoute(deleteWorkspaceController));
