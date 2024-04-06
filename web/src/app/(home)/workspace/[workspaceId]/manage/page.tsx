@@ -50,6 +50,12 @@ export default function WorkspaceManager() {
           </Modal>
         </div>
         <div className="mt-2 w-full max-h-128 border-2 border-zinc-900 rounded overflow-y-auto">
+          {workspace.users.length === 0 && (
+            <div className="flex flex-col justify-center text-center text-zinc-500 w-full p-4 ">
+              <p>Nenhum usuário encontrado.</p>
+              <p>Adicione um novo usuário usando o botão acima.</p>
+            </div>
+          )}
           {workspace.users.map((user) => (
             <div
               key={user.id}
