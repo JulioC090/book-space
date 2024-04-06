@@ -27,28 +27,32 @@ export default class AddUserToWorkspace {
     authenticatedUser: User,
     workspaceId: string,
     userEmail: string,
-  ): Promise<boolean> {
+  ): Promise<{ id: string; name: string; email: string } | null> {
     const workspace =
       await this.loadWorkspaceByIdRepository.loadById(workspaceId);
 
-    if (!workspace) return false;
-    if (workspace.ownerId !== authenticatedUser.id) return false;
-    if (userEmail === authenticatedUser.email) return false;
+    if (!workspace) return null;
+    if (workspace.ownerId !== authenticatedUser.id) return null;
+    if (userEmail === authenticatedUser.email) return null;
 
     const addedUser =
       await this.loadAccountByEmailRepository.loadByEmail(userEmail);
-    if (!addedUser) return false;
+    if (!addedUser) return null;
 
     const existInWorkspace =
       await this.checkUserExistInWorkspaceRepository.checkUserInWorkspace(
         workspaceId,
         addedUser.id,
       );
-    if (existInWorkspace) return false;
+    if (existInWorkspace) return null;
 
-    return await this.addUserToWorkspaceRepository.addUserToWorkspace(
+    const response = await this.addUserToWorkspaceRepository.addUserToWorkspace(
       workspaceId,
       addedUser.id,
     );
+
+    if (!response) return null;
+
+    return { id: addedUser.id, name: addedUser.name, email: addedUser.email };
   }
 }

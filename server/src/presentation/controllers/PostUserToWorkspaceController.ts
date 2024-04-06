@@ -40,6 +40,6 @@ export default class PostUserToWorkspaceController implements Controller {
     );
 
     if (!response) return forbidden();
-    return created();
+    return created(response);
   }
 }
