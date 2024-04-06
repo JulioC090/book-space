@@ -1,5 +1,6 @@
 'use client';
 
+import Card from '@/components/Card';
 import { FloatingMenu } from '@/components/FloatingMenu';
 import { IconButton } from '@/components/IconButton';
 import DefaultMenu from '@/components/WorkspaceCard/DefaultMenu';
@@ -20,7 +21,7 @@ export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
   const menuComponent = roleMenuMap[workspace.role] || <DefaultMenu />;
 
   return (
-    <div className="flex flex-col justify-between items-center gap-8 bg-zinc-900 border-zinc-800 border-2 shadow-sm p-4 pt-8 rounded relative">
+    <Card className="flex flex-col justify-between items-center gap-8">
       <div className="bg-green-haze-500 size-24 p-8 rounded font-bold text-xl flex justify-center items-center">
         {getInitials(workspace.name)}
       </div>
@@ -38,6 +39,6 @@ export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
       >
         {menuComponent}
       </FloatingMenu.Root>
-    </div>
+    </Card>
   );
 }
