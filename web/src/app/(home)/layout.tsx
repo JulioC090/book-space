@@ -16,7 +16,7 @@ export default function SideMenuLayout({ children }: SideMenuLayoutProps) {
   if (!userInfo) return;
 
   return (
-    <div className="flex flex-col-reverse h-screen sm:h-fit sm:flex-row w-screen">
+    <div className="flex flex-col-reverse h-screen sm:h-fit sm:flex-row w-full">
       <SideMenu.Root>
         <SideMenu.Header user={userInfo!} />
         <SideMenu.List>
@@ -39,7 +39,9 @@ export default function SideMenuLayout({ children }: SideMenuLayoutProps) {
           />
         </SideMenu.Footer>
       </SideMenu.Root>
-      <main className="flex-grow sm:min-h-screen">{children}</main>
+      <main className="flex-grow sm:min-h-screen overflow-y-auto">
+        {children}
+      </main>
     </div>
   );
 }

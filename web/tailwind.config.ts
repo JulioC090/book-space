@@ -28,6 +28,9 @@ const config: Config = {
           '950': '#062d1b',
         },
       },
+      spacing: {
+        '128': '32rem',
+      },
     },
   },
   plugins: [],

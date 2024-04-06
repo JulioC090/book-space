@@ -20,3 +20,20 @@ body {
 .default-focus {
   @apply focus:outline-none focus:ring-2 ring-[#18A15D] ring-offset-2 ring-offset-zinc-950;
 }
+
+
+::-webkit-scrollbar{
+  @apply w-1
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-zinc-800 rounded
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-700 rounded-full
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-zinc-600
+}

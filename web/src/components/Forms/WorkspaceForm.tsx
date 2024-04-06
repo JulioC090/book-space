@@ -7,7 +7,7 @@ import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 export interface WorkspaceFormProps {
-  workspace?: Workspace;
+  workspace?: Omit<Workspace, 'role'>;
   onSubmit?(): void;
 }
 

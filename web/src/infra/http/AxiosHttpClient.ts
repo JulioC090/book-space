@@ -112,6 +112,7 @@ export default class AxiosHttpClient implements IHttpClient {
     const response = await this.axios.delete(url, {
       headers: params.headers,
       params: params.query,
+      data: params.body,
     });
 
     return { body: response.data, status: response.status };

@@ -10,12 +10,13 @@ import { createContext, useContext, useEffect, useState } from 'react';
 
 interface WorkspacesContextType {
   workspaces: Array<Workspace>;
-  addWorkspace(workspace: Omit<Workspace, 'id'>): Promise<boolean>;
+  addWorkspace(workspace: Omit<Workspace, 'id' | 'role'>): Promise<boolean>;
   updateWorkspace(
     workspaceId: string,
-    workspace: Omit<Workspace, 'id'>,
+    workspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<boolean>;
   deleteWorkspace(workspaceId: string): Promise<boolean>;
+  addUser(workspaceId: string, userEmail: string): Promise<boolean>;
 }
 
 interface WorkspacesProviderProps {
@@ -82,9 +83,22 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
     return true;
   }
 
+  async function addUser(
+    workspaceId: string,
+    userEmail: string,
+  ): Promise<boolean> {
+    return await workspaceGateway.addUser(workspaceId, userEmail);
+  }
+
   return (
     <WorkspaceContext.Provider
-      value={{ workspaces, addWorkspace, updateWorkspace, deleteWorkspace }}
+      value={{
+        workspaces,
+        addWorkspace,
+        updateWorkspace,
+        deleteWorkspace,
+        addUser,
+      }}
     >
       {children}
     </WorkspaceContext.Provider>

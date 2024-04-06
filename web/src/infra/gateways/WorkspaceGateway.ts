@@ -1,7 +1,10 @@
+import IAddUserInWorkspaceGateway from '@/infra/protocols/gateways/IAddUserInWorkspaceGateway';
 import IAddWorkspaceGateway, {
   IAddWorkspaceGatewayOutput,
 } from '@/infra/protocols/gateways/IAddWorkspaceGateway';
+import IDeleteUserInWorkspace from '@/infra/protocols/gateways/IDeleteUserInWorkspaceGateway';
 import IDeleteWorkspace from '@/infra/protocols/gateways/IDeleteWorkspaceGateway';
+import ILoadWorkspaceDetailsGateway from '@/infra/protocols/gateways/ILoadWorkspaceDetailsGateway';
 import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
@@ -12,7 +15,10 @@ export default class WorkspaceGateway
     IAddWorkspaceGateway,
     IUpdateWorkspaceGateway,
     ILoadWorkspaceGateway,
-    IDeleteWorkspace
+    IDeleteWorkspace,
+    ILoadWorkspaceDetailsGateway,
+    IAddUserInWorkspaceGateway,
+    IDeleteUserInWorkspace
 {
   private httpClient: IHttpClient;
 
@@ -26,6 +32,19 @@ export default class WorkspaceGateway
     });
 
     return response ? response.body! : [];
+  }
+
+  async loadWorkspaceDetails(
+    workspaceId: string,
+  ): Promise<Required<Workspace> | undefined> {
+    const response = await this.httpClient.get<Required<Workspace>>({
+      url: '/workspace/:workspaceId',
+      params: { workspaceId },
+    });
+
+    if (!response) return undefined;
+
+    return response.body!;
   }
 
   async add(
@@ -58,6 +77,26 @@ export default class WorkspaceGateway
     const response = await this.httpClient.delete({
       url: '/workspace/:workspaceId',
       params: { workspaceId },
+    });
+
+    return response.status === 200;
+  }
+
+  async addUser(workspaceId: string, userEmail: string): Promise<boolean> {
+    const response = await this.httpClient.post({
+      url: '/workspace/:workspaceId/user',
+      params: { workspaceId },
+      body: { userEmail },
+    });
+
+    return response.status === 201;
+  }
+
+  async deleteUser(workspaceId: string, userEmail: string): Promise<boolean> {
+    const response = await this.httpClient.delete({
+      url: '/workspace/:workspaceId/user',
+      params: { workspaceId },
+      body: { userEmail },
     });
 
     return response.status === 200;
