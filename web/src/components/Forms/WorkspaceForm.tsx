@@ -1,24 +1,27 @@
 import Button from '@/components/Button';
 import { TextInput } from '@/components/TextInput';
-import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { Workspace } from '@/models/Workspace';
 import { BookmarkSimple, Notebook } from '@phosphor-icons/react/dist/ssr';
-import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-
-export interface WorkspaceFormProps {
-  workspace?: Omit<Workspace, 'role'>;
-  onSubmit?(): void;
-}
 
 interface IWorkspaceFields {
   name: string;
   tag: string;
 }
 
+export interface WorkspaceFormProps {
+  workspace?: Omit<Workspace, 'role'>;
+  onWorkspaceSubmit: (
+    // eslint-disable-next-line no-unused-vars
+    workspace: IWorkspaceFields & Partial<{ id: string }>,
+  ) => Promise<boolean>;
+  onSubmit?(): void;
+}
+
 export default function WorkspaceForm({
   workspace,
   onSubmit,
+  onWorkspaceSubmit,
 }: WorkspaceFormProps) {
   const {
     register,
@@ -26,17 +29,11 @@ export default function WorkspaceForm({
     formState: { errors },
     setError,
   } = useForm<IWorkspaceFields>();
-  const { addWorkspace, updateWorkspace } = useContext(WorkspaceContext);
 
   const handleWorkspaceSubmit: SubmitHandler<IWorkspaceFields> = async (
     data,
   ) => {
-    let response: boolean = false;
-    if (!workspace) {
-      response = await addWorkspace(data);
-    } else {
-      response = await updateWorkspace(workspace.id, data);
-    }
+    const response = await onWorkspaceSubmit({ ...workspace, ...data });
 
     if (!response) {
       const formError = { type: 'server' };

@@ -9,7 +9,7 @@ import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { useContext } from 'react';
 
 export default function Home() {
-  const { workspaces } = useContext(WorkspaceContext);
+  const { workspaces, addWorkspace } = useContext(WorkspaceContext);
 
   return (
     <Container>
@@ -20,7 +20,7 @@ export default function Home() {
           trigger={<Button>Adicionar Workspace</Button>}
           hasForm
         >
-          <WorkspaceForm />
+          <WorkspaceForm onWorkspaceSubmit={addWorkspace} />
         </Modal>
       </div>
       {workspaces.length === 0 ? (

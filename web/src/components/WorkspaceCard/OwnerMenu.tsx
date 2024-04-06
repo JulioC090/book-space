@@ -22,7 +22,8 @@ interface OwnerMenuProps {
 }
 
 export default function OwnerMenu({ workspace }: OwnerMenuProps) {
-  const { deleteWorkspace, addUser } = useContext(WorkspaceContext);
+  const { updateWorkspace, deleteWorkspace, addUser } =
+    useContext(WorkspaceContext);
 
   return (
     <>
@@ -44,7 +45,10 @@ export default function OwnerMenu({ workspace }: OwnerMenuProps) {
           />
         }
       >
-        <WorkspaceForm workspace={workspace} />
+        <WorkspaceForm
+          onWorkspaceSubmit={({ id, ...rest }) => updateWorkspace(id!, rest)}
+          workspace={workspace}
+        />
       </Modal>
       <Modal
         title="Adicionar usuário"

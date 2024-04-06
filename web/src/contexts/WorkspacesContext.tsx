@@ -17,6 +17,7 @@ interface WorkspacesContextType {
   ): Promise<boolean>;
   deleteWorkspace(workspaceId: string): Promise<boolean>;
   addUser(workspaceId: string, userEmail: string): Promise<boolean>;
+  setIsValid: (isValid: boolean) => void;
 }
 
 interface WorkspacesProviderProps {
@@ -34,26 +35,28 @@ const workspaceGateway = new WorkspaceGateway(axiosHttpClient);
 
 export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   const [workspaces, setWorkspaces] = useState<Array<Workspace>>([]);
+  const [isValid, setIsValid] = useState<boolean>(false);
   const { userInfo } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchData() {
       setWorkspaces(await workspaceGateway.load());
+      setIsValid(true);
     }
 
-    if (!userInfo) return;
+    if (!userInfo || isValid) return;
     fetchData();
-  }, [userInfo]);
+  }, [userInfo, isValid]);
 
   async function addWorkspace(
-    workspace: Omit<Workspace, 'id'>,
+    workspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<boolean> {
     const response = await workspaceGateway.add(workspace);
     if (!response) return false;
 
     setWorkspaces((prevWorkspaces) => [
       ...prevWorkspaces,
-      { id: response.workspaceId, ...workspace },
+      { id: response.workspaceId, role: 'OWNER', ...workspace },
     ]);
     return true;
   }
@@ -98,6 +101,7 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
         updateWorkspace,
         deleteWorkspace,
         addUser,
+        setIsValid,
       }}
     >
       {children}

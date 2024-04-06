@@ -8,5 +8,7 @@ export type IAddWorkspaceGatewayOutput =
   | undefined;
 
 export default interface IAddWorkspaceGateway {
-  add(workspace: Omit<Workspace, 'id'>): Promise<IAddWorkspaceGatewayOutput>;
+  add(
+    workspace: Omit<Workspace, 'id' | 'role'>,
+  ): Promise<IAddWorkspaceGatewayOutput>;
 }

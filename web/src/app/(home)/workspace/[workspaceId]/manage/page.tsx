@@ -13,7 +13,7 @@ import { TrashSimple } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
 export default function WorkspaceManager() {
-  const { workspace, addUser, deleteUser } = useContext(
+  const { workspace, updateWorkspace, addUser, deleteUser } = useContext(
     WorkspaceDetailsContext,
   );
   if (!workspace) return;
@@ -31,7 +31,10 @@ export default function WorkspaceManager() {
           trigger={<Button>Editar Workspace</Button>}
           hasForm
         >
-          <WorkspaceForm workspace={workspace} />
+          <WorkspaceForm
+            onWorkspaceSubmit={({ id, ...rest }) => updateWorkspace(id!, rest)}
+            workspace={workspace}
+          />
         </Modal>
       </div>
       <p className="text-zinc-500">Atualize as informações da sua Workspace</p>

@@ -1,14 +1,21 @@
 'use client';
 
+import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
 import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { Workspace } from '@/models/Workspace';
 import { useParams, useRouter } from 'next/navigation';
-import { createContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 interface WorkspaceDetailsContextType {
   workspace?: Required<Workspace>;
+  updateWorkspace: (
+    // eslint-disable-next-line no-unused-vars
+    workspaceId: string,
+    // eslint-disable-next-line no-unused-vars
+    partialWorkspace: Omit<Workspace, 'id' | 'role'>,
+  ) => Promise<boolean>;
   // eslint-disable-next-line no-unused-vars
   addUser: (userEmail: string) => Promise<boolean>;
   // eslint-disable-next-line no-unused-vars
@@ -34,6 +41,7 @@ export function WorkspaceDetailProvider({
   children,
 }: WorkspaceDetailsProviderProps) {
   const [workspace, setWorkspace] = useState<Required<Workspace>>();
+  const { setIsValid } = useContext(WorkspaceContext);
   const params = useParams<{ workspaceId: string }>();
   const router = useRouter();
 
@@ -48,6 +56,21 @@ export function WorkspaceDetailProvider({
 
     fetchData();
   }, [params, router]);
+
+  async function updateWorkspace(
+    workspaceId: string,
+    partialWorkspace: Omit<Workspace, 'id' | 'role'>,
+  ): Promise<boolean> {
+    if (!(await workspaceGateway.update(workspaceId, partialWorkspace)))
+      return false;
+
+    setWorkspace((prevWorkspace) => ({
+      ...prevWorkspace!,
+      ...partialWorkspace,
+    }));
+    setIsValid(false);
+    return true;
+  }
 
   async function addUser(userEmail: string): Promise<boolean> {
     return await workspaceGateway.addUser(workspace!.id, userEmail);
@@ -69,7 +92,7 @@ export function WorkspaceDetailProvider({
 
   return (
     <WorkspaceDetailsContext.Provider
-      value={{ workspace, addUser, deleteUser }}
+      value={{ workspace, updateWorkspace, addUser, deleteUser }}
     >
       {children}
     </WorkspaceDetailsContext.Provider>

@@ -48,10 +48,10 @@ export default class WorkspaceGateway
   }
 
   async add(
-    workspace: Omit<Workspace, 'id'>,
+    workspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<IAddWorkspaceGatewayOutput> {
     const httpClientResponse = await this.httpClient.post<
-      Omit<Workspace, 'id'>,
+      Omit<Workspace, 'id' | 'role'>,
       IAddWorkspaceGatewayOutput
     >({ url: '/workspace', body: workspace });
 
@@ -60,10 +60,10 @@ export default class WorkspaceGateway
 
   async update(
     workspaceId: string,
-    workspace: Omit<Workspace, 'id'>,
+    workspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<boolean> {
     const httpClientResponse = await this.httpClient.patch<
-      Omit<Workspace, 'id'>
+      Omit<Workspace, 'id' | 'role'>
     >({
       url: '/workspace/:workspaceId',
       params: { workspaceId },
