@@ -1,4 +1,6 @@
-import IAddUserInWorkspaceGateway from '@/infra/protocols/gateways/IAddUserInWorkspaceGateway';
+import IAddUserInWorkspaceGateway, {
+  IAddUserInWorkspaceGatewayOutput,
+} from '@/infra/protocols/gateways/IAddUserInWorkspaceGateway';
 import IAddWorkspaceGateway, {
   IAddWorkspaceGatewayOutput,
 } from '@/infra/protocols/gateways/IAddWorkspaceGateway';
@@ -82,14 +84,22 @@ export default class WorkspaceGateway
     return response.status === 200;
   }
 
-  async addUser(workspaceId: string, userEmail: string): Promise<boolean> {
-    const response = await this.httpClient.post({
+  async addUser(
+    workspaceId: string,
+    userEmail: string,
+  ): Promise<IAddUserInWorkspaceGatewayOutput | undefined> {
+    const response = await this.httpClient.post<
+      { userEmail: string },
+      IAddUserInWorkspaceGatewayOutput
+    >({
       url: '/workspace/:workspaceId/user',
       params: { workspaceId },
       body: { userEmail },
     });
 
-    return response.status === 201;
+    if (response.status !== 201) return;
+
+    return response.body;
   }
 
   async deleteUser(workspaceId: string, userEmail: string): Promise<boolean> {

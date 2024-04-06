@@ -73,7 +73,15 @@ export function WorkspaceDetailProvider({
   }
 
   async function addUser(userEmail: string): Promise<boolean> {
-    return await workspaceGateway.addUser(workspace!.id, userEmail);
+    const response = await workspaceGateway.addUser(workspace!.id, userEmail);
+    if (!response) return false;
+
+    setWorkspace((prevWorkspace) => ({
+      ...prevWorkspace!,
+      users: [...prevWorkspace!.users, response],
+    }));
+
+    return true;
   }
 
   async function deleteUser(userEmail: string): Promise<boolean> {
