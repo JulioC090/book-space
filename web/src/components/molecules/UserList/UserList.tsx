@@ -1,21 +1,21 @@
+import withEmptyMessage, {
+  withEmptyMessageProps,
+} from '@/components/hoc/withEmptyMessage';
 import UserListEmpty from '@/components/molecules/UserList/UserListEmpty';
 import UserListItem from '@/components/molecules/UserList/UserListItem';
+import UserListRoot from '@/components/molecules/UserList/UserListRoot';
 import { User } from '@/models/User';
 
-interface UserListProps {
-  users: Array<Omit<User, 'password'>>;
-}
+interface UserListProps extends withEmptyMessageProps<Omit<User, 'password'>> {}
 
-export default function UserList({ users }: UserListProps) {
+function UserList({ data }: UserListProps) {
   return (
-    <div className="mt-2 w-full max-h-128 border-2 border-zinc-900 rounded overflow-y-auto">
-      {users.length === 0 ? (
-        <UserListEmpty />
-      ) : (
-        users.map((user) => (
-          <UserListItem key={user.id} user={user}></UserListItem>
-        ))
-      )}
-    </div>
+    <UserListRoot>
+      {data.map((user) => (
+        <UserListItem key={user.id} user={user}></UserListItem>
+      ))}
+    </UserListRoot>
   );
 }
+
+export default withEmptyMessage(UserList, UserListEmpty);

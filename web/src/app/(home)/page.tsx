@@ -23,7 +23,7 @@ export default function Home() {
           <WorkspaceForm onWorkspaceSubmit={addWorkspace} />
         </Modal>
       </div>
-      <WorkspaceList workspaces={workspaces} />
+      <WorkspaceList data={workspaces} />
     </Container>
   );
 }

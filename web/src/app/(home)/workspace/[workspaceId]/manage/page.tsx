@@ -48,7 +48,7 @@ export default function WorkspaceManager() {
             <WorkspaceAddUserForm handleAddUser={addUser} />
           </Modal>
         </div>
-        <UserList users={workspace.users} />
+        <UserList data={workspace.users} />
       </div>
       <div className="mt-16 mb-16">
         <div className="flex justify-between pt-8">
