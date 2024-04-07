@@ -3,6 +3,7 @@
 import Button from '@/components/atoms/Button';
 import Card from '@/components/atoms/Card';
 import Container from '@/components/atoms/Container';
+import GridList from '@/components/atoms/GridList';
 import { IconButton } from '@/components/atoms/IconButton';
 import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserForm';
 import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
@@ -87,7 +88,7 @@ export default function WorkspaceManager() {
             Em desenvolvimento
           </Modal>
         </div>
-        <div className="w-full max-h-128 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-8 gap-8">
+        <GridList className="w-full max-h-128">
           <Card className="min-h-64 flex justify-center items-center">
             Em desenvolvimento
           </Card>
@@ -97,7 +98,7 @@ export default function WorkspaceManager() {
           <Card className="min-h-64 flex justify-center items-center">
             Em desenvolvimento
           </Card>
-        </div>
+        </GridList>
       </div>
     </Container>
   );

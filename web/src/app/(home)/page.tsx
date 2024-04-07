@@ -2,6 +2,7 @@
 
 import Button from '@/components/atoms/Button';
 import Container from '@/components/atoms/Container';
+import GridList from '@/components/atoms/GridList';
 import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
 import Modal from '@/components/organism/Modal';
 import WorkspaceCard from '@/components/organism/WorkspaceCard/WorkspaceCard';
@@ -29,11 +30,11 @@ export default function Home() {
           <p>Adicione um novo workspace usando o botão acima.</p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-8 gap-8">
+        <GridList>
           {workspaces.map((workspace) => (
             <WorkspaceCard key={workspace.id} workspace={workspace} />
           ))}
-        </div>
+        </GridList>
       )}
     </Container>
   );
