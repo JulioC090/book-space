@@ -6,6 +6,7 @@ import IAddWorkspaceGateway, {
 } from '@/infra/protocols/gateways/IAddWorkspaceGateway';
 import IDeleteUserInWorkspace from '@/infra/protocols/gateways/IDeleteUserInWorkspaceGateway';
 import IDeleteWorkspace from '@/infra/protocols/gateways/IDeleteWorkspaceGateway';
+import ILeaveWorkspaceGateway from '@/infra/protocols/gateways/ILeaveWorkspaceGateway';
 import ILoadWorkspaceDetailsGateway from '@/infra/protocols/gateways/ILoadWorkspaceDetailsGateway';
 import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
@@ -20,7 +21,8 @@ export default class WorkspaceGateway
     IDeleteWorkspace,
     ILoadWorkspaceDetailsGateway,
     IAddUserInWorkspaceGateway,
-    IDeleteUserInWorkspace
+    IDeleteUserInWorkspace,
+    ILeaveWorkspaceGateway
 {
   private httpClient: IHttpClient;
 
@@ -107,6 +109,15 @@ export default class WorkspaceGateway
       url: '/workspace/:workspaceId/user',
       params: { workspaceId },
       body: { userEmail },
+    });
+
+    return response.status === 200;
+  }
+
+  async leave(workspaceId: string): Promise<boolean> {
+    const response = await this.httpClient.delete({
+      url: '/workspace/:workspaceId/leave',
+      params: { workspaceId },
     });
 
     return response.status === 200;

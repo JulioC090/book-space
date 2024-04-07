@@ -17,6 +17,7 @@ interface WorkspacesContextType {
   ): Promise<boolean>;
   deleteWorkspace(workspaceId: string): Promise<boolean>;
   addUser(workspaceId: string, userEmail: string): Promise<boolean>;
+  leaveWorkspace(workspaceId: string): Promise<boolean>;
   setIsValid: (isValid: boolean) => void;
 }
 
@@ -90,7 +91,15 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
     workspaceId: string,
     userEmail: string,
   ): Promise<boolean> {
-    return await workspaceGateway.addUser(workspaceId, userEmail);
+    return !!(await workspaceGateway.addUser(workspaceId, userEmail));
+  }
+
+  async function leaveWorkspace(workspaceId: string) {
+    if (!(await workspaceGateway.leave(workspaceId))) return false;
+    setWorkspaces((prevWorkspaces) =>
+      prevWorkspaces.filter((workspace) => workspace.id !== workspaceId),
+    );
+    return true;
   }
 
   return (
@@ -101,6 +110,7 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
         updateWorkspace,
         deleteWorkspace,
         addUser,
+        leaveWorkspace,
         setIsValid,
       }}
     >

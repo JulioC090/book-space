@@ -18,7 +18,9 @@ export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
     OWNER: <OwnerMenu workspace={workspace} />,
   };
 
-  const menuComponent = roleMenuMap[workspace.role] || <DefaultMenu />;
+  const menuComponent = roleMenuMap[workspace.role] || (
+    <DefaultMenu workspace={workspace} />
+  );
 
   return (
     <Card className="flex flex-col justify-between items-center gap-8">
