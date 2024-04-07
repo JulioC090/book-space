@@ -38,11 +38,9 @@ export default function OwnerMenu({ workspace }: OwnerMenuProps) {
         title="Editar Workspace"
         hasForm
         trigger={
-          <FloatingMenu.Item
-            icon={<Notebook />}
-            label="Editar Workspace"
-            hasModal
-          />
+          <FloatingMenu.Item icon={<Notebook />} hasModal>
+            Editar Workspace
+          </FloatingMenu.Item>
         }
       >
         <WorkspaceForm
@@ -54,11 +52,9 @@ export default function OwnerMenu({ workspace }: OwnerMenuProps) {
         title="Adicionar usuário"
         hasForm
         trigger={
-          <FloatingMenu.Item
-            icon={<User />}
-            label="Adicionar Membro"
-            hasModal
-          />
+          <FloatingMenu.Item icon={<User />} hasModal>
+            Adicionar Membro
+          </FloatingMenu.Item>
         }
       >
         <WorkspaceAddUserForm
@@ -68,20 +64,25 @@ export default function OwnerMenu({ workspace }: OwnerMenuProps) {
         />
       </Modal>
 
-      <FloatingMenu.Item icon={<HouseSimple />} label="Adicionar Espaço" />
+      <FloatingMenu.Item icon={<HouseSimple />}>
+        Adicionar Espaço
+      </FloatingMenu.Item>
 
       <FloatingMenu.Separator />
 
-      <FloatingMenu.Item icon={<LinkSimple />} label="Obter Link" />
-      <FloatingMenu.Item icon={<BookmarkSimple />} label="Adicionar Anotação" />
+      <FloatingMenu.Item icon={<LinkSimple />}>Obter Link</FloatingMenu.Item>
+      <FloatingMenu.Item icon={<BookmarkSimple />}>
+        Adicionar Anotação
+      </FloatingMenu.Item>
 
       <FloatingMenu.Separator />
 
       <FloatingMenu.Item
         onSelect={() => deleteWorkspace(workspace.id)}
         icon={<TrashSimple />}
-        label="Excluir Workspace"
-      />
+      >
+        Excluir Workspace
+      </FloatingMenu.Item>
     </>
   );
 }

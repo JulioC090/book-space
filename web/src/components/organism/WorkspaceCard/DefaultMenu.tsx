@@ -17,16 +17,19 @@ export default function DefaultMenu({ workspace }: DefaultMenuProps) {
 
   return (
     <>
-      <FloatingMenu.Item icon={<LinkSimple />} label="Obter Link" />
-      <FloatingMenu.Item icon={<BookmarkSimple />} label="Adicionar Anotação" />
+      <FloatingMenu.Item icon={<LinkSimple />}>Obter Link</FloatingMenu.Item>
+      <FloatingMenu.Item icon={<BookmarkSimple />}>
+        Adicionar Anotação
+      </FloatingMenu.Item>
 
       <FloatingMenu.Separator />
 
       <FloatingMenu.Item
         icon={<SignOut />}
-        label="Sair da Workspace"
         onSelect={() => leaveWorkspace(workspace.id)}
-      />
+      >
+        Sair da Workspace
+      </FloatingMenu.Item>
     </>
   );
 }

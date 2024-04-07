@@ -2,6 +2,7 @@
 
 import Button from '@/components/atoms/Button';
 import Center from '@/components/atoms/Center';
+import LinkButton from '@/components/atoms/LinkButton';
 import { TextInput } from '@/components/atoms/TextInput';
 import { AuthContext } from '@/contexts/AuthContext';
 import AuthGateway from '@/infra/gateways/AuthGateway';
@@ -10,7 +11,6 @@ import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple, User } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -122,12 +122,7 @@ export default function SignUpPage() {
       </form>
       <p className="text-sm mt-4">
         Você já possui uma conta?{' '}
-        <Link
-          href={'/login'}
-          className="text-green-haze-600 default-focus rounded hover:text-green-500 focus:text-green-500"
-        >
-          Entrar
-        </Link>
+        <LinkButton href={'/login'}>Entrar</LinkButton>
       </p>
     </Center>
   );

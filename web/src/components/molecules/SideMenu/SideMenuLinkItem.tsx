@@ -1,6 +1,5 @@
-import SideMenuIconItem from '@/components/molecules/SideMenu/SideMenuIconItem';
+import LinkButton from '@/components/atoms/LinkButton';
 import SideMenuItem from '@/components/molecules/SideMenu/SideMenuItem';
-import Link from 'next/link';
 
 export interface SideMenuLinkItemProps {
   link: string;
@@ -15,10 +14,9 @@ export default function SideMenuLinkItem({
 }: SideMenuLinkItemProps) {
   return (
     <SideMenuItem>
-      <Link href={link}>
-        <SideMenuIconItem>{icon}</SideMenuIconItem>
+      <LinkButton href={link} icon={icon} variant="unstyled">
         <span className="hidden lg:block">{label}</span>
-      </Link>
+      </LinkButton>
     </SideMenuItem>
   );
 }

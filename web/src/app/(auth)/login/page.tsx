@@ -2,12 +2,12 @@
 
 import Button from '@/components/atoms/Button';
 import Center from '@/components/atoms/Center';
+import LinkButton from '@/components/atoms/LinkButton';
 import { TextInput } from '@/components/atoms/TextInput';
 import { AuthContext } from '@/contexts/AuthContext';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple } from '@phosphor-icons/react/dist/ssr';
 import Image from 'next/image';
-import Link from 'next/link';
 import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -104,12 +104,7 @@ export default function LoginPage() {
       </form>
       <p className="text-sm mt-4">
         Você não possui uma conta?{' '}
-        <Link
-          href={'/signup'}
-          className="text-green-haze-600 default-focus rounded hover:text-green-500 focus:text-green-500"
-        >
-          Cadastrar-se
-        </Link>
+        <LinkButton href={'/signup'}>Cadastrar-se</LinkButton>
       </p>
     </Center>
   );
