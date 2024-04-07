@@ -1,7 +1,14 @@
 export interface TextInputErrorProps {
-  children?: React.ReactNode;
+  error?: string;
+  messages: { [key: string]: string };
 }
 
-export default function TextInputError({ children }: TextInputErrorProps) {
-  return <span className="text-sm text-red-400">{children}</span>;
+export default function TextInputError({
+  error,
+  messages,
+}: TextInputErrorProps) {
+  if (!error) return;
+
+  const errorMessage = messages[error] || '';
+  return <span className="text-sm text-red-400">{errorMessage}</span>;
 }

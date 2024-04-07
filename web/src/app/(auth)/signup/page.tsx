@@ -68,11 +68,13 @@ export default function SignUpPage() {
               placeholder="Digite o seu nome"
             />
           </TextInput.Wrapper>
-          <TextInput.Error>
-            {errors.name?.type === 'required' && 'O nome é obrigatório'}
-            {errors.name?.type === 'minLength' &&
-              'O nome precisa ter pelo menos dois caracteres'}
-          </TextInput.Error>
+          <TextInput.Error
+            error={errors.name?.type}
+            messages={{
+              required: 'O nome é obrigatório',
+              minLength: 'O nome precisa ter pelo menos dois caracteres',
+            }}
+          />
         </TextInput.Root>
 
         <TextInput.Root>
@@ -91,13 +93,14 @@ export default function SignUpPage() {
               placeholder="Digite o seu email"
             />
           </TextInput.Wrapper>
-          <TextInput.Error>
-            {errors.email?.type === 'required' && 'O email é obrigatório'}
-            {errors.email?.type === 'pattern' &&
-              'O email precisa estar no formato "email@domain.com" '}
-            {errors.email?.type === 'email-exists' &&
-              'O email informado já está cadastrado'}
-          </TextInput.Error>
+          <TextInput.Error
+            error={errors.email?.type}
+            messages={{
+              required: 'O email é obrigatório',
+              pattern: 'O email precisa estar no formato "email@domain.com"',
+              'email-exists': 'O email informado já está cadastrado',
+            }}
+          />
         </TextInput.Root>
 
         <TextInput.Root>
@@ -111,11 +114,13 @@ export default function SignUpPage() {
               placeholder="Digite sua senha"
             />
           </TextInput.Wrapper>
-          <TextInput.Error>
-            {errors.password?.type === 'required' && 'A senha é obrigatória'}
-            {errors.password?.type === 'minLength' &&
-              'A senha precisa ter pelo menos oito caracteres'}
-          </TextInput.Error>
+          <TextInput.Error
+            error={errors.password?.type}
+            messages={{
+              required: 'A senha é obrigatória',
+              minLength: 'A senha precisa ter pelo menos oito caracteres',
+            }}
+          />
         </TextInput.Root>
 
         <Button className="mt-8 w-full">Cadastrar-se</Button>

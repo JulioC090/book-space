@@ -61,11 +61,13 @@ export default function WorkspaceForm({
             placeholder="Digite o nome da Workspace"
           />
         </TextInput.Wrapper>
-        <TextInput.Error>
-          {errors.name?.type === 'required' && 'O nome é obrigatório'}
-          {errors.name?.type === 'minLength' &&
-            'O nome precisa ter pelo menos dois caracteres'}
-        </TextInput.Error>
+        <TextInput.Error
+          error={errors.name?.type}
+          messages={{
+            required: 'O nome é obrigatório',
+            minLength: 'O nome precisa ter pelo menos dois caracteres',
+          }}
+        />
       </TextInput.Root>
 
       <TextInput.Root>
@@ -79,11 +81,13 @@ export default function WorkspaceForm({
             placeholder="Digite uma tag para a Workspace"
           />
         </TextInput.Wrapper>
-        <TextInput.Error>
-          {errors.tag?.type === 'required' && 'A tag é obrigatória'}
-          {errors.tag?.type === 'minLength' &&
-            'A tag precisa ter pelo menos dois caracteres'}
-        </TextInput.Error>
+        <TextInput.Error
+          error={errors.tag?.type}
+          messages={{
+            required: 'A tag é obrigatória',
+            minLength: 'A tag precisa ter pelo menos dois caracteres',
+          }}
+        />
       </TextInput.Root>
 
       {errors.name?.type === 'server' && (

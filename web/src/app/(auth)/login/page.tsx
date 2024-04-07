@@ -72,11 +72,13 @@ export default function LoginPage() {
               placeholder="Digite o seu email"
             />
           </TextInput.Wrapper>
-          <TextInput.Error>
-            {errors.email?.type === 'required' && 'O email é obrigatório'}
-            {errors.email?.type === 'pattern' &&
-              'O email precisa estar no formato "email@domain.com" '}
-          </TextInput.Error>
+          <TextInput.Error
+            error={errors.email?.type}
+            messages={{
+              required: 'O email é obrigatório',
+              pattern: 'O email precisa estar no formato "email@domain.com"',
+            }}
+          />
         </TextInput.Root>
 
         <TextInput.Root>
@@ -90,9 +92,10 @@ export default function LoginPage() {
               placeholder="Digite sua senha"
             />
           </TextInput.Wrapper>
-          <TextInput.Error>
-            {errors.password?.type === 'required' && 'A senha é obrigatória'}
-          </TextInput.Error>
+          <TextInput.Error
+            error={errors.password?.type}
+            messages={{ required: 'A senha é obrigatória' }}
+          />
         </TextInput.Root>
         {errors.email?.type === 'server' && (
           <div className="bg-red-300 py-3 px-4 w-full text-sm text-red-700 border-red-400 border-2 font-bold rounded">
