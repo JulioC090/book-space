@@ -1,7 +1,7 @@
 'use client';
 
-import { SideMenu } from '@/components/SideMenu';
-import SideMenuActionItem from '@/components/SideMenu/SideMenuActionItem';
+import { SideMenu } from '@/components/molecules/SideMenu';
+import SideMenuActionItem from '@/components/molecules/SideMenu/SideMenuActionItem';
 import { AuthContext } from '@/contexts/AuthContext';
 import { BookOpen, HouseSimple, SignOut } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';

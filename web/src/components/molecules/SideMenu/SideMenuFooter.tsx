@@ -1,4 +1,4 @@
-import SideMenuList from '@/components/SideMenu/SideMenuList';
+import SideMenuList from '@/components/molecules/SideMenu/SideMenuList';
 
 export interface SideMenuFooterProps {
   children: React.ReactNode;

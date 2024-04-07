@@ -1,10 +1,10 @@
 'use client';
 
-import Button from '@/components/Button';
-import Container from '@/components/Container';
-import WorkspaceForm from '@/components/Forms/WorkspaceForm';
-import Modal from '@/components/Modal';
-import WorkspaceCard from '@/components/WorkspaceCard/WorkspaceCard';
+import Button from '@/components/atoms/Button';
+import Container from '@/components/atoms/Container';
+import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
+import Modal from '@/components/organism/Modal';
+import WorkspaceCard from '@/components/organism/WorkspaceCard/WorkspaceCard';
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { useContext } from 'react';
 

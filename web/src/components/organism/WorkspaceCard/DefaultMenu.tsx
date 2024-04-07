@@ -1,4 +1,4 @@
-import { FloatingMenu } from '@/components/FloatingMenu';
+import { FloatingMenu } from '@/components/molecules/FloatingMenu';
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { Workspace } from '@/models/Workspace';
 import {

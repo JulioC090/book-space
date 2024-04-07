@@ -1,12 +1,12 @@
 'use client';
 
-import Button from '@/components/Button';
-import Card from '@/components/Card';
-import Container from '@/components/Container';
-import WorkspaceAddUserForm from '@/components/Forms/WorkspaceAddUserForm';
-import WorkspaceForm from '@/components/Forms/WorkspaceForm';
-import { IconButton } from '@/components/IconButton';
-import Modal from '@/components/Modal';
+import Button from '@/components/atoms/Button';
+import Card from '@/components/atoms/Card';
+import Container from '@/components/atoms/Container';
+import { IconButton } from '@/components/atoms/IconButton';
+import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserForm';
+import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
+import Modal from '@/components/organism/Modal';
 import { WorkspaceDetailsContext } from '@/contexts/WorkspaceDetailsContext';
 import getInitials from '@/utils/getInitials';
 import { TrashSimple } from '@phosphor-icons/react/dist/ssr';

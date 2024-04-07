@@ -1,5 +1,5 @@
-import Button from '@/components/Button';
-import { TextInput } from '@/components/TextInput';
+import Button from '@/components/atoms/Button';
+import { TextInput } from '@/components/atoms/TextInput';
 import { Workspace } from '@/models/Workspace';
 import { BookmarkSimple, Notebook } from '@phosphor-icons/react/dist/ssr';
 import { SubmitHandler, useForm } from 'react-hook-form';

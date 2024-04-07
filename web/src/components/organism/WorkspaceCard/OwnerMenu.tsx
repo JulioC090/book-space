@@ -1,9 +1,9 @@
 'use client';
 
-import { FloatingMenu } from '@/components/FloatingMenu';
-import WorkspaceAddUserForm from '@/components/Forms/WorkspaceAddUserForm';
-import WorkspaceForm from '@/components/Forms/WorkspaceForm';
-import Modal from '@/components/Modal';
+import { FloatingMenu } from '@/components/molecules/FloatingMenu';
+import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserForm';
+import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
+import Modal from '@/components/organism/Modal';
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { Workspace } from '@/models/Workspace';
 import {

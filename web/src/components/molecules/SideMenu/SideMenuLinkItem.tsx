@@ -1,5 +1,5 @@
-import SideMenuIconItem from '@/components/SideMenu/SideMenuIconItem';
-import SideMenuItem from '@/components/SideMenu/SideMenuItem';
+import SideMenuIconItem from '@/components/molecules/SideMenu/SideMenuIconItem';
+import SideMenuItem from '@/components/molecules/SideMenu/SideMenuItem';
 import Link from 'next/link';
 
 export interface SideMenuLinkItemProps {

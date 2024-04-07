@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@/components/Button';
-import Center from '@/components/Center';
-import { TextInput } from '@/components/TextInput';
+import Button from '@/components/atoms/Button';
+import Center from '@/components/atoms/Center';
+import { TextInput } from '@/components/atoms/TextInput';
 import { AuthContext } from '@/contexts/AuthContext';
 import AuthGateway from '@/infra/gateways/AuthGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';

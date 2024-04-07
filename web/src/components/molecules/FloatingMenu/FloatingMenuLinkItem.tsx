@@ -1,4 +1,4 @@
-import { FloatingMenuItem } from '@/components/FloatingMenu/FloatingMenuItem';
+import { FloatingMenuItem } from '@/components/molecules/FloatingMenu/FloatingMenuItem';
 import { DropdownMenuItemProps } from '@radix-ui/react-dropdown-menu';
 import Link from 'next/link';
 

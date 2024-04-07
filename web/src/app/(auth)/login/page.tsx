@@ -1,8 +1,8 @@
 'use client';
 
-import Button from '@/components/Button';
-import Center from '@/components/Center';
-import { TextInput } from '@/components/TextInput';
+import Button from '@/components/atoms/Button';
+import Center from '@/components/atoms/Center';
+import { TextInput } from '@/components/atoms/TextInput';
 import { AuthContext } from '@/contexts/AuthContext';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple } from '@phosphor-icons/react/dist/ssr';

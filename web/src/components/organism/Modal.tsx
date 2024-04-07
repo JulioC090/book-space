@@ -1,6 +1,6 @@
 'use client';
 
-import { IconButton } from '@/components/IconButton';
+import { IconButton } from '@/components/atoms/IconButton';
 import { X } from '@phosphor-icons/react/dist/ssr';
 import * as Dialog from '@radix-ui/react-dialog';
 import { Slot } from '@radix-ui/react-slot';

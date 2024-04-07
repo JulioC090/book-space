@@ -1,10 +1,10 @@
 'use client';
 
-import Card from '@/components/Card';
-import { FloatingMenu } from '@/components/FloatingMenu';
-import { IconButton } from '@/components/IconButton';
-import DefaultMenu from '@/components/WorkspaceCard/DefaultMenu';
-import OwnerMenu from '@/components/WorkspaceCard/OwnerMenu';
+import Card from '@/components/atoms/Card';
+import { IconButton } from '@/components/atoms/IconButton';
+import { FloatingMenu } from '@/components/molecules/FloatingMenu';
+import DefaultMenu from '@/components/organism/WorkspaceCard/DefaultMenu';
+import OwnerMenu from '@/components/organism/WorkspaceCard/OwnerMenu';
 import { Workspace } from '@/models/Workspace';
 import getInitials from '@/utils/getInitials';
 import { DotsThree } from '@phosphor-icons/react/dist/ssr';
