@@ -8,11 +8,13 @@ import {
 } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
-interface DefaultMenuProps {
+interface WorkspaceListItemDefaultMenuProps {
   workspace: Workspace;
 }
 
-export default function DefaultMenu({ workspace }: DefaultMenuProps) {
+export default function WorkspaceListItemDefaultMenu({
+  workspace,
+}: WorkspaceListItemDefaultMenuProps) {
   const { leaveWorkspace } = useContext(WorkspaceContext);
 
   return (

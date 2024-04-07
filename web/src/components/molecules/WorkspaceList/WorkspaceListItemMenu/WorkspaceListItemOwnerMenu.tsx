@@ -17,11 +17,13 @@ import {
 } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
-interface OwnerMenuProps {
+interface WorkspaceListItemOwnerMenuProps {
   workspace: Workspace;
 }
 
-export default function OwnerMenu({ workspace }: OwnerMenuProps) {
+export default function WorkspaceListItemOwnerMenu({
+  workspace,
+}: WorkspaceListItemOwnerMenuProps) {
   const { updateWorkspace, deleteWorkspace, addUser } =
     useContext(WorkspaceContext);
 

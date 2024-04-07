@@ -3,23 +3,24 @@
 import Card from '@/components/atoms/Card';
 import { IconButton } from '@/components/atoms/IconButton';
 import { FloatingMenu } from '@/components/molecules/FloatingMenu';
-import DefaultMenu from '@/components/organism/WorkspaceCard/DefaultMenu';
-import OwnerMenu from '@/components/organism/WorkspaceCard/OwnerMenu';
+import { WorkspaceListItemMenu } from '@/components/molecules/WorkspaceList/WorkspaceListItemMenu';
 import { Workspace } from '@/models/Workspace';
 import getInitials from '@/utils/getInitials';
 import { DotsThree } from '@phosphor-icons/react/dist/ssr';
 
-export interface WorkspaceCardProps {
+export interface WorkspaceListItemProps {
   workspace: Workspace;
 }
 
-export default function WorkspaceCard({ workspace }: WorkspaceCardProps) {
+export default function WorkspaceListItem({
+  workspace,
+}: WorkspaceListItemProps) {
   const roleMenuMap: { [key: string]: React.ReactNode } = {
-    OWNER: <OwnerMenu workspace={workspace} />,
+    OWNER: <WorkspaceListItemMenu.Owner workspace={workspace} />,
   };
 
   const menuComponent = roleMenuMap[workspace.role] || (
-    <DefaultMenu workspace={workspace} />
+    <WorkspaceListItemMenu.Default workspace={workspace} />
   );
 
   return (
