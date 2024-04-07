@@ -1,4 +1,5 @@
 import LinkButton from '@/components/atoms/LinkButton';
+import { ResponsiveResumer } from '@/components/atoms/ResponsiveResumer';
 import SideMenuItem from '@/components/molecules/SideMenu/SideMenuItem';
 
 export interface SideMenuLinkItemProps {
@@ -14,9 +15,14 @@ export default function SideMenuLinkItem({
 }: SideMenuLinkItemProps) {
   return (
     <SideMenuItem>
-      <LinkButton href={link} icon={icon} variant="unstyled">
-        <span className="hidden lg:block">{label}</span>
-      </LinkButton>
+      <ResponsiveResumer.Root sizeTrigger="lg" asChild>
+        <LinkButton href={link} variant="unstyled">
+          <ResponsiveResumer.Show>{icon}</ResponsiveResumer.Show>
+          <ResponsiveResumer.Hidden asChild>
+            <span>{label}</span>
+          </ResponsiveResumer.Hidden>
+        </LinkButton>
+      </ResponsiveResumer.Root>
     </SideMenuItem>
   );
 }

@@ -19,7 +19,8 @@ export default function FloatingMenuLinkItem({
 
   return (
     <FloatingMenuItem {...rest} onSelect={() => linkRef.current?.click()}>
-      <LinkButton ref={linkRef} href={href} icon={icon} variant="unstyled">
+      <LinkButton ref={linkRef} className="p-2" href={href} variant="unstyled">
+        {icon}
         {label}
       </LinkButton>
     </FloatingMenuItem>
