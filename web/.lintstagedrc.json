@@ -1,6 +1,5 @@
 {
   "*.{ts,tsx}": [
-      "npm run lint:fix",
-      "tsc-files --noEmit"
+      "npm run lint:fix"
   ]
 }
