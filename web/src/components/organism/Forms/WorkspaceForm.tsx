@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button';
+import FormError from '@/components/atoms/FormError';
 import { TextInput } from '@/components/atoms/TextInput';
 import { Workspace } from '@/models/Workspace';
 import { BookmarkSimple, Notebook } from '@phosphor-icons/react/dist/ssr';
@@ -90,11 +91,12 @@ export default function WorkspaceForm({
         />
       </TextInput.Root>
 
-      {errors.name?.type === 'server' && (
-        <div className="bg-red-300 py-3 px-4 w-full text-sm text-red-700 border-red-400 border-2 font-bold rounded">
-          Lamentamos, mas parece que ocorreu algum erro no servidor
-        </div>
-      )}
+      <FormError
+        error={errors.name?.type}
+        messages={{
+          server: 'Lamentamos, mas parece que ocorreu algum erro no servidor',
+        }}
+      />
 
       <Button className="mt-8 w-full">
         {!workspace ? 'Adicionar Workspace' : 'Editar Workspace'}

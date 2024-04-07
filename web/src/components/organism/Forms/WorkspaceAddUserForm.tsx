@@ -1,4 +1,5 @@
 import Button from '@/components/atoms/Button';
+import FormError from '@/components/atoms/FormError';
 import { TextInput } from '@/components/atoms/TextInput';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope } from '@phosphor-icons/react/dist/ssr';
@@ -69,11 +70,10 @@ export default function WorkspaceAddUserForm({
         />
       </TextInput.Root>
 
-      {errors.email?.type === 'server' && (
-        <div className="bg-red-300 py-3 px-4 w-full text-sm text-red-700 border-red-400 border-2 font-bold rounded">
-          O usuário informado não pode ser adicionado
-        </div>
-      )}
+      <FormError
+        error={errors.email?.type}
+        messages={{ server: 'O usuário informado não pode ser adicionado' }}
+      />
 
       <Button className="mt-8 w-full">Adicionar usuário</Button>
     </form>

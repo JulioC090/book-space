@@ -2,6 +2,7 @@
 
 import Button from '@/components/atoms/Button';
 import Center from '@/components/atoms/Center';
+import FormError from '@/components/atoms/FormError';
 import LinkButton from '@/components/atoms/LinkButton';
 import { TextInput } from '@/components/atoms/TextInput';
 import { AuthContext } from '@/contexts/AuthContext';
@@ -97,11 +98,11 @@ export default function LoginPage() {
             messages={{ required: 'A senha é obrigatória' }}
           />
         </TextInput.Root>
-        {errors.email?.type === 'server' && (
-          <div className="bg-red-300 py-3 px-4 w-full text-sm text-red-700 border-red-400 border-2 font-bold rounded">
-            Usuário ou senha incorretos
-          </div>
-        )}
+
+        <FormError
+          error={errors.email?.type}
+          messages={{ server: 'Usuário ou senha incorretos' }}
+        />
 
         <Button className="mt-8 w-full">Entrar</Button>
       </form>
