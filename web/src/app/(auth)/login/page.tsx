@@ -4,7 +4,7 @@ import Button from '@/components/atoms/Button';
 import Center from '@/components/atoms/Center';
 import FormError from '@/components/atoms/FormError';
 import LinkButton from '@/components/atoms/LinkButton';
-import { TextInput } from '@/components/atoms/TextInput';
+import TextInputController from '@/components/molecules/TextInputController';
 import { AuthContext } from '@/contexts/AuthContext';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple } from '@phosphor-icons/react/dist/ssr';
@@ -38,8 +38,7 @@ export default function LoginPage() {
 
   const clearServerError = () => {
     if (errors.email?.type === 'server') {
-      clearErrors('email');
-      clearErrors('password');
+      clearErrors(['email', 'password']);
     }
   };
 
@@ -57,47 +56,28 @@ export default function LoginPage() {
         onChange={clearServerError}
         className="flex flex-col items-center max-w-md w-full gap-3 p-4"
       >
-        <TextInput.Root>
-          <TextInput.Wrapper error={!!errors.email}>
-            <TextInput.Icon>
-              <Envelope />
-            </TextInput.Icon>
-            <TextInput.Input
-              {...register('email', {
-                required: true,
-                pattern: {
-                  value: emailRegex,
-                  message: 'Email inválido',
-                },
-              })}
-              placeholder="Digite o seu email"
-            />
-          </TextInput.Wrapper>
-          <TextInput.Error
-            error={errors.email?.type}
-            messages={{
-              required: 'O email é obrigatório',
-              pattern: 'O email precisa estar no formato "email@domain.com"',
-            }}
-          />
-        </TextInput.Root>
+        <TextInputController
+          {...register('email', {
+            required: { value: true, message: 'O email é obrigatório' },
+            pattern: {
+              value: emailRegex,
+              message: 'O email precisa estar no formato "email@domain.com"',
+            },
+          })}
+          placeholder="Digite o seu email"
+          icon={<Envelope />}
+          error={errors.email}
+        />
 
-        <TextInput.Root>
-          <TextInput.Wrapper error={!!errors.password}>
-            <TextInput.Icon>
-              <LockSimple />
-            </TextInput.Icon>
-            <TextInput.Input
-              {...register('password', { required: true })}
-              type="password"
-              placeholder="Digite sua senha"
-            />
-          </TextInput.Wrapper>
-          <TextInput.Error
-            error={errors.password?.type}
-            messages={{ required: 'A senha é obrigatória' }}
-          />
-        </TextInput.Root>
+        <TextInputController
+          {...register('password', {
+            required: { value: true, message: 'A senha é obrigatória' },
+          })}
+          type="password"
+          placeholder="Digite sua senha"
+          icon={<LockSimple />}
+          error={errors.password}
+        />
 
         <FormError
           error={errors.email?.type}

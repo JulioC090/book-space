@@ -3,7 +3,7 @@
 import Button from '@/components/atoms/Button';
 import Center from '@/components/atoms/Center';
 import LinkButton from '@/components/atoms/LinkButton';
-import { TextInput } from '@/components/atoms/TextInput';
+import TextInputController from '@/components/molecules/TextInputController';
 import { AuthContext } from '@/contexts/AuthContext';
 import AuthGateway from '@/infra/gateways/AuthGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
@@ -39,7 +39,10 @@ export default function SignUpPage() {
   const handleSignUp: SubmitHandler<ISignUpFields> = async (data) => {
     const response = await signupGateway.signup(data);
     if (!response) {
-      setError('email', { type: 'email-exists' });
+      setError('email', {
+        type: 'email-exists',
+        message: 'O email informado já está cadastrado',
+      });
       return;
     }
     await signIn(data);
@@ -58,70 +61,45 @@ export default function SignUpPage() {
         onSubmit={handleSubmit(handleSignUp)}
         className="flex flex-col items-center max-w-md w-full gap-3 p-4"
       >
-        <TextInput.Root>
-          <TextInput.Wrapper error={!!errors.name}>
-            <TextInput.Icon>
-              <User />
-            </TextInput.Icon>
-            <TextInput.Input
-              {...register('name', { required: true, minLength: 2 })}
-              placeholder="Digite o seu nome"
-            />
-          </TextInput.Wrapper>
-          <TextInput.Error
-            error={errors.name?.type}
-            messages={{
-              required: 'O nome é obrigatório',
-              minLength: 'O nome precisa ter pelo menos dois caracteres',
-            }}
-          />
-        </TextInput.Root>
+        <TextInputController
+          {...register('name', {
+            required: { value: true, message: 'O nome é obrigatório' },
+            minLength: {
+              value: 2,
+              message: 'O nome precisa ter pelo menos dois caracteres',
+            },
+          })}
+          placeholder="Digite o seu nome"
+          icon={<User />}
+          error={errors.name}
+        />
 
-        <TextInput.Root>
-          <TextInput.Wrapper error={!!errors.email}>
-            <TextInput.Icon>
-              <Envelope />
-            </TextInput.Icon>
-            <TextInput.Input
-              {...register('email', {
-                required: true,
-                pattern: {
-                  value: emailRegex,
-                  message: 'Email inválido',
-                },
-              })}
-              placeholder="Digite o seu email"
-            />
-          </TextInput.Wrapper>
-          <TextInput.Error
-            error={errors.email?.type}
-            messages={{
-              required: 'O email é obrigatório',
-              pattern: 'O email precisa estar no formato "email@domain.com"',
-              'email-exists': 'O email informado já está cadastrado',
-            }}
-          />
-        </TextInput.Root>
+        <TextInputController
+          {...register('email', {
+            required: { value: true, message: 'O email é obrigatório' },
+            pattern: {
+              value: emailRegex,
+              message: 'O email precisa estar no formato "email@domain.com"',
+            },
+          })}
+          placeholder="Digite o seu email"
+          icon={<Envelope />}
+          error={errors.email}
+        />
 
-        <TextInput.Root>
-          <TextInput.Wrapper error={!!errors.password}>
-            <TextInput.Icon>
-              <LockSimple />
-            </TextInput.Icon>
-            <TextInput.Input
-              {...register('password', { required: true, minLength: 8 })}
-              type="password"
-              placeholder="Digite sua senha"
-            />
-          </TextInput.Wrapper>
-          <TextInput.Error
-            error={errors.password?.type}
-            messages={{
-              required: 'A senha é obrigatória',
-              minLength: 'A senha precisa ter pelo menos oito caracteres',
-            }}
-          />
-        </TextInput.Root>
+        <TextInputController
+          {...register('password', {
+            required: { value: true, message: 'A senha é obrigatória' },
+            minLength: {
+              value: 8,
+              message: 'A senha precisa ter pelo menos oito caracteres',
+            },
+          })}
+          type="password"
+          placeholder="Digite sua senha"
+          icon={<LockSimple />}
+          error={errors.password}
+        />
 
         <Button className="mt-8 w-full">Cadastrar-se</Button>
       </form>

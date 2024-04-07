@@ -1,6 +1,6 @@
 import Button from '@/components/atoms/Button';
 import FormError from '@/components/atoms/FormError';
-import { TextInput } from '@/components/atoms/TextInput';
+import TextInputController from '@/components/molecules/TextInputController';
 import { Workspace } from '@/models/Workspace';
 import { BookmarkSimple, Notebook } from '@phosphor-icons/react/dist/ssr';
 import { SubmitHandler, useForm } from 'react-hook-form';
@@ -51,45 +51,33 @@ export default function WorkspaceForm({
       onSubmit={handleSubmit(handleWorkspaceSubmit)}
       className="flex flex-col items-center max-w-md w-full gap-3 p-4"
     >
-      <TextInput.Root>
-        <TextInput.Wrapper error={!!errors.name}>
-          <TextInput.Icon>
-            <Notebook />
-          </TextInput.Icon>
-          <TextInput.Input
-            {...register('name', { required: true, minLength: 2 })}
-            defaultValue={workspace?.name}
-            placeholder="Digite o nome da Workspace"
-          />
-        </TextInput.Wrapper>
-        <TextInput.Error
-          error={errors.name?.type}
-          messages={{
-            required: 'O nome é obrigatório',
-            minLength: 'O nome precisa ter pelo menos dois caracteres',
-          }}
-        />
-      </TextInput.Root>
+      <TextInputController
+        {...register('name', {
+          required: { value: true, message: 'O nome é obrigatório' },
+          minLength: {
+            value: 2,
+            message: 'O nome precisa ter pelo menos dois caracteres',
+          },
+        })}
+        defaultValue={workspace?.name}
+        placeholder="Digite o nome da Workspace"
+        icon={<Notebook />}
+        error={errors.name}
+      />
 
-      <TextInput.Root>
-        <TextInput.Wrapper error={!!errors.tag}>
-          <TextInput.Icon>
-            <BookmarkSimple />
-          </TextInput.Icon>
-          <TextInput.Input
-            {...register('tag', { required: true, minLength: 2 })}
-            defaultValue={workspace?.tag}
-            placeholder="Digite uma tag para a Workspace"
-          />
-        </TextInput.Wrapper>
-        <TextInput.Error
-          error={errors.tag?.type}
-          messages={{
-            required: 'A tag é obrigatória',
-            minLength: 'A tag precisa ter pelo menos dois caracteres',
-          }}
-        />
-      </TextInput.Root>
+      <TextInputController
+        {...register('tag', {
+          required: { value: true, message: 'A tag é obrigatória' },
+          minLength: {
+            value: 2,
+            message: 'A tag precisa ter pelo menos dois caracteres',
+          },
+        })}
+        defaultValue={workspace?.tag}
+        placeholder="Digite uma tag para a Workspace"
+        icon={<BookmarkSimple />}
+        error={errors.tag}
+      />
 
       <FormError
         error={errors.name?.type}
