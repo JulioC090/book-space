@@ -1,6 +1,7 @@
 'use client';
 
 import NavBar from '@/components/organism/Navbar';
+import { WorkspacesProvider } from '@/contexts/WorkspacesContext';
 
 export interface SideMenuLayoutProps {
   children: React.ReactNode;
@@ -8,11 +9,13 @@ export interface SideMenuLayoutProps {
 
 export default function SideMenuLayout({ children }: SideMenuLayoutProps) {
   return (
-    <div className="flex flex-col-reverse h-screen sm:h-fit sm:flex-row w-full">
-      <NavBar />
-      <main className="flex-grow sm:min-h-screen overflow-y-auto">
-        {children}
-      </main>
-    </div>
+    <WorkspacesProvider>
+      <div className="flex flex-col-reverse h-screen sm:h-fit sm:flex-row w-full">
+        <NavBar />
+        <main className="flex-grow sm:min-h-screen overflow-y-auto">
+          {children}
+        </main>
+      </div>
+    </WorkspacesProvider>
   );
 }

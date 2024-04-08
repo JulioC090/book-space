@@ -1,12 +1,11 @@
 /* eslint-disable no-unused-vars */
 'use client';
 
-import { AuthContext } from '@/contexts/AuthContext';
 import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
 import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { Workspace } from '@/models/Workspace';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 interface WorkspacesContextType {
   workspaces: Array<Workspace>;
@@ -37,7 +36,6 @@ const workspaceGateway = new WorkspaceGateway(axiosHttpClient);
 export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   const [workspaces, setWorkspaces] = useState<Array<Workspace>>([]);
   const [isValid, setIsValid] = useState<boolean>(false);
-  const { userInfo } = useContext(AuthContext);
 
   useEffect(() => {
     async function fetchData() {
@@ -45,9 +43,9 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
       setIsValid(true);
     }
 
-    if (!userInfo || isValid) return;
+    if (isValid) return;
     fetchData();
-  }, [userInfo, isValid]);
+  }, [isValid]);
 
   async function addWorkspace(
     workspace: Omit<Workspace, 'id' | 'role'>,
