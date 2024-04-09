@@ -3,17 +3,16 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id       String  @id @default(uuid())
-  token    String?
-  name     String
-  email    String  @unique
-  password String
-
+  id            String             @id @default(uuid())
+  token         String?
+  name          String
+  email         String             @unique
+  password      String
   ownWorkspaces Workspace[]
   workspaces    UsersOnWorkspace[]
 
@@ -21,13 +20,12 @@ model User {
 }
 
 model Workspace {
-  id      String @id @default(uuid())
+  id      String             @id @default(uuid())
   ownerId String
   name    String
   tag     String
-
-  owner User               @relation(fields: [ownerId], references: [id])
-  users UsersOnWorkspace[]
+  owner   User               @relation(fields: [ownerId], references: [id])
+  users   UsersOnWorkspace[]
 
   @@map("workspaces")
 }
@@ -35,10 +33,16 @@ model Workspace {
 model UsersOnWorkspace {
   userId      String
   workspaceId String
+  role        UsersOnWorkspaceRole @default(DEFAULT)
 
   user      User      @relation(fields: [userId], references: [id])
   workspace Workspace @relation(fields: [workspaceId], references: [id])
 
   @@id([userId, workspaceId])
   @@map("workspaces_users")
+}
+
+enum UsersOnWorkspaceRole {
+  MANAGER
+  DEFAULT
 }
