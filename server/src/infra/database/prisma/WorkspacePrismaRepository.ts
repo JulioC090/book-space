@@ -6,6 +6,7 @@ import IAddWorkspaceRepository, {
   IAddWorkspaceRepositoryInput,
   IAddWorkspaceRepositoryOutput,
 } from 'infra/protocols/repositories/IAddWorkspaceRepository';
+import IChangeUserRoleRepository from 'infra/protocols/repositories/IChangeUserRoleRepository';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
 import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
@@ -26,7 +27,8 @@ export default class WorkspacePrimaRepository
     ICheckUserExistInWorkspaceRepository,
     IAddUserToWorkspaceRepository,
     IDeleteUserInWorkspaceRepository,
-    ILoadWorkspaceDetailsRepository
+    ILoadWorkspaceDetailsRepository,
+    IChangeUserRoleRepository
 {
   async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
     return await prisma.workspace.findMany({
@@ -126,5 +128,17 @@ export default class WorkspacePrimaRepository
     });
 
     return !!deletedUser;
+  }
+
+  async changeRole(
+    workspaceId: string,
+    { userId, role }: { userId: string; role: UserRole },
+  ): Promise<boolean> {
+    const changedUser = await prisma.usersOnWorkspace.updateMany({
+      where: { AND: [{ userId }, { workspaceId }] },
+      data: { role },
+    });
+
+    return !!changedUser;
   }
 }
