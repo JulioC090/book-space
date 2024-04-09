@@ -1,4 +1,5 @@
 import { User } from 'domain/models/User';
+import { UserRole } from 'domain/models/UserRole';
 import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
 import { badRequest, created, forbidden } from 'presentation/helpers/httpCodes';
 import { Controller } from 'presentation/protocols/Controller';
@@ -11,6 +12,7 @@ const requestParamsSchema = z.object({
 
 const requestBodySchema = z.object({
   userEmail: z.string().min(1),
+  role: z.nativeEnum(UserRole).default(UserRole.DEFAULT),
 });
 
 export default class PostUserToWorkspaceController implements Controller {
@@ -36,7 +38,10 @@ export default class PostUserToWorkspaceController implements Controller {
     const response = await this.addUserToWorkspace.addUserToWorkspace(
       account,
       validatedRequestParams.data.workspaceId,
-      validatedRequestBody.data.userEmail,
+      {
+        email: validatedRequestBody.data.userEmail,
+        role: validatedRequestBody.data.role,
+      },
     );
 
     if (!response) return forbidden();

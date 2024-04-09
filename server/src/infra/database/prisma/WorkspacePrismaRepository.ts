@@ -1,3 +1,4 @@
+import { UserRole } from 'domain/models/UserRole';
 import Workspace from 'domain/models/Workspace';
 import { prisma } from 'infra/database/prisma/prismaClient';
 import IAddUserToWorkspaceRepository from 'infra/protocols/repositories/IAddUserToWorkspaceRepository';
@@ -108,10 +109,10 @@ export default class WorkspacePrimaRepository
 
   async addUserToWorkspace(
     workspaceId: string,
-    userId: string,
+    { id, role }: { id: string; role: UserRole },
   ): Promise<boolean> {
     const createdUserOnWorkspace = await prisma.usersOnWorkspace.create({
-      data: { userId, workspaceId },
+      data: { userId: id, workspaceId, role },
     });
     return !!createdUserOnWorkspace;
   }

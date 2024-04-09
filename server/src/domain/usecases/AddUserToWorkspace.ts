@@ -1,4 +1,5 @@
 import { User } from 'domain/models/User';
+import { UserRole } from 'domain/models/UserRole';
 import IAddUserToWorkspaceRepository from 'infra/protocols/repositories/IAddUserToWorkspaceRepository';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
 import { ILoadAccountByEmailRepository } from 'infra/protocols/repositories/ILoadAccountByEmailRepository';
@@ -26,17 +27,18 @@ export default class AddUserToWorkspace {
   async addUserToWorkspace(
     authenticatedUser: User,
     workspaceId: string,
-    userEmail: string,
+    user: { email: string; role: UserRole },
   ): Promise<{ id: string; name: string; email: string } | null> {
     const workspace =
       await this.loadWorkspaceByIdRepository.loadById(workspaceId);
 
     if (!workspace) return null;
     if (workspace.ownerId !== authenticatedUser.id) return null;
-    if (userEmail === authenticatedUser.email) return null;
+    if (user.email === authenticatedUser.email) return null;
 
-    const addedUser =
-      await this.loadAccountByEmailRepository.loadByEmail(userEmail);
+    const addedUser = await this.loadAccountByEmailRepository.loadByEmail(
+      user.email,
+    );
     if (!addedUser) return null;
 
     const existInWorkspace =
@@ -48,7 +50,7 @@ export default class AddUserToWorkspace {
 
     const response = await this.addUserToWorkspaceRepository.addUserToWorkspace(
       workspaceId,
-      addedUser.id,
+      { id: addedUser.id, role: user.role },
     );
 
     if (!response) return null;
