@@ -9,10 +9,6 @@ export default class LoadWorkspaces {
   }
 
   async load(userId: string): Promise<Array<Workspace>> {
-    const workspaces = await this.loadWorkspacesRepository.load(userId);
-    return workspaces.map((workspace) => ({
-      ...workspace,
-      role: workspace.ownerId === userId ? 'OWNER' : 'DEFAULT',
-    }));
+    return await this.loadWorkspacesRepository.load(userId);
   }
 }

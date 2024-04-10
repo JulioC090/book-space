@@ -10,6 +10,7 @@ import IChangeUserRoleRepository from 'infra/protocols/repositories/IChangeUserR
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
 import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
+import ILoadUserRoleRepository from 'infra/protocols/repositories/ILoadUserRoleRepository';
 import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
 import ILoadWorkspaceDetailsRepository from 'infra/protocols/repositories/ILoadWorkspaceDetailsRepository';
 import ILoadWorkspacesRepository, {
@@ -28,12 +29,27 @@ export default class WorkspacePrimaRepository
     IAddUserToWorkspaceRepository,
     IDeleteUserInWorkspaceRepository,
     ILoadWorkspaceDetailsRepository,
-    IChangeUserRoleRepository
+    IChangeUserRoleRepository,
+    ILoadUserRoleRepository
 {
   async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
-    return await prisma.workspace.findMany({
-      where: { OR: [{ ownerId: userId }, { users: { some: { userId } } }] },
+    const response = await prisma.workspace.findMany({
+      where: {
+        OR: [{ ownerId: userId }, { users: { some: { userId } } }],
+      },
+      include: { users: { select: { role: true }, where: { userId } } },
     });
+
+    return response.map((workspace) => ({
+      id: workspace.id,
+      name: workspace.name,
+      ownerId: workspace.ownerId,
+      tag: workspace.tag,
+      role:
+        workspace!.users.length === 0
+          ? 'OWNER'
+          : (workspace!.users[0].role as UserRole),
+    }));
   }
 
   async add(
@@ -140,5 +156,26 @@ export default class WorkspacePrimaRepository
     });
 
     return !!changedUser;
+  }
+
+  async loadUserRole(
+    userId: string,
+    workspaceId: string,
+  ): Promise<UserRole | 'OWNER' | null> {
+    const response = await prisma.workspace.findFirst({
+      where: { id: workspaceId },
+      include: { users: { select: { role: true }, where: { userId } } },
+    });
+
+    if (!response) return null;
+    if (response?.users.length === 0 && response.ownerId !== userId)
+      return null;
+
+    const role =
+      response!.users.length === 0
+        ? 'OWNER'
+        : (response!.users[0].role as UserRole);
+
+    return role;
   }
 }

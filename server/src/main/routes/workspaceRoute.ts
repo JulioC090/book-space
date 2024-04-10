@@ -48,6 +48,7 @@ const deleteWorkspaceController = new DeleteWorkspaceController(
 const loadWorkspaceDetails = new LoadWorkspaceDetails(
   workspaceRepository,
   workspaceRepository,
+  workspaceRepository,
 );
 const getWorkspaceDetailsController = new GetWorkspaceDetailsController(
   loadWorkspaceDetails,
