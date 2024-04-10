@@ -56,6 +56,7 @@ const getWorkspaceDetailsController = new GetWorkspaceDetailsController(
 
 const addUserToWorkspace = new AddUserToWorkspace(
   workspaceRepository,
+  workspaceRepository,
   accountRepository,
   workspaceRepository,
   workspaceRepository,
@@ -65,6 +66,7 @@ const postUserToWorkspaceController = new PostUserToWorkspaceController(
 );
 
 const deleteUserInWorkspace = new DeleteUserInWorkspace(
+  workspaceRepository,
   workspaceRepository,
   workspaceRepository,
   accountRepository,
@@ -84,6 +86,7 @@ const deleteLeaveWorkspaceController = new DeleteLeaveWorkspaceController(
 );
 
 const changeUserRoleInWorkspace = new ChangeUserRoleInWorkspace(
+  workspaceRepository,
   workspaceRepository,
   accountRepository,
   workspaceRepository,
