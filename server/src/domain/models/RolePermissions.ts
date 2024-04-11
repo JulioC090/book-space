@@ -1,5 +1,5 @@
-import { UserRole } from 'domain/models/UserRole';
-import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
+import { UserRole } from '@/domain/models/UserRole';
+import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
 
 export const rolePermissions: Record<
   UserRole | 'OWNER',
