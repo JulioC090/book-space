@@ -1,4 +1,4 @@
-export enum Permission {
+export enum WorkspacePermissions {
   EDIT_WORKSPACE = 'EDIT_WORKSPACE',
   DELETE_WORKSPACE = 'DELETE_WORKSPACE',
   ADD_USER_TO_WORKSPACE = 'ADD_USER_TO_WORKSPACE',

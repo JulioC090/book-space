@@ -1,5 +1,5 @@
-import { Permission } from 'domain/models/Permission';
 import { User } from 'domain/models/User';
+import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
 import can from 'domain/utils/permissionResolver';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
 import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
@@ -45,7 +45,12 @@ export default class DeleteUserInWorkspace {
       );
 
     if (!authenticatedUserRole) return false;
-    if (!can(authenticatedUserRole, Permission.REMOVE_USER_FROM_WORKSPACE))
+    if (
+      !can(
+        authenticatedUserRole,
+        WorkspacePermissions.REMOVE_USER_FROM_WORKSPACE,
+      )
+    )
       return false;
 
     const removedUser =

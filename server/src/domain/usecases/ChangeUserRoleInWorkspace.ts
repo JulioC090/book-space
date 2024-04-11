@@ -1,6 +1,6 @@
-import { Permission } from 'domain/models/Permission';
 import { User } from 'domain/models/User';
 import { UserRole } from 'domain/models/UserRole';
+import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
 import can from 'domain/utils/permissionResolver';
 import IChangeUserRoleRepository from 'infra/protocols/repositories/IChangeUserRoleRepository';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
@@ -45,7 +45,8 @@ export default class ChangeUserRoleInWorkspace {
         workspaceId,
       );
     if (!authenticatedUserRole) return false;
-    if (!can(authenticatedUserRole, Permission.UPDATE_USER_ROLE)) return false;
+    if (!can(authenticatedUserRole, WorkspacePermissions.UPDATE_USER_ROLE))
+      return false;
 
     const changedUser = await this.loadAccountByEmailRepository.loadByEmail(
       user.email,

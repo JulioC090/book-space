@@ -1,6 +1,6 @@
-import { Permission } from 'domain/models/Permission';
 import { User } from 'domain/models/User';
 import { UserRole } from 'domain/models/UserRole';
+import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
 import can from 'domain/utils/permissionResolver';
 import IAddUserToWorkspaceRepository from 'infra/protocols/repositories/IAddUserToWorkspaceRepository';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
@@ -48,7 +48,7 @@ export default class AddUserToWorkspace {
       );
 
     if (!authenticatedUserRole) return null;
-    if (!can(authenticatedUserRole, Permission.ADD_USER_TO_WORKSPACE))
+    if (!can(authenticatedUserRole, WorkspacePermissions.ADD_USER_TO_WORKSPACE))
       return null;
 
     const addedUser = await this.loadAccountByEmailRepository.loadByEmail(
