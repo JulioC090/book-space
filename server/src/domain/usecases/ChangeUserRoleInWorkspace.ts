@@ -1,5 +1,5 @@
+import { UserRole } from '@/domain/models/UserRole';
 import { User } from 'domain/models/User';
-import { UserRole } from 'domain/models/UserRole';
 import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
 import can from 'domain/utils/permissionResolver';
 import IChangeUserRoleRepository from 'infra/protocols/repositories/IChangeUserRoleRepository';

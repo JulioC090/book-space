@@ -1,12 +1,12 @@
-import { User } from 'domain/models/User';
-import { UserRole } from 'domain/models/UserRole';
-import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
-import can from 'domain/utils/permissionResolver';
-import IAddUserToWorkspaceRepository from 'infra/protocols/repositories/IAddUserToWorkspaceRepository';
-import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
-import { ILoadAccountByEmailRepository } from 'infra/protocols/repositories/ILoadAccountByEmailRepository';
-import ILoadUserRoleRepository from 'infra/protocols/repositories/ILoadUserRoleRepository';
-import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
+import { User } from '@/domain/models/User';
+import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
+import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
+import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
+import IAddUserToWorkspaceRepository from '@/infra/protocols/repositories/IAddUserToWorkspaceRepository';
+import ICheckUserExistInWorkspaceRepository from '@/infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
+import { ILoadAccountByEmailRepository } from '@/infra/protocols/repositories/ILoadAccountByEmailRepository';
+import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
+import ILoadWorkspaceById from '@/infra/protocols/repositories/ILoadWorkspaceById';
 
 export default class AddUserToWorkspace {
   private loadUserRoleRepository: ILoadUserRoleRepository;
@@ -31,9 +31,9 @@ export default class AddUserToWorkspace {
   }
 
   async addUserToWorkspace(
-    authenticatedUser: User,
+    authenticatedUser: Omit<User, 'password'>,
     workspaceId: string,
-    user: { email: string; role: UserRole },
+    user: { email: string; role: WorkspaceRoles },
   ): Promise<{ id: string; name: string; email: string } | null> {
     const workspace =
       await this.loadWorkspaceByIdRepository.loadById(workspaceId);
@@ -48,7 +48,18 @@ export default class AddUserToWorkspace {
       );
 
     if (!authenticatedUserRole) return null;
-    if (!can(authenticatedUserRole, WorkspacePermissions.ADD_USER_TO_WORKSPACE))
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].can(
+        WorkspacePermissions.ADD_USER_TO_WORKSPACE,
+      )
+    )
+      return null;
+
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].isAbove(
+        workspaceRolesPermissions[user.role],
+      )
+    )
       return null;
 
     const addedUser = await this.loadAccountByEmailRepository.loadByEmail(

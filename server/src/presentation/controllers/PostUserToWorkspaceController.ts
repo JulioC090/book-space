@@ -1,5 +1,5 @@
+import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 import { User } from 'domain/models/User';
-import { UserRole } from 'domain/models/UserRole';
 import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
 import { badRequest, created, forbidden } from 'presentation/helpers/httpCodes';
 import { Controller } from 'presentation/protocols/Controller';
@@ -12,7 +12,7 @@ const requestParamsSchema = z.object({
 
 const requestBodySchema = z.object({
   userEmail: z.string().min(1),
-  role: z.nativeEnum(UserRole).default(UserRole.DEFAULT),
+  role: z.nativeEnum(WorkspaceRoles).default(WorkspaceRoles.DEFAULT),
 });
 
 export default class PostUserToWorkspaceController implements Controller {

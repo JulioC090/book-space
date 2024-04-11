@@ -1,4 +1,6 @@
-import { UserRole } from 'domain/models/UserRole';
+import { UserRole } from '@/domain/models/UserRole';
+import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
+import { UsersOnWorkspaceRole } from '@prisma/client';
 import Workspace from 'domain/models/Workspace';
 import { prisma } from 'infra/database/prisma/prismaClient';
 import IAddUserToWorkspaceRepository from 'infra/protocols/repositories/IAddUserToWorkspaceRepository';
@@ -127,10 +129,10 @@ export default class WorkspacePrimaRepository
 
   async addUserToWorkspace(
     workspaceId: string,
-    { id, role }: { id: string; role: UserRole },
+    { id, role }: { id: string; role: Omit<WorkspaceRoles, 'OWNER'> },
   ): Promise<boolean> {
     const createdUserOnWorkspace = await prisma.usersOnWorkspace.create({
-      data: { userId: id, workspaceId, role },
+      data: { userId: id, workspaceId, role: role as UsersOnWorkspaceRole },
     });
     return !!createdUserOnWorkspace;
   }
@@ -161,7 +163,7 @@ export default class WorkspacePrimaRepository
   async loadUserRole(
     userId: string,
     workspaceId: string,
-  ): Promise<UserRole | 'OWNER' | null> {
+  ): Promise<WorkspaceRoles | null> {
     const response = await prisma.workspace.findFirst({
       where: { id: workspaceId },
       include: { users: { select: { role: true }, where: { userId } } },
@@ -173,8 +175,8 @@ export default class WorkspacePrimaRepository
 
     const role =
       response!.users.length === 0
-        ? 'OWNER'
-        : (response!.users[0].role as UserRole);
+        ? WorkspaceRoles.OWNER
+        : (response!.users[0].role as WorkspaceRoles);
 
     return role;
   }

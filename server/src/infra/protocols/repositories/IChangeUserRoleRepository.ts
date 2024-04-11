@@ -1,4 +1,4 @@
-import { UserRole } from 'domain/models/UserRole';
+import { UserRole } from '@/domain/models/UserRole';
 
 export default interface IChangeUserRoleRepository {
   changeRole(

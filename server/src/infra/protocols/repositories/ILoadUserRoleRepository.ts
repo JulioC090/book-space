@@ -1,8 +1,8 @@
-import { UserRole } from 'domain/models/UserRole';
+import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 
 export default interface ILoadUserRoleRepository {
   loadUserRole(
     userId: string,
     workspaceId: string,
-  ): Promise<UserRole | 'OWNER' | null>;
+  ): Promise<WorkspaceRoles | null>;
 }

@@ -1,5 +1,5 @@
+import { UserRole } from '@/domain/models/UserRole';
 import { User } from '@prisma/client';
-import { UserRole } from 'domain/models/UserRole';
 import ChangeUserRoleInWorkspace from 'domain/usecases/ChangeUserRoleInWorkspace';
 import { badRequest, forbidden, ok } from 'presentation/helpers/httpCodes';
 import { Controller } from 'presentation/protocols/Controller';
