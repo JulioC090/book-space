@@ -22,7 +22,7 @@ const OWNER = new Role<WorkspacePermissions>(
     WorkspacePermissions.ADD_USER_TO_WORKSPACE,
     WorkspacePermissions.UPDATE_USER_ROLE,
     WorkspacePermissions.REMOVE_USER_FROM_WORKSPACE,
-    WorkspacePermissions.EDIT_WORKSPACE,
+    WorkspacePermissions.UPDATE_WORKSPACE,
     WorkspacePermissions.DELETE_WORKSPACE,
   ],
   2,

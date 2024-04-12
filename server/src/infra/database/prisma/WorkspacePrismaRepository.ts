@@ -61,12 +61,11 @@ export default class WorkspacePrimaRepository
   }
 
   async update(
-    userId: string,
     workspaceId: string,
     partialWorkspace: Partial<Omit<Workspace, 'id'>>,
   ): Promise<boolean> {
     const updatesWorkspace = await prisma.workspace.updateMany({
-      where: { id: workspaceId, ownerId: userId },
+      where: { id: workspaceId },
       data: partialWorkspace,
     });
     return updatesWorkspace.count > 0;
