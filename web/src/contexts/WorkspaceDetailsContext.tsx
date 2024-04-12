@@ -1,9 +1,7 @@
 'use client';
 
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
-import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
-import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
-import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
+import { makeWorkspaceGateway } from '@/main/factories/gateways/WorkspaceGateway';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { useParams, useRouter } from 'next/navigation';
@@ -33,12 +31,7 @@ export const WorkspaceDetailsContext = createContext(
   {} as WorkspaceDetailsContextType,
 );
 
-const urlReplaceParams = new UrlReplaceParams();
-const axiosHttpClient = new AxiosHttpClient(
-  process.env.NEXT_PUBLIC_API_URL || '',
-  urlReplaceParams,
-);
-const workspaceGateway = new WorkspaceGateway(axiosHttpClient);
+const workspaceGateway = makeWorkspaceGateway();
 
 export function WorkspaceDetailProvider({
   children,
