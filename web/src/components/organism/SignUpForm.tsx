@@ -3,9 +3,7 @@
 import Button from '@/components/atoms/Button';
 import TextInputController from '@/components/molecules/TextInputController';
 import { AuthContext } from '@/contexts/AuthContext';
-import AuthGateway from '@/infra/gateways/AuthGateway';
-import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
-import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
+import { makeAuthGateway } from '@/main/factories/gateways/AuthGatewayFactory';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope, LockSimple, User } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
@@ -17,12 +15,7 @@ interface ISignUpFields {
   password: string;
 }
 
-const urlReplaceParams = new UrlReplaceParams();
-const httpClient = new AxiosHttpClient(
-  process.env.NEXT_PUBLIC_API_URL || '',
-  urlReplaceParams,
-);
-const signupGateway = new AuthGateway(httpClient);
+const signupGateway = makeAuthGateway();
 
 export default function SignUpForm() {
   const {

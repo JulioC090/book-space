@@ -2,10 +2,8 @@
 
 import useLocalStorage from '@/hooks/useLocalStorage';
 /* eslint-disable no-unused-vars */
-import AuthGateway from '@/infra/gateways/AuthGateway';
-import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
-import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
+import { makeAuthGateway } from '@/main/factories/gateways/AuthGatewayFactory';
 import { User } from '@/models/User';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/navigation';
@@ -23,12 +21,7 @@ interface AuthProviderProps {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-const urlReplaceParams = new UrlReplaceParams();
-const httpClient = new AxiosHttpClient(
-  process.env.NEXT_PUBLIC_API_URL || '',
-  urlReplaceParams,
-);
-const authGateway = new AuthGateway(httpClient);
+const authGateway = makeAuthGateway();
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
