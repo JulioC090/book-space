@@ -10,6 +10,7 @@ import ILeaveWorkspaceGateway from '@/infra/protocols/gateways/ILeaveWorkspaceGa
 import ILoadWorkspaceDetailsGateway from '@/infra/protocols/gateways/ILoadWorkspaceDetailsGateway';
 import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
+import IUpdateWorkspaceUserRoleGateway from '@/infra/protocols/gateways/IUpdateWorkspaceUserRoleGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
@@ -22,6 +23,7 @@ export default class WorkspaceGateway
     IDeleteWorkspace,
     ILoadWorkspaceDetailsGateway,
     IAddUserInWorkspaceGateway,
+    IUpdateWorkspaceUserRoleGateway,
     IDeleteUserInWorkspace,
     ILeaveWorkspaceGateway
 {
@@ -104,6 +106,21 @@ export default class WorkspaceGateway
     if (response.status !== 201) return;
 
     return { ...response.body!, role };
+  }
+
+  async updateUserRole(
+    workspaceId: string,
+    userEmail: string,
+    role: WorkspaceRoles,
+  ): Promise<boolean> {
+    const response = await this.httpClient.put({
+      url: '/workspace/:workspaceId/user',
+      params: { workspaceId },
+      body: { userEmail, role },
+    });
+    if (!response) return false;
+
+    return response.status === 200;
   }
 
   async deleteUser(workspaceId: string, userEmail: string): Promise<boolean> {

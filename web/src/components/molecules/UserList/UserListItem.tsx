@@ -15,7 +15,9 @@ interface UserListItemProps {
 }
 
 export default function UserListItem({ user }: UserListItemProps) {
-  const { workspace, deleteUser } = useContext(WorkspaceDetailsContext);
+  const { workspace, deleteUser, updateUserRole } = useContext(
+    WorkspaceDetailsContext,
+  );
 
   return (
     <div className="flex justify-between items-center w-full p-4 [&:not(:last-child)]:border-b border-b-zinc-900">
@@ -32,6 +34,7 @@ export default function UserListItem({ user }: UserListItemProps) {
         <SelectionField
           className="w-fit min-w-32"
           defaultValue={user.role}
+          onChange={(value) => updateUserRole(user.email, value)}
           options={getRolesWithLowerLevel(workspace!.role)}
         />
         <IconButton onClick={() => deleteUser(user.email)}>

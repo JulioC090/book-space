@@ -20,6 +20,8 @@ interface WorkspaceDetailsContextType {
   // eslint-disable-next-line no-unused-vars
   addUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   // eslint-disable-next-line no-unused-vars
+  updateUserRole: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
+  // eslint-disable-next-line no-unused-vars
   deleteUser: (userEmail: string) => Promise<boolean>;
 }
 
@@ -92,6 +94,29 @@ export function WorkspaceDetailProvider({
     return true;
   }
 
+  async function updateUserRole(
+    userEmail: string,
+    role: WorkspaceRoles,
+  ): Promise<boolean> {
+    const response = await workspaceGateway.updateUserRole(
+      workspace!.id,
+      userEmail,
+      role,
+    );
+
+    if (!response) return false;
+
+    setWorkspace((prevWorkspace) => ({
+      ...prevWorkspace!,
+      users: prevWorkspace!.users.map((user) => {
+        if (user.email !== userEmail) return user;
+        return { ...user, role };
+      }),
+    }));
+
+    return true;
+  }
+
   async function deleteUser(userEmail: string): Promise<boolean> {
     const response = await workspaceGateway.deleteUser(
       workspace!.id,
@@ -108,7 +133,13 @@ export function WorkspaceDetailProvider({
 
   return (
     <WorkspaceDetailsContext.Provider
-      value={{ workspace, updateWorkspace, addUser, deleteUser }}
+      value={{
+        workspace,
+        updateWorkspace,
+        addUser,
+        updateUserRole,
+        deleteUser,
+      }}
     >
       {children}
     </WorkspaceDetailsContext.Provider>
