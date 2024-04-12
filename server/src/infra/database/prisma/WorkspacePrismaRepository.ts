@@ -1,4 +1,3 @@
-import { UserRole } from '@/domain/models/UserRole';
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 import { UsersOnWorkspaceRole } from '@prisma/client';
 import Workspace from 'domain/models/Workspace';
@@ -49,8 +48,8 @@ export default class WorkspacePrimaRepository
       tag: workspace.tag,
       role:
         workspace!.users.length === 0
-          ? 'OWNER'
-          : (workspace!.users[0].role as UserRole),
+          ? WorkspaceRoles.OWNER
+          : (workspace!.users[0].role as WorkspaceRoles),
     }));
   }
 
