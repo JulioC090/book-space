@@ -51,7 +51,10 @@ export default function WorkspaceManager() {
             trigger={<Button>Adicionar usuário</Button>}
             hasForm
           >
-            <WorkspaceAddUserForm handleAddUser={addUser} />
+            <WorkspaceAddUserForm
+              handleAddUser={addUser}
+              role={workspace.role}
+            />
           </Modal>
         </div>
         <UserList data={workspace.users} />

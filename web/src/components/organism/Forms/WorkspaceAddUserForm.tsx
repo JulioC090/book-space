@@ -3,6 +3,7 @@ import FormError from '@/components/atoms/FormError';
 import { SelectionField } from '@/components/atoms/SelectionField';
 import TextInputController from '@/components/molecules/TextInputController';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
+import getRolesWithLowerLevel from '@/utils/getRolesWithLowerLevel';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope } from '@phosphor-icons/react/dist/ssr';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
@@ -16,11 +17,13 @@ interface WorkspaceAddUserFormProps {
   // eslint-disable-next-line no-unused-vars
   handleAddUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   onSubmit?(): void;
+  role: WorkspaceRoles;
 }
 
 export default function WorkspaceAddUserForm({
   handleAddUser,
   onSubmit,
+  role,
 }: WorkspaceAddUserFormProps) {
   const {
     register,
@@ -68,13 +71,7 @@ export default function WorkspaceAddUserForm({
         defaultValue={WorkspaceRoles.DEFAULT}
         render={({ field }) => {
           return (
-            <SelectionField
-              {...field}
-              options={[
-                { value: 'DEFAULT', label: 'Padrão' },
-                { value: 'MANAGER', label: 'Gerente' },
-              ]}
-            />
+            <SelectionField {...field} options={getRolesWithLowerLevel(role)} />
           );
         }}
       />

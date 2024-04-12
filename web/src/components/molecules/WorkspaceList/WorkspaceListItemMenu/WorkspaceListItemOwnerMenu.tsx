@@ -64,6 +64,7 @@ export default function WorkspaceListItemOwnerMenu({
           handleAddUser={(userEmail: string, role: WorkspaceRoles) =>
             addUser(workspace.id, userEmail, role)
           }
+          role={workspace.role}
         />
       </Modal>
 
