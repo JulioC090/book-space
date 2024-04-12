@@ -103,7 +103,7 @@ export default class WorkspaceGateway
 
     if (response.status !== 201) return;
 
-    return response.body;
+    return { ...response.body!, role };
   }
 
   async deleteUser(workspaceId: string, userEmail: string): Promise<boolean> {

@@ -6,6 +6,7 @@ export interface IAddUserInWorkspaceGatewayOutput {
   id: string;
   name: string;
   email: string;
+  role: WorkspaceRoles;
 }
 
 export default interface IAddUserInWorkspaceGateway {
