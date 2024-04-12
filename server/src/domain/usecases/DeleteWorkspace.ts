@@ -1,23 +1,38 @@
+import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
+import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
+import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
-import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
 
 export default class DeleteWorkspace {
-  private loadWorkspaceById: ILoadWorkspaceById;
+  private loadUserRoleRepository: ILoadUserRoleRepository;
   private deleteWorkspaceRepository: IDeleteWorkspaceRepository;
 
   constructor(
-    loadWorkspaceById: ILoadWorkspaceById,
+    loadUserRoleRepository: ILoadUserRoleRepository,
     deleteWorkspaceRepository: IDeleteWorkspaceRepository,
   ) {
-    this.loadWorkspaceById = loadWorkspaceById;
+    this.loadUserRoleRepository = loadUserRoleRepository;
     this.deleteWorkspaceRepository = deleteWorkspaceRepository;
   }
 
-  async delete(userId: string, workspaceId: string): Promise<boolean> {
-    const workspace = await this.loadWorkspaceById.loadById(workspaceId);
-    if (!workspace) return false;
-    if (workspace.ownerId !== userId) return false;
+  async delete(
+    authenticatedUserId: string,
+    workspaceId: string,
+  ): Promise<boolean> {
+    const authenticatedUserRole =
+      await this.loadUserRoleRepository.loadUserRole(
+        authenticatedUserId,
+        workspaceId,
+      );
 
-    return this.deleteWorkspaceRepository.delete(userId, workspaceId);
+    if (!authenticatedUserRole) return false;
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].can(
+        WorkspacePermissions.DELETE_WORKSPACE,
+      )
+    )
+      return false;
+
+    return this.deleteWorkspaceRepository.delete(workspaceId);
   }
 }
