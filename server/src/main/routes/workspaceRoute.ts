@@ -68,7 +68,6 @@ const postUserToWorkspaceController = new PostUserToWorkspaceController(
 const deleteUserInWorkspace = new DeleteUserInWorkspace(
   workspaceRepository,
   workspaceRepository,
-  workspaceRepository,
   accountRepository,
   workspaceRepository,
 );
