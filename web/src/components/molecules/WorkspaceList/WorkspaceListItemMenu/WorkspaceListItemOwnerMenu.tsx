@@ -6,6 +6,7 @@ import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
 import Modal from '@/components/organism/Modal';
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { Workspace } from '@/models/Workspace';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import {
   BookmarkSimple,
   Cards,
@@ -60,8 +61,8 @@ export default function WorkspaceListItemOwnerMenu({
         }
       >
         <WorkspaceAddUserForm
-          handleAddUser={(userEmail: string) =>
-            addUser(workspace.id, userEmail)
+          handleAddUser={(userEmail: string, role: WorkspaceRoles) =>
+            addUser(workspace.id, userEmail, role)
           }
         />
       </Modal>

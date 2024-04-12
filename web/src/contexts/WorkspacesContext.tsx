@@ -5,6 +5,7 @@ import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
 import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { Workspace } from '@/models/Workspace';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { createContext, useEffect, useState } from 'react';
 
 interface WorkspacesContextType {
@@ -15,7 +16,11 @@ interface WorkspacesContextType {
     workspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<boolean>;
   deleteWorkspace(workspaceId: string): Promise<boolean>;
-  addUser(workspaceId: string, userEmail: string): Promise<boolean>;
+  addUser(
+    workspaceId: string,
+    userEmail: string,
+    role: WorkspaceRoles,
+  ): Promise<boolean>;
   leaveWorkspace(workspaceId: string): Promise<boolean>;
   setIsValid: (isValid: boolean) => void;
 }
@@ -55,7 +60,7 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
 
     setWorkspaces((prevWorkspaces) => [
       ...prevWorkspaces,
-      { id: response.workspaceId, role: 'OWNER', ...workspace },
+      { id: response.workspaceId, role: WorkspaceRoles.OWNER, ...workspace },
     ]);
     return true;
   }
@@ -88,8 +93,9 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   async function addUser(
     workspaceId: string,
     userEmail: string,
+    role: WorkspaceRoles,
   ): Promise<boolean> {
-    return !!(await workspaceGateway.addUser(workspaceId, userEmail));
+    return !!(await workspaceGateway.addUser(workspaceId, userEmail, role));
   }
 
   async function leaveWorkspace(workspaceId: string) {

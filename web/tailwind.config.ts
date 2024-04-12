@@ -30,6 +30,7 @@ const config: Config = {
       },
       spacing: {
         '128': '32rem',
+        'radix-trigger-width': 'var(--radix-select-trigger-width)',
       },
     },
   },

@@ -12,6 +12,7 @@ import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGate
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
 import { Workspace } from '@/models/Workspace';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 
 export default class WorkspaceGateway
   implements
@@ -89,14 +90,15 @@ export default class WorkspaceGateway
   async addUser(
     workspaceId: string,
     userEmail: string,
+    role: WorkspaceRoles,
   ): Promise<IAddUserInWorkspaceGatewayOutput | undefined> {
     const response = await this.httpClient.post<
-      { userEmail: string },
+      { userEmail: string; role: WorkspaceRoles },
       IAddUserInWorkspaceGatewayOutput
     >({
       url: '/workspace/:workspaceId/user',
       params: { workspaceId },
-      body: { userEmail },
+      body: { userEmail, role },
     });
 
     if (response.status !== 201) return;

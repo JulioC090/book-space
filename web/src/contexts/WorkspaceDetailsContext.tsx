@@ -5,6 +5,7 @@ import WorkspaceGateway from '@/infra/gateways/WorkspaceGateway';
 import AxiosHttpClient from '@/infra/http/AxiosHttpClient';
 import UrlReplaceParams from '@/infra/http/UrlReplaceParams';
 import { Workspace } from '@/models/Workspace';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { useParams, useRouter } from 'next/navigation';
 import { createContext, useContext, useEffect, useState } from 'react';
 
@@ -17,7 +18,7 @@ interface WorkspaceDetailsContextType {
     partialWorkspace: Omit<Workspace, 'id' | 'role'>,
   ) => Promise<boolean>;
   // eslint-disable-next-line no-unused-vars
-  addUser: (userEmail: string) => Promise<boolean>;
+  addUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   // eslint-disable-next-line no-unused-vars
   deleteUser: (userEmail: string) => Promise<boolean>;
 }
@@ -72,8 +73,15 @@ export function WorkspaceDetailProvider({
     return true;
   }
 
-  async function addUser(userEmail: string): Promise<boolean> {
-    const response = await workspaceGateway.addUser(workspace!.id, userEmail);
+  async function addUser(
+    userEmail: string,
+    role: WorkspaceRoles,
+  ): Promise<boolean> {
+    const response = await workspaceGateway.addUser(
+      workspace!.id,
+      userEmail,
+      role,
+    );
     if (!response) return false;
 
     setWorkspace((prevWorkspace) => ({

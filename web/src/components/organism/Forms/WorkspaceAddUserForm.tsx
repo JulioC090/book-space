@@ -1,17 +1,20 @@
 import Button from '@/components/atoms/Button';
 import FormError from '@/components/atoms/FormError';
+import { SelectionField } from '@/components/atoms/SelectionField';
 import TextInputController from '@/components/molecules/TextInputController';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { emailRegex } from '@/utils/patterns';
 import { Envelope } from '@phosphor-icons/react/dist/ssr';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 interface IWorkspaceAddUserFields {
   email: string;
+  role: WorkspaceRoles;
 }
 
 interface WorkspaceAddUserFormProps {
   // eslint-disable-next-line no-unused-vars
-  handleAddUser: (userEmail: string) => Promise<boolean>;
+  handleAddUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   onSubmit?(): void;
 }
 
@@ -24,12 +27,13 @@ export default function WorkspaceAddUserForm({
     handleSubmit,
     formState: { errors },
     setError,
+    control,
   } = useForm<IWorkspaceAddUserFields>();
 
   const handleWorkspaceAddUserSubmit: SubmitHandler<
     IWorkspaceAddUserFields
   > = async (data) => {
-    const response = await handleAddUser(data.email);
+    const response = await handleAddUser(data.email, data.role);
 
     if (!response) {
       const formError = { type: 'server' };
@@ -56,6 +60,23 @@ export default function WorkspaceAddUserForm({
         placeholder="Digite o seu email"
         icon={<Envelope />}
         error={errors.email}
+      />
+
+      <Controller
+        control={control}
+        name="role"
+        defaultValue={WorkspaceRoles.DEFAULT}
+        render={({ field }) => {
+          return (
+            <SelectionField
+              {...field}
+              options={[
+                { value: 'DEFAULT', label: 'Padrão' },
+                { value: 'MANAGER', label: 'Gerente' },
+              ]}
+            />
+          );
+        }}
       />
 
       <FormError
