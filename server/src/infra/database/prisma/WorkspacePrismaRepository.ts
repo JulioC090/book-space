@@ -114,7 +114,10 @@ export default class WorkspacePrimaRepository
     const workspace = await prisma.workspace.findFirst({
       include: {
         users: {
-          select: { user: { select: { id: true, email: true, name: true } } },
+          select: {
+            user: { select: { id: true, email: true, name: true } },
+            role: true,
+          },
         },
       },
       where: { id: workspaceId },
@@ -122,7 +125,13 @@ export default class WorkspacePrimaRepository
 
     if (!workspace) return null;
 
-    return { ...workspace, users: workspace.users.map((user) => user.user) };
+    return {
+      ...workspace,
+      users: workspace.users.map((user) => ({
+        ...user.user,
+        role: user.role as WorkspaceRoles,
+      })),
+    };
   }
 
   async addUserToWorkspace(

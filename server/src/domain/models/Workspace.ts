@@ -7,5 +7,5 @@ export default interface Workspace {
   name: string;
   tag: string;
   role?: WorkspaceRoles;
-  users?: Array<Omit<User, 'password'>>;
+  users?: Array<Omit<User, 'password'> & { role: WorkspaceRoles }>;
 }
