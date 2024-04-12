@@ -53,7 +53,7 @@ export function WorkspaceDetailProvider({
       const response = await workspaceGateway.loadWorkspaceDetails(
         params.workspaceId,
       );
-      if (!response || response?.role !== 'OWNER') router.push('/');
+      if (!response || response?.role === 'DEFAULT') router.push('/');
       setWorkspace(response);
     }
 

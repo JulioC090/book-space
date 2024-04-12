@@ -5,6 +5,7 @@ import { IconButton } from '@/components/atoms/IconButton';
 import { FloatingMenu } from '@/components/molecules/FloatingMenu';
 import { WorkspaceListItemMenu } from '@/components/molecules/WorkspaceList/WorkspaceListItemMenu';
 import { Workspace } from '@/models/Workspace';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import getInitials from '@/utils/getInitials';
 import { DotsThree } from '@phosphor-icons/react/dist/ssr';
 
@@ -15,13 +16,14 @@ export interface WorkspaceListItemProps {
 export default function WorkspaceListItem({
   workspace,
 }: WorkspaceListItemProps) {
-  const roleMenuMap: { [key: string]: React.ReactNode } = {
+  // eslint-disable-next-line no-unused-vars
+  const roleMenuMap: { [key in WorkspaceRoles]: React.ReactNode } = {
     OWNER: <WorkspaceListItemMenu.Owner workspace={workspace} />,
+    MANAGER: <WorkspaceListItemMenu.Manager workspace={workspace} />,
+    DEFAULT: <WorkspaceListItemMenu.Default workspace={workspace} />,
   };
 
-  const menuComponent = roleMenuMap[workspace.role] || (
-    <WorkspaceListItemMenu.Default workspace={workspace} />
-  );
+  const menuComponent = roleMenuMap[workspace.role] || roleMenuMap.DEFAULT;
 
   return (
     <Card className="flex flex-col justify-between items-center gap-8">

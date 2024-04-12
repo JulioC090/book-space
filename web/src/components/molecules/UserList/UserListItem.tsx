@@ -2,11 +2,14 @@
 
 import { IconButton } from '@/components/atoms/IconButton';
 import { SelectionField } from '@/components/atoms/SelectionField';
+import { workspaceRolesList } from '@/consts/workspaceRolesList';
+import { AuthContext } from '@/contexts/AuthContext';
 import { WorkspaceDetailsContext } from '@/contexts/WorkspaceDetailsContext';
 import { User } from '@/models/User';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import getInitials from '@/utils/getInitials';
 import getRolesWithLowerLevel from '@/utils/getRolesWithLowerLevel';
+import { isRoleAboveOrSame } from '@/utils/isRoleAbove';
 import { TrashSimple } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
@@ -14,10 +17,45 @@ interface UserListItemProps {
   user: Omit<User, 'password'> & { role: WorkspaceRoles };
 }
 
-export default function UserListItem({ user }: UserListItemProps) {
-  const { workspace, deleteUser, updateUserRole } = useContext(
-    WorkspaceDetailsContext,
+interface RoleFieldProps {
+  user: Omit<User, 'password'> & { role: WorkspaceRoles };
+}
+
+function RoleField({ user }: RoleFieldProps) {
+  const { userInfo } = useContext(AuthContext);
+  const { workspace, updateUserRole } = useContext(WorkspaceDetailsContext);
+
+  if (
+    userInfo?.email === user.email ||
+    isRoleAboveOrSame(workspace!.role, user.role)
+  )
+    return (
+      <SelectionField
+        className="w-fit min-w-32"
+        defaultValue={user.role}
+        options={[
+          {
+            ...workspaceRolesList.find(
+              (roleItem) => roleItem.value === user.role,
+            )!,
+          },
+        ]}
+        disabled
+      />
+    );
+
+  return (
+    <SelectionField
+      className="w-fit min-w-32"
+      defaultValue={user.role}
+      onChange={(value) => updateUserRole(user.email, value)}
+      options={getRolesWithLowerLevel(workspace!.role)}
+    />
   );
+}
+
+export default function UserListItem({ user }: UserListItemProps) {
+  const { deleteUser } = useContext(WorkspaceDetailsContext);
 
   return (
     <div className="flex justify-between items-center w-full p-4 [&:not(:last-child)]:border-b border-b-zinc-900">
@@ -31,12 +69,8 @@ export default function UserListItem({ user }: UserListItemProps) {
         </div>
       </div>
       <div className="flex gap-4 items-center">
-        <SelectionField
-          className="w-fit min-w-32"
-          defaultValue={user.role}
-          onChange={(value) => updateUserRole(user.email, value)}
-          options={getRolesWithLowerLevel(workspace!.role)}
-        />
+        <RoleField user={user} />
+
         <IconButton onClick={() => deleteUser(user.email)}>
           <TrashSimple />
         </IconButton>

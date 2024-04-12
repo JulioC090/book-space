@@ -10,6 +10,7 @@ import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserFo
 import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
 import Modal from '@/components/organism/Modal';
 import { WorkspaceDetailsContext } from '@/contexts/WorkspaceDetailsContext';
+import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { NotePencil } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
@@ -27,20 +28,24 @@ export default function WorkspaceManager() {
             @{workspace.tag}
           </span>
         </h1>
-        <Modal
-          title="Editar Workspace"
-          trigger={
-            <IconButton>
-              <NotePencil />
-            </IconButton>
-          }
-          hasForm
-        >
-          <WorkspaceForm
-            onWorkspaceSubmit={({ id, ...rest }) => updateWorkspace(id!, rest)}
-            workspace={workspace}
-          />
-        </Modal>
+        {workspace.role === WorkspaceRoles.OWNER && (
+          <Modal
+            title="Editar Workspace"
+            trigger={
+              <IconButton>
+                <NotePencil />
+              </IconButton>
+            }
+            hasForm
+          >
+            <WorkspaceForm
+              onWorkspaceSubmit={({ id, ...rest }) =>
+                updateWorkspace(id!, rest)
+              }
+              workspace={workspace}
+            />
+          </Modal>
+        )}
       </div>
       <p className="text-zinc-500">Atualize as informações da sua Workspace</p>
       <div className="mt-16">
