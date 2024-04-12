@@ -89,7 +89,6 @@ const changeUserRoleInWorkspace = new ChangeUserRoleInWorkspace(
   workspaceRepository,
   accountRepository,
   workspaceRepository,
-  workspaceRepository,
 );
 const putUserRoleInWorkspaceController = new PutUserRoleInWorkspaceController(
   changeUserRoleInWorkspace,

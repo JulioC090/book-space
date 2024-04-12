@@ -1,39 +1,34 @@
-import { UserRole } from '@/domain/models/UserRole';
-import { User } from 'domain/models/User';
-import { WorkspacePermissions } from 'domain/models/WorkspacePermissions';
-import can from 'domain/utils/permissionResolver';
-import IChangeUserRoleRepository from 'infra/protocols/repositories/IChangeUserRoleRepository';
-import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
-import { ILoadAccountByEmailRepository } from 'infra/protocols/repositories/ILoadAccountByEmailRepository';
-import ILoadUserRoleRepository from 'infra/protocols/repositories/ILoadUserRoleRepository';
-import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
+import { User } from '@/domain/models/User';
+import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
+import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
+import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
+import IChangeUserRoleRepository from '@/infra/protocols/repositories/IChangeUserRoleRepository';
+import { ILoadAccountByEmailRepository } from '@/infra/protocols/repositories/ILoadAccountByEmailRepository';
+import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
+import ILoadWorkspaceById from '@/infra/protocols/repositories/ILoadWorkspaceById';
 
 export default class ChangeUserRoleInWorkspace {
   private loadUserRoleRepository: ILoadUserRoleRepository;
   private loadWorkspaceByIdRepository: ILoadWorkspaceById;
   private loadAccountByEmailRepository: ILoadAccountByEmailRepository;
-  private checkUserExistInWorkspaceRepository: ICheckUserExistInWorkspaceRepository;
   private changeUserRoleRepository: IChangeUserRoleRepository;
 
   constructor(
     loadUserRoleRepository: ILoadUserRoleRepository,
     loadWorkspaceByIdRepository: ILoadWorkspaceById,
     loadAccountByEmailRepository: ILoadAccountByEmailRepository,
-    checkUserExistInWorkspaceRepository: ICheckUserExistInWorkspaceRepository,
     changeUserRoleRepository: IChangeUserRoleRepository,
   ) {
     this.loadUserRoleRepository = loadUserRoleRepository;
     this.loadWorkspaceByIdRepository = loadWorkspaceByIdRepository;
     this.loadAccountByEmailRepository = loadAccountByEmailRepository;
-    this.checkUserExistInWorkspaceRepository =
-      checkUserExistInWorkspaceRepository;
     this.changeUserRoleRepository = changeUserRoleRepository;
   }
 
   async changeRole(
-    authenticatedUser: User,
+    authenticatedUser: Omit<User, 'password'>,
     workspaceId: string,
-    user: { email: string; role: UserRole },
+    user: { email: string; role: WorkspaceRoles },
   ): Promise<boolean> {
     const workspace =
       await this.loadWorkspaceByIdRepository.loadById(workspaceId);
@@ -45,7 +40,18 @@ export default class ChangeUserRoleInWorkspace {
         workspaceId,
       );
     if (!authenticatedUserRole) return false;
-    if (!can(authenticatedUserRole, WorkspacePermissions.UPDATE_USER_ROLE))
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].can(
+        WorkspacePermissions.UPDATE_USER_ROLE,
+      )
+    )
+      return false;
+
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].isAbove(
+        workspaceRolesPermissions[user.role],
+      )
+    )
       return false;
 
     const changedUser = await this.loadAccountByEmailRepository.loadByEmail(
@@ -53,12 +59,18 @@ export default class ChangeUserRoleInWorkspace {
     );
     if (!changedUser) return false;
 
-    const isInWorkspace =
-      await this.checkUserExistInWorkspaceRepository.checkUserInWorkspace(
-        workspaceId,
-        changedUser.id,
-      );
-    if (!isInWorkspace) return false;
+    const changedUserRole = await this.loadUserRoleRepository.loadUserRole(
+      changedUser.id,
+      workspaceId,
+    );
+    if (!changedUserRole) return false;
+
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].isAbove(
+        workspaceRolesPermissions[changedUserRole],
+      )
+    )
+      return false;
 
     return await this.changeUserRoleRepository.changeRole(workspace.id, {
       userId: changedUser.id,

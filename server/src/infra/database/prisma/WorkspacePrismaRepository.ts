@@ -150,11 +150,11 @@ export default class WorkspacePrimaRepository
 
   async changeRole(
     workspaceId: string,
-    { userId, role }: { userId: string; role: UserRole },
+    { userId, role }: { userId: string; role: WorkspaceRoles },
   ): Promise<boolean> {
     const changedUser = await prisma.usersOnWorkspace.updateMany({
       where: { AND: [{ userId }, { workspaceId }] },
-      data: { role },
+      data: { role: role as UsersOnWorkspaceRole },
     });
 
     return !!changedUser;

@@ -1,4 +1,4 @@
-import { UserRole } from '@/domain/models/UserRole';
+import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 import { User } from '@prisma/client';
 import ChangeUserRoleInWorkspace from 'domain/usecases/ChangeUserRoleInWorkspace';
 import { badRequest, forbidden, ok } from 'presentation/helpers/httpCodes';
@@ -12,7 +12,7 @@ const requestParamsSchema = z.object({
 
 const requestBodySchema = z.object({
   userEmail: z.string().min(1),
-  role: z.nativeEnum(UserRole).default(UserRole.DEFAULT),
+  role: z.nativeEnum(WorkspaceRoles).default(WorkspaceRoles.DEFAULT),
 });
 
 export default class PutUserRoleInWorkspaceController implements Controller {
