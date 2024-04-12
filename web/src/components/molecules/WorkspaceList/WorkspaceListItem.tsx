@@ -7,6 +7,7 @@ import { WorkspaceListItemMenu } from '@/components/molecules/WorkspaceList/Work
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import getInitials from '@/utils/getInitials';
+import { getRole } from '@/utils/getRole';
 import { DotsThree } from '@phosphor-icons/react/dist/ssr';
 
 export interface WorkspaceListItemProps {
@@ -27,6 +28,12 @@ export default function WorkspaceListItem({
 
   return (
     <Card className="flex flex-col justify-between items-center gap-8">
+      {workspace.role !== WorkspaceRoles.DEFAULT && (
+        <div className="absolute top-2 left-4 text-zinc-500 text-sm">
+          {getRole(workspace.role)?.label}
+        </div>
+      )}
+
       <div className="bg-green-haze-500 size-24 p-8 rounded font-bold text-xl flex justify-center items-center">
         {getInitials(workspace.name)}
       </div>
