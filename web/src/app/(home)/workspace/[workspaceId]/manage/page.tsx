@@ -4,11 +4,13 @@ import Button from '@/components/atoms/Button';
 import Card from '@/components/atoms/Card';
 import Container from '@/components/atoms/Container';
 import GridList from '@/components/atoms/GridList';
+import { IconButton } from '@/components/atoms/IconButton';
 import UserList from '@/components/molecules/UserList';
 import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserForm';
 import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
 import Modal from '@/components/organism/Modal';
 import { WorkspaceDetailsContext } from '@/contexts/WorkspaceDetailsContext';
+import { NotePencil } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
 export default function WorkspaceManager() {
@@ -18,7 +20,7 @@ export default function WorkspaceManager() {
   if (!workspace) return;
   return (
     <Container>
-      <div className="flex justify-between pt-8">
+      <div className="flex gap-2 pt-8">
         <h1 className="text-2xl font-bold">
           {workspace.name}
           <span className="text-zinc-500 font-normal ml-2">
@@ -27,7 +29,11 @@ export default function WorkspaceManager() {
         </h1>
         <Modal
           title="Editar Workspace"
-          trigger={<Button>Editar Workspace</Button>}
+          trigger={
+            <IconButton>
+              <NotePencil />
+            </IconButton>
+          }
           hasForm
         >
           <WorkspaceForm
