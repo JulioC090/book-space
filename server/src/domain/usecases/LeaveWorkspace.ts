@@ -1,20 +1,17 @@
-import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
-import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
-import ILoadWorkspaceById from 'infra/protocols/repositories/ILoadWorkspaceById';
+import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
+import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
+import IDeleteUserInWorkspaceRepository from '@/infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
+import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
 
 export default class LeaveWorkspace {
-  private checkUserExistInWorkspaceRepository: ICheckUserExistInWorkspaceRepository;
-  private loadWorkspaceById: ILoadWorkspaceById;
+  private loadUserRoleRepository: ILoadUserRoleRepository;
   private deleteUserInWorkspaceRepository: IDeleteUserInWorkspaceRepository;
 
   constructor(
-    checkUserExistInWorkspaceRepository: ICheckUserExistInWorkspaceRepository,
-    loadWorkspaceById: ILoadWorkspaceById,
+    loadUserRoleRepository: ILoadUserRoleRepository,
     deleteUserInWorkspaceRepository: IDeleteUserInWorkspaceRepository,
   ) {
-    this.checkUserExistInWorkspaceRepository =
-      checkUserExistInWorkspaceRepository;
-    this.loadWorkspaceById = loadWorkspaceById;
+    this.loadUserRoleRepository = loadUserRoleRepository;
     this.deleteUserInWorkspaceRepository = deleteUserInWorkspaceRepository;
   }
 
@@ -22,15 +19,19 @@ export default class LeaveWorkspace {
     authenticatedUserId: string,
     workspaceId: string,
   ): Promise<boolean> {
-    const isInWorkspace =
-      await this.checkUserExistInWorkspaceRepository.checkUserInWorkspace(
-        workspaceId,
+    const authenticatedUserRole =
+      await this.loadUserRoleRepository.loadUserRole(
         authenticatedUserId,
+        workspaceId,
       );
-    if (!isInWorkspace) return false;
+    if (!authenticatedUserRole) return false;
 
-    const workspace = await this.loadWorkspaceById.loadById(workspaceId);
-    if (workspace?.ownerId === authenticatedUserId) return false;
+    if (
+      !workspaceRolesPermissions[authenticatedUserRole].can(
+        WorkspacePermissions.LEAVE_WORKSPACE,
+      )
+    )
+      return false;
 
     return await this.deleteUserInWorkspaceRepository.deleteUserInWorkspace(
       workspaceId,

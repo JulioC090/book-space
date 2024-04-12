@@ -78,7 +78,6 @@ const deleteUserInWorkspaceController = new DeleteUserInWorkspaceController(
 const leaveWorkspace = new LeaveWorkspace(
   workspaceRepository,
   workspaceRepository,
-  workspaceRepository,
 );
 const deleteLeaveWorkspaceController = new DeleteLeaveWorkspaceController(
   leaveWorkspace,

@@ -2,10 +2,14 @@ import Role from '@/domain/models/Role';
 import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 
-const DEFAULT = new Role<WorkspacePermissions>([], 0);
+const DEFAULT = new Role<WorkspacePermissions>(
+  [WorkspacePermissions.LEAVE_WORKSPACE],
+  0,
+);
 
 const MANAGER = new Role<WorkspacePermissions>(
   [
+    WorkspacePermissions.LEAVE_WORKSPACE,
     WorkspacePermissions.ADD_USER_TO_WORKSPACE,
     WorkspacePermissions.UPDATE_USER_ROLE,
     WorkspacePermissions.REMOVE_USER_FROM_WORKSPACE,
