@@ -1,1 +1,2 @@
+npm --prefix ./server run typecheck
 npx lint-staged --cwd ./server

@@ -11,6 +11,7 @@
     "test:watch": "npm test -- --detectOpenHandles --watch",
     "test:staged": "npm test -- --detectOpenHandles --findRelatedTests --forceExit",
     "test:coverage": "npm test -- --detectOpenHandles --coverage --forceExit",
+    "typecheck": "tsc --noEmit -p .",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "prepare": "cd .. && husky server/.husky"
