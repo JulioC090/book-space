@@ -1,11 +1,10 @@
-import WorkspaceService from '@/infra/services/WorkspaceService';
+import WorkspaceUserService from '@/infra/services/WorkspaceUserService';
 import { makeWorkspaceGateway } from '@/main/factories/gateways/WorkspaceGatewayFactory';
 
 const workspaceGateway = makeWorkspaceGateway();
 
-export const makeWorkspaceService = () =>
-  new WorkspaceService(
-    workspaceGateway,
+export const makeWorkspaceUserService = () =>
+  new WorkspaceUserService(
     workspaceGateway,
     workspaceGateway,
     workspaceGateway,

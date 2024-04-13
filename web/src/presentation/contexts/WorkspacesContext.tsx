@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 'use client';
 
-import { makeWorkspaceGateway } from '@/main/factories/gateways/WorkspaceGateway';
 import { makeWorkspaceService } from '@/main/factories/services/WorkspaceServiceFactory';
+import { makeWorkspaceUserService } from '@/main/factories/services/WorkspaceUserServiceFactory';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { createContext, useEffect, useState } from 'react';
@@ -30,7 +30,7 @@ interface WorkspacesProviderProps {
 
 export const WorkspaceContext = createContext({} as WorkspacesContextType);
 
-const workspaceGateway = makeWorkspaceGateway();
+const workspaceUserService = makeWorkspaceUserService();
 const workspaceService = makeWorkspaceService();
 
 export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
@@ -90,11 +90,14 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
     userEmail: string,
     role: WorkspaceRoles,
   ): Promise<boolean> {
-    return !!(await workspaceGateway.addUser(workspaceId, userEmail, role));
+    return !!(await workspaceUserService.add(workspaceId, {
+      email: userEmail,
+      role,
+    }));
   }
 
   async function leaveWorkspace(workspaceId: string) {
-    if (!(await workspaceGateway.leave(workspaceId))) return false;
+    if (!(await workspaceUserService.leave(workspaceId))) return false;
     setWorkspaces((prevWorkspaces) =>
       prevWorkspaces.filter((workspace) => workspace.id !== workspaceId),
     );

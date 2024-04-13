@@ -1,7 +1,7 @@
 'use client';
 
-import { makeWorkspaceGateway } from '@/main/factories/gateways/WorkspaceGateway';
 import { makeWorkspaceService } from '@/main/factories/services/WorkspaceServiceFactory';
+import { makeWorkspaceUserService } from '@/main/factories/services/WorkspaceUserServiceFactory';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { WorkspaceContext } from '@/presentation/contexts/WorkspacesContext';
@@ -32,7 +32,7 @@ export const WorkspaceDetailsContext = createContext(
   {} as WorkspaceDetailsContextType,
 );
 
-const workspaceGateway = makeWorkspaceGateway();
+const workspaceUserService = makeWorkspaceUserService();
 const workspaceService = makeWorkspaceService();
 
 export function WorkspaceDetailProvider({
@@ -72,11 +72,10 @@ export function WorkspaceDetailProvider({
     userEmail: string,
     role: WorkspaceRoles,
   ): Promise<boolean> {
-    const response = await workspaceGateway.addUser(
-      workspace!.id,
-      userEmail,
+    const response = await workspaceUserService.add(workspace!.id, {
+      email: userEmail,
       role,
-    );
+    });
     if (!response) return false;
 
     setWorkspace((prevWorkspace) => ({
@@ -91,11 +90,10 @@ export function WorkspaceDetailProvider({
     userEmail: string,
     role: WorkspaceRoles,
   ): Promise<boolean> {
-    const response = await workspaceGateway.updateUserRole(
-      workspace!.id,
-      userEmail,
+    const response = await workspaceUserService.update(workspace!.id, {
+      email: userEmail,
       role,
-    );
+    });
 
     if (!response) return false;
 
@@ -111,7 +109,7 @@ export function WorkspaceDetailProvider({
   }
 
   async function deleteUser(userEmail: string): Promise<boolean> {
-    const response = await workspaceGateway.deleteUser(
+    const response = await workspaceUserService.delete(
       workspace!.id,
       userEmail,
     );
