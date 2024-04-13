@@ -1,5 +1,5 @@
-import SignUpForm from '@/components/organism/SignUpForm';
-import AuthFormTemplate from '@/components/templates/AuthFormTemplate';
+import SignUpForm from '@/presentation/components/organism/SignUpForm';
+import AuthFormTemplate from '@/presentation/components/templates/AuthFormTemplate';
 
 export default function SignUpPage() {
   return (

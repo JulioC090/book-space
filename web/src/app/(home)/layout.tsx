@@ -1,7 +1,7 @@
 'use client';
 
-import NavBar from '@/components/organism/Navbar';
-import { WorkspacesProvider } from '@/contexts/WorkspacesContext';
+import NavBar from '@/presentation/components/organism/Navbar';
+import { WorkspacesProvider } from '@/presentation/contexts/WorkspacesContext';
 
 export interface SideMenuLayoutProps {
   children: React.ReactNode;

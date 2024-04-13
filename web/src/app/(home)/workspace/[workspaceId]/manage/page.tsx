@@ -1,16 +1,16 @@
 'use client';
 
-import Card from '@/components/atoms/Card';
-import Container from '@/components/atoms/Container';
-import GridList from '@/components/atoms/GridList';
-import { IconButton } from '@/components/atoms/IconButton';
-import UserList from '@/components/molecules/UserList';
-import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserForm';
-import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
-import Modal from '@/components/organism/Modal';
-import ActionListTemplate from '@/components/templates/ActionListTemplate';
-import { WorkspaceDetailsContext } from '@/contexts/WorkspaceDetailsContext';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
+import Card from '@/presentation/components/atoms/Card';
+import Container from '@/presentation/components/atoms/Container';
+import GridList from '@/presentation/components/atoms/GridList';
+import { IconButton } from '@/presentation/components/atoms/IconButton';
+import UserList from '@/presentation/components/molecules/UserList';
+import WorkspaceAddUserForm from '@/presentation/components/organism/Forms/WorkspaceAddUserForm';
+import WorkspaceForm from '@/presentation/components/organism/Forms/WorkspaceForm';
+import Modal from '@/presentation/components/organism/Modal';
+import ActionListTemplate from '@/presentation/components/templates/ActionListTemplate';
+import { WorkspaceDetailsContext } from '@/presentation/contexts/WorkspaceDetailsContext';
 import { NotePencil } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 

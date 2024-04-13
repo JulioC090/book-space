@@ -1,7 +1,7 @@
 'use client';
 
-import LoginForm from '@/components/organism/LoginForm';
-import AuthFormTemplate from '@/components/templates/AuthFormTemplate';
+import LoginForm from '@/presentation/components/organism/LoginForm';
+import AuthFormTemplate from '@/presentation/components/templates/AuthFormTemplate';
 
 export default function LoginPage() {
   return (
