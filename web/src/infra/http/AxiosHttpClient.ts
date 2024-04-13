@@ -1,3 +1,4 @@
+import { HttpCode } from '@/consts/httpCodes';
 import IHttpClient, {
   IHttpClientProps,
 } from '@/infra/protocols/http/IHttpClient';
@@ -17,7 +18,7 @@ export default class AxiosHttpClient implements IHttpClient {
       baseURL: baseURl,
       headers: { 'Content-Type': 'application/json' },
       validateStatus: function (status) {
-        return status < 500;
+        return status < HttpCode.INTERNAL_SERVER_ERROR;
       },
     });
 

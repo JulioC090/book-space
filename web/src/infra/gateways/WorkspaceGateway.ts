@@ -1,3 +1,4 @@
+import { HttpCode } from '@/consts/httpCodes';
 import IAddUserInWorkspaceGateway, {
   IAddUserInWorkspaceGatewayOutput,
 } from '@/infra/protocols/gateways/IAddUserInWorkspaceGateway';
@@ -77,7 +78,7 @@ export default class WorkspaceGateway
       body: workspace,
     });
 
-    return httpClientResponse.status === 200;
+    return httpClientResponse.status === HttpCode.OK;
   }
 
   async delete(workspaceId: string): Promise<boolean> {
@@ -86,7 +87,7 @@ export default class WorkspaceGateway
       params: { workspaceId },
     });
 
-    return response.status === 200;
+    return response.status === HttpCode.OK;
   }
 
   async addUser(
@@ -103,7 +104,7 @@ export default class WorkspaceGateway
       body: { userEmail, role },
     });
 
-    if (response.status !== 201) return;
+    if (response.status !== HttpCode.CREATED) return;
 
     return { ...response.body!, role };
   }
@@ -120,7 +121,7 @@ export default class WorkspaceGateway
     });
     if (!response) return false;
 
-    return response.status === 200;
+    return response.status === HttpCode.OK;
   }
 
   async deleteUser(workspaceId: string, userEmail: string): Promise<boolean> {
@@ -130,7 +131,7 @@ export default class WorkspaceGateway
       body: { userEmail },
     });
 
-    return response.status === 200;
+    return response.status === HttpCode.OK;
   }
 
   async leave(workspaceId: string): Promise<boolean> {
@@ -139,6 +140,6 @@ export default class WorkspaceGateway
       params: { workspaceId },
     });
 
-    return response.status === 200;
+    return response.status === HttpCode.OK;
   }
 }

@@ -1,3 +1,4 @@
+import { HttpCode } from '@/consts/httpCodes';
 import ILogoutGateway from '@/infra/protocols/gateways/ILogoutGateway';
 import ISignInGateway, {
   ISignInGatewayInput,
@@ -22,7 +23,7 @@ export default class AuthGateway
       url: '/signup',
       body: user,
     });
-    return httpClientResponse.status === 201;
+    return httpClientResponse.status === HttpCode.CREATED;
   }
 
   async signin(

@@ -1,5 +1,6 @@
 'use client';
 
+import { HttpCode } from '@/consts/httpCodes';
 import useLocalStorage from '@/hooks/useLocalStorage';
 /* eslint-disable no-unused-vars */
 import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
@@ -31,7 +32,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   async function signIn(user: ISignInGatewayInput) {
     const response = await authGateway.signin(user);
 
-    if (response.status !== 200) return false;
+    if (response.status !== HttpCode.OK) return false;
 
     setUserInfo({ email: user.email, name: response.body!.name });
     Cookie.set('auth_token', response.body!.token);
