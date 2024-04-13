@@ -6,7 +6,6 @@ import ISignInGateway, {
 } from '@/infra/protocols/gateways/ISignInGateway';
 import ISignUpGateway from '@/infra/protocols/gateways/ISignUpGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
-import IHttpResponse from '@/infra/protocols/http/IHttpResponse';
 import { User } from '@/models/User';
 
 export default class AuthGateway
@@ -28,7 +27,7 @@ export default class AuthGateway
 
   async signin(
     user: ISignInGatewayInput,
-  ): Promise<IHttpResponse<ISignInGatewayOutput>> {
+  ): Promise<ISignInGatewayOutput | null> {
     const httpClientResponse = await this.httpClient.post<
       ISignInGatewayInput,
       ISignInGatewayOutput
@@ -42,7 +41,9 @@ export default class AuthGateway
       `Bearer ${httpClientResponse.body!.token}`,
     );
 
-    return httpClientResponse;
+    if (!httpClientResponse || httpClientResponse.status !== HttpCode.OK)
+      return null;
+    return httpClientResponse.body!;
   }
 
   async logout(): Promise<void> {

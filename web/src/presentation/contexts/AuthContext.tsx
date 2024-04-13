@@ -1,10 +1,9 @@
 'use client';
 
-import { HttpCode } from '@/consts/httpCodes';
 import useLocalStorage from '@/presentation/hooks/useLocalStorage';
 /* eslint-disable no-unused-vars */
 import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
-import { makeAuthGateway } from '@/main/factories/gateways/AuthGatewayFactory';
+import { makeAuthService } from '@/main/factories/services/AuthServiceFactory';
 import { User } from '@/models/User';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/navigation';
@@ -22,7 +21,7 @@ interface AuthProviderProps {
 
 export const AuthContext = createContext({} as AuthContextType);
 
-const authGateway = makeAuthGateway();
+const authService = makeAuthService();
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
@@ -30,17 +29,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
     useLocalStorage<Omit<User, 'id' | 'password'>>('userInfo');
 
   async function signIn(user: ISignInGatewayInput) {
-    const response = await authGateway.signin(user);
+    const response = await authService.signIn(user);
 
-    if (response.status !== HttpCode.OK) return false;
+    if (!response) return false;
 
-    setUserInfo({ email: user.email, name: response.body!.name });
-    Cookie.set('auth_token', response.body!.token);
+    setUserInfo({ email: user.email, name: response.name });
+    Cookie.set('auth_token', response.token);
     router.push('/');
   }
 
   async function logout() {
-    await authGateway.logout();
+    await authService.logout();
     setUserInfo();
     Cookie.remove('auth_token');
     router.push('/login');

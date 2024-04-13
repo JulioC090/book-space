@@ -1,4 +1,3 @@
-import IHttpResponse from '@/infra/protocols/http/IHttpResponse';
 import { User } from '@/models/User';
 
 /* eslint-disable no-unused-vars */
@@ -10,7 +9,5 @@ export type ISignInGatewayOutput = {
 };
 
 export default interface ISignInGateway {
-  signin(
-    user: ISignInGatewayInput,
-  ): Promise<IHttpResponse<ISignInGatewayOutput>>;
+  signin(user: ISignInGatewayInput): Promise<ISignInGatewayOutput | null>;
 }
