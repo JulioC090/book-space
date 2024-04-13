@@ -1,5 +1,5 @@
-import { workspaceRolesList } from '@/consts/workspaceRolesList';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
+import { workspaceRolesList } from '@/presentation/constants/workspaceRolesList';
 
 export default function getRolesWithLowerLevel(role: WorkspaceRoles) {
   const currentRoleIndex = workspaceRolesList.findIndex(

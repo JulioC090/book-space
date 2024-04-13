@@ -1,10 +1,10 @@
 'use client';
 
-import { workspaceRolesList } from '@/consts/workspaceRolesList';
 import { User } from '@/models/User';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { IconButton } from '@/presentation/components/atoms/IconButton';
 import { SelectionField } from '@/presentation/components/atoms/SelectionField';
+import { workspaceRolesList } from '@/presentation/constants/workspaceRolesList';
 import { AuthContext } from '@/presentation/contexts/AuthContext';
 import { WorkspaceDetailsContext } from '@/presentation/contexts/WorkspaceDetailsContext';
 import getInitials from '@/presentation/utils/getInitials';
