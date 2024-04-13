@@ -24,7 +24,7 @@ export default function ActionListTemplate({
           {action.form}
         </Modal>
       </div>
-      <div className="mt-6">{list}</div>
+      <div className="mt-6 flex-grow">{list}</div>
     </>
   );
 }
