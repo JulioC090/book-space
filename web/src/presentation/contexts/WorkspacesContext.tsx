@@ -2,6 +2,7 @@
 'use client';
 
 import { makeWorkspaceGateway } from '@/main/factories/gateways/WorkspaceGateway';
+import { makeWorkspaceService } from '@/main/factories/services/WorkspaceServiceFactory';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { createContext, useEffect, useState } from 'react';
@@ -30,6 +31,7 @@ interface WorkspacesProviderProps {
 export const WorkspaceContext = createContext({} as WorkspacesContextType);
 
 const workspaceGateway = makeWorkspaceGateway();
+const workspaceService = makeWorkspaceService();
 
 export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   const [workspaces, setWorkspaces] = useState<Array<Workspace>>([]);
@@ -37,7 +39,7 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
 
   useEffect(() => {
     async function fetchData() {
-      setWorkspaces(await workspaceGateway.load());
+      setWorkspaces(await workspaceService.loadAll());
       setIsValid(true);
     }
 
@@ -48,12 +50,12 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   async function addWorkspace(
     workspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<boolean> {
-    const response = await workspaceGateway.add(workspace);
+    const response = await workspaceService.add(workspace);
     if (!response) return false;
 
     setWorkspaces((prevWorkspaces) => [
       ...prevWorkspaces,
-      { id: response.workspaceId, role: WorkspaceRoles.OWNER, ...workspace },
+      { id: response, role: WorkspaceRoles.OWNER, ...workspace },
     ]);
     return true;
   }
@@ -62,7 +64,7 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
     workspaceId: string,
     updatedWorkspace: Omit<Workspace, 'id'>,
   ): Promise<boolean> {
-    if (!(await workspaceGateway.update(workspaceId, updatedWorkspace)))
+    if (!(await workspaceService.update(workspaceId, updatedWorkspace)))
       return false;
 
     setWorkspaces((prevWorkspaces) =>
@@ -75,7 +77,7 @@ export function WorkspacesProvider({ children }: WorkspacesProviderProps) {
   }
 
   async function deleteWorkspace(workspaceId: string): Promise<boolean> {
-    if (!(await workspaceGateway.delete(workspaceId))) return false;
+    if (!(await workspaceService.delete(workspaceId))) return false;
 
     setWorkspaces((prevWorkspaces) =>
       prevWorkspaces.filter((workspace) => workspace.id !== workspaceId),

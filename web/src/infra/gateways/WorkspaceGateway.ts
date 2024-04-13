@@ -6,7 +6,7 @@ import IAddWorkspaceGateway, {
   IAddWorkspaceGatewayOutput,
 } from '@/infra/protocols/gateways/IAddWorkspaceGateway';
 import IDeleteUserInWorkspace from '@/infra/protocols/gateways/IDeleteUserInWorkspaceGateway';
-import IDeleteWorkspace from '@/infra/protocols/gateways/IDeleteWorkspaceGateway';
+import IDeleteWorkspaceGateway from '@/infra/protocols/gateways/IDeleteWorkspaceGateway';
 import ILeaveWorkspaceGateway from '@/infra/protocols/gateways/ILeaveWorkspaceGateway';
 import ILoadWorkspaceDetailsGateway from '@/infra/protocols/gateways/ILoadWorkspaceDetailsGateway';
 import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGateway';
@@ -21,7 +21,7 @@ export default class WorkspaceGateway
     IAddWorkspaceGateway,
     IUpdateWorkspaceGateway,
     ILoadWorkspaceGateway,
-    IDeleteWorkspace,
+    IDeleteWorkspaceGateway,
     ILoadWorkspaceDetailsGateway,
     IAddUserInWorkspaceGateway,
     IUpdateWorkspaceUserRoleGateway,

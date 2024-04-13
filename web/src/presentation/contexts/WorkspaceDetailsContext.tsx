@@ -1,6 +1,7 @@
 'use client';
 
 import { makeWorkspaceGateway } from '@/main/factories/gateways/WorkspaceGateway';
+import { makeWorkspaceService } from '@/main/factories/services/WorkspaceServiceFactory';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { WorkspaceContext } from '@/presentation/contexts/WorkspacesContext';
@@ -32,6 +33,7 @@ export const WorkspaceDetailsContext = createContext(
 );
 
 const workspaceGateway = makeWorkspaceGateway();
+const workspaceService = makeWorkspaceService();
 
 export function WorkspaceDetailProvider({
   children,
@@ -43,9 +45,7 @@ export function WorkspaceDetailProvider({
 
   useEffect(() => {
     async function fetchData() {
-      const response = await workspaceGateway.loadWorkspaceDetails(
-        params.workspaceId,
-      );
+      const response = await workspaceService.load(params.workspaceId);
       if (!response || response?.role === 'DEFAULT') router.push('/');
       setWorkspace(response);
     }
@@ -57,7 +57,7 @@ export function WorkspaceDetailProvider({
     workspaceId: string,
     partialWorkspace: Omit<Workspace, 'id' | 'role'>,
   ): Promise<boolean> {
-    if (!(await workspaceGateway.update(workspaceId, partialWorkspace)))
+    if (!(await workspaceService.update(workspaceId, partialWorkspace)))
       return false;
 
     setWorkspace((prevWorkspace) => ({
