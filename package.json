@@ -1,5 +1,15 @@
 {
+  "name": "book-space",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "license": "MIT",
+  "workspaces": [
+    "projects/*",
+    "packages/*"
+  ],
   "devDependencies": {
     "git-commit-msg-linter": "^5.0.7"
-  }
+  },
+  "packageManager": "pnpm@8.15.7"
 }

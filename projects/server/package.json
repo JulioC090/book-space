@@ -1,5 +1,5 @@
 {
-  "name": "server",
+  "name": "@book-space/server",
   "version": "1.0.0",
   "description": "",
   "main": "index.ts",
@@ -14,7 +14,7 @@
     "typecheck": "tsc --noEmit -p .",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "prepare": "cd .. && husky server/.husky"
+    "prepare": "cd ../.. && husky server/.husky"
   },
   "author": "",
   "license": "MIT",

@@ -1,12 +1,12 @@
 {
-  "name": "web",
+  "name": "@book-space/web",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prepare": "cd .. && husky web/.husky",
+    "prepare": "cd ../.. && husky web/.husky",
     "lint": "next lint",
     "lint:fix": "eslint --fix",
     "typecheck": "tsc --noEmit -p ."
