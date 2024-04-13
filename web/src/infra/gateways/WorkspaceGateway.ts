@@ -1,4 +1,3 @@
-import { HttpCode } from '@/consts/httpCodes';
 import IAddUserInWorkspaceGateway, {
   IAddUserInWorkspaceGatewayOutput,
 } from '@/infra/protocols/gateways/IAddUserInWorkspaceGateway';
@@ -13,6 +12,7 @@ import ILoadWorkspaceGateway from '@/infra/protocols/gateways/ILoadWorkspaceGate
 import IUpdateWorkspaceGateway from '@/infra/protocols/gateways/IUpdateWorkspaceGateway';
 import IUpdateWorkspaceUserRoleGateway from '@/infra/protocols/gateways/IUpdateWorkspaceUserRoleGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
+import { HttpCode } from '@/infra/protocols/http/httpCodes';
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 

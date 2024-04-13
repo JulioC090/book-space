@@ -1,4 +1,4 @@
-import { HttpCode } from '@/consts/httpCodes';
+import { HttpCode } from '@/infra/protocols/http/httpCodes';
 import IHttpClient, {
   IHttpClientProps,
 } from '@/infra/protocols/http/IHttpClient';

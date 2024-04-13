@@ -1,4 +1,3 @@
-import { HttpCode } from '@/consts/httpCodes';
 import ILogoutGateway from '@/infra/protocols/gateways/ILogoutGateway';
 import ISignInGateway, {
   ISignInGatewayInput,
@@ -6,6 +5,7 @@ import ISignInGateway, {
 } from '@/infra/protocols/gateways/ISignInGateway';
 import ISignUpGateway from '@/infra/protocols/gateways/ISignUpGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
+import { HttpCode } from '@/infra/protocols/http/httpCodes';
 import { User } from '@/models/User';
 
 export default class AuthGateway
