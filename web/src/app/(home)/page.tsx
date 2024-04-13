@@ -1,10 +1,9 @@
 'use client';
 
-import Button from '@/components/atoms/Button';
 import Container from '@/components/atoms/Container';
 import WorkspaceList from '@/components/molecules/WorkspaceList';
 import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
-import Modal from '@/components/organism/Modal';
+import ActionListTemplate from '@/components/templates/ActionListTemplate';
 import { WorkspaceContext } from '@/contexts/WorkspacesContext';
 import { useContext } from 'react';
 
@@ -13,17 +12,14 @@ export default function Home() {
 
   return (
     <Container>
-      <div className="flex justify-between pt-8">
-        <h1 className="text-2xl font-bold">Workspaces</h1>
-        <Modal
-          title="Adicionar Workspace"
-          trigger={<Button>Adicionar Workspace</Button>}
-          hasForm
-        >
-          <WorkspaceForm onWorkspaceSubmit={addWorkspace} />
-        </Modal>
-      </div>
-      <WorkspaceList data={workspaces} />
+      <ActionListTemplate
+        title={<h1 className="text-2xl font-bold">Workspaces</h1>}
+        action={{
+          name: 'Adicionar Workspace',
+          form: <WorkspaceForm onWorkspaceSubmit={addWorkspace} />,
+        }}
+        list={<WorkspaceList data={workspaces} />}
+      />
     </Container>
   );
 }

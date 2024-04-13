@@ -1,6 +1,5 @@
 'use client';
 
-import Button from '@/components/atoms/Button';
 import Card from '@/components/atoms/Card';
 import Container from '@/components/atoms/Container';
 import GridList from '@/components/atoms/GridList';
@@ -9,6 +8,7 @@ import UserList from '@/components/molecules/UserList';
 import WorkspaceAddUserForm from '@/components/organism/Forms/WorkspaceAddUserForm';
 import WorkspaceForm from '@/components/organism/Forms/WorkspaceForm';
 import Modal from '@/components/organism/Modal';
+import ActionListTemplate from '@/components/templates/ActionListTemplate';
 import { WorkspaceDetailsContext } from '@/contexts/WorkspaceDetailsContext';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { NotePencil } from '@phosphor-icons/react/dist/ssr';
@@ -49,42 +49,41 @@ export default function WorkspaceManager() {
       </div>
       <p className="text-zinc-500">Atualize as informações da sua Workspace</p>
       <div className="mt-16">
-        <div className="flex justify-between pt-8">
-          <h2 className="text-xl font-bold mb-2">Membros</h2>
-          <Modal
-            title="Adicionar usuário"
-            trigger={<Button>Adicionar usuário</Button>}
-            hasForm
-          >
-            <WorkspaceAddUserForm
-              handleAddUser={addUser}
-              role={workspace.role}
-            />
-          </Modal>
-        </div>
-        <UserList data={workspace.users} />
+        <ActionListTemplate
+          title={<h2 className="text-xl font-bold mb-2">Membros</h2>}
+          action={{
+            name: 'Adicionar usuário',
+            form: (
+              <WorkspaceAddUserForm
+                handleAddUser={addUser}
+                role={workspace.role}
+              />
+            ),
+          }}
+          list={<UserList data={workspace.users} />}
+        />
       </div>
       <div className="mt-16 mb-16">
-        <div className="flex justify-between pt-8">
-          <h2 className="text-xl font-bold mb-2">Espaços</h2>
-          <Modal
-            title="Adicionar Espaço"
-            trigger={<Button>Adicionar espaço</Button>}
-          >
-            Em desenvolvimento
-          </Modal>
-        </div>
-        <GridList className="w-full max-h-128">
-          <Card className="min-h-64 flex justify-center items-center">
-            Em desenvolvimento
-          </Card>
-          <Card className="min-h-64 flex justify-center items-center">
-            Em desenvolvimento
-          </Card>
-          <Card className="min-h-64 flex justify-center items-center">
-            Em desenvolvimento
-          </Card>
-        </GridList>
+        <ActionListTemplate
+          title={<h2 className="text-xl font-bold mb-2">Espaços</h2>}
+          action={{
+            name: 'Adicionar Espaço',
+            form: 'Em desenvolvimento',
+          }}
+          list={
+            <GridList className="w-full max-h-128">
+              <Card className="min-h-64 flex justify-center items-center">
+                Em desenvolvimento
+              </Card>
+              <Card className="min-h-64 flex justify-center items-center">
+                Em desenvolvimento
+              </Card>
+              <Card className="min-h-64 flex justify-center items-center">
+                Em desenvolvimento
+              </Card>
+            </GridList>
+          }
+        />
       </div>
     </Container>
   );
