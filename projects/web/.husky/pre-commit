@@ -1,2 +1,0 @@
-npx lint-staged --cwd ./web
-npm --prefix ./web run typecheck

@@ -5,12 +5,14 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
+    "pre-commit": "pnpm run --filter \"@book-space/*\" pre-commit",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "test": "jest --passWithNoTests --runInBand",
     "test:watch": "npm test -- --detectOpenHandles --watch",
     "test:staged": "npm test -- --detectOpenHandles --findRelatedTests --forceExit",
-    "test:coverage": "npm test -- --detectOpenHandles --coverage --forceExit"
+    "test:coverage": "npm test -- --detectOpenHandles --coverage --forceExit",
+    "prepare": "husky"
   },
   "workspaces": [
     "projects/*",
@@ -20,7 +22,9 @@
     "@book-space/eslint-config": "workspace:^",
     "@types/jest": "^29.5.12",
     "git-commit-msg-linter": "^5.0.7",
+    "husky": "^9.0.11",
     "jest": "^29.7.0",
+    "lint-staged": "^15.2.2",
     "ts-jest": "^29.1.2"
   },
   "packageManager": "pnpm@8.15.7"

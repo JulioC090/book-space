@@ -12,7 +12,7 @@
     "test:staged": "npm test -- --detectOpenHandles --findRelatedTests --forceExit",
     "test:coverage": "npm test -- --detectOpenHandles --coverage --forceExit",
     "typecheck": "tsc --noEmit -p .",
-    "prepare": "cd ../.. && husky server/.husky"
+    "pre-commit": "npm run typecheck"
   },
   "author": "",
   "license": "MIT",
@@ -29,8 +29,6 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
     "prisma": "^5.11.0",
     "tsc-alias": "^1.8.8",
     "tsx": "^4.7.1",
