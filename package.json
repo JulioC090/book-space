@@ -4,11 +4,16 @@
   "description": "",
   "keywords": [],
   "license": "MIT",
+  "scripts": {
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --fix"
+  },
   "workspaces": [
     "projects/*",
     "packages/*"
   ],
   "devDependencies": {
+    "@book-space/eslint-config": "workspace:^",
     "git-commit-msg-linter": "^5.0.7"
   },
   "packageManager": "pnpm@8.15.7"

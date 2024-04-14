@@ -1,6 +1,5 @@
 import { User } from '@/models/User';
 
-/* eslint-disable no-unused-vars */
 export type ISignInGatewayInput = Omit<User, 'id' | 'name'>;
 
 export type ISignInGatewayOutput = {

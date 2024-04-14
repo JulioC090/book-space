@@ -11,16 +11,11 @@ import { createContext, useContext, useEffect, useState } from 'react';
 interface WorkspaceDetailsContextType {
   workspace?: Required<Workspace>;
   updateWorkspace: (
-    // eslint-disable-next-line no-unused-vars
     workspaceId: string,
-    // eslint-disable-next-line no-unused-vars
     partialWorkspace: Omit<Workspace, 'id' | 'role'>,
   ) => Promise<boolean>;
-  // eslint-disable-next-line no-unused-vars
   addUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
-  // eslint-disable-next-line no-unused-vars
   updateUserRole: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
-  // eslint-disable-next-line no-unused-vars
   deleteUser: (userEmail: string) => Promise<boolean>;
 }
 

@@ -14,7 +14,6 @@ interface IWorkspaceAddUserFields {
 }
 
 interface WorkspaceAddUserFormProps {
-  // eslint-disable-next-line no-unused-vars
   handleAddUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   onSubmit?(): void;
   role: WorkspaceRoles;

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 'use client';
 
 import { makeWorkspaceService } from '@/main/factories/services/WorkspaceServiceFactory';

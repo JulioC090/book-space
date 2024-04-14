@@ -4,7 +4,7 @@ export default function getInitials(str: string, amount: number = 2) {
 
   if (amount < 1) return '';
 
-  for (let word of words) {
+  for (const word of words) {
     if (initials.length >= amount) break;
     if (word.length > 0) {
       if (initials.length > 1 && word[0] === word[0].toUpperCase()) {

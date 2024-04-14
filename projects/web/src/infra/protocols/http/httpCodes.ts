@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 export enum HttpCode {
   OK = 200,
   CREATED = 201,

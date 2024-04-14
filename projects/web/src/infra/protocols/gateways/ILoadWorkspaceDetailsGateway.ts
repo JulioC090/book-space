@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Workspace } from '@/models/Workspace';
 
 export default interface ILoadWorkspaceDetailsGateway {

@@ -1,7 +1,6 @@
 import IHttpRequest from '@/infra/protocols/http/IHttpRequest';
 import IHttpResponse from '@/infra/protocols/http/IHttpResponse';
 
-/* eslint-disable no-unused-vars */
 export interface IHttpClientProps<RequestBodyType = undefined>
   extends IHttpRequest<RequestBodyType> {
   url: string;

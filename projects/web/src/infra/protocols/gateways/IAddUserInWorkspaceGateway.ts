@@ -1,5 +1,3 @@
-/* eslint-disable no-unused-vars */
-
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 
 export interface IAddUserInWorkspaceGatewayOutput {

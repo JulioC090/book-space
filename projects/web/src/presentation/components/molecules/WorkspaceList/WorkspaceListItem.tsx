@@ -17,7 +17,6 @@ export interface WorkspaceListItemProps {
 export default function WorkspaceListItem({
   workspace,
 }: WorkspaceListItemProps) {
-  // eslint-disable-next-line no-unused-vars
   const roleMenuMap: { [key in WorkspaceRoles]: React.ReactNode } = {
     OWNER: <WorkspaceListItemMenu.Owner workspace={workspace} />,
     MANAGER: <WorkspaceListItemMenu.Manager workspace={workspace} />,

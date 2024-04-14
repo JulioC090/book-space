@@ -1,10 +1,9 @@
 'use client';
 
-import useLocalStorage from '@/presentation/hooks/useLocalStorage';
-/* eslint-disable no-unused-vars */
 import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
 import { makeAuthService } from '@/main/factories/services/AuthServiceFactory';
 import { User } from '@/models/User';
+import useLocalStorage from '@/presentation/hooks/useLocalStorage';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { createContext } from 'react';

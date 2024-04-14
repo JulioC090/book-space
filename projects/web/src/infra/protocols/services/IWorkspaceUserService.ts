@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { User } from '@/models/User';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 

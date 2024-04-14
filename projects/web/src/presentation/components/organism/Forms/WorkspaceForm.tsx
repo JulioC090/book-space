@@ -13,7 +13,6 @@ interface IWorkspaceFields {
 export interface WorkspaceFormProps {
   workspace?: Omit<Workspace, 'role'>;
   onWorkspaceSubmit: (
-    // eslint-disable-next-line no-unused-vars
     workspace: IWorkspaceFields & Partial<{ id: string }>,
   ) => Promise<boolean>;
   onSubmit?(): void;
