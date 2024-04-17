@@ -1,4 +1,5 @@
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
+import IUpdateWorkspaceUserRoleRepository from '@/infra/protocols/repositories/IUpdateWorkspaceUserRoleRepository';
 import { UsersOnWorkspaceRole } from '@prisma/client';
 import Workspace from 'domain/models/Workspace';
 import { prisma } from 'infra/database/prisma/prismaClient';
@@ -7,7 +8,6 @@ import IAddWorkspaceRepository, {
   IAddWorkspaceRepositoryInput,
   IAddWorkspaceRepositoryOutput,
 } from 'infra/protocols/repositories/IAddWorkspaceRepository';
-import IChangeUserRoleRepository from 'infra/protocols/repositories/IChangeUserRoleRepository';
 import ICheckUserExistInWorkspaceRepository from 'infra/protocols/repositories/ICheckUserExistInWorkspaceRepository';
 import IDeleteUserInWorkspaceRepository from 'infra/protocols/repositories/IDeleteUserInWorkspaceRepository';
 import IDeleteWorkspaceRepository from 'infra/protocols/repositories/IDeleteWorkspaceRepository';
@@ -30,7 +30,7 @@ export default class WorkspacePrimaRepository
     IAddUserToWorkspaceRepository,
     IDeleteUserInWorkspaceRepository,
     ILoadWorkspaceDetailsRepository,
-    IChangeUserRoleRepository,
+    IUpdateWorkspaceUserRoleRepository,
     ILoadUserRoleRepository
 {
   async load(userId: string): Promise<ILoadWorkspacesRepositoryOutput> {
@@ -155,7 +155,7 @@ export default class WorkspacePrimaRepository
     return !!deletedUser;
   }
 
-  async changeRole(
+  async updateUserRole(
     workspaceId: string,
     { userId, role }: { userId: string; role: WorkspaceRoles },
   ): Promise<boolean> {

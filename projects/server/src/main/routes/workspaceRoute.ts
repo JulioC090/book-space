@@ -1,6 +1,7 @@
+import UpdateWorkspaceUserRole from '@/domain/usecases/UpdateWorkspaceUserRole';
+import PutWorkspaceUserRoleController from '@/presentation/controllers/PutWorkspaceUserRoleController';
 import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
 import AddWorkspace from 'domain/usecases/AddWorkspace';
-import ChangeUserRoleInWorkspace from 'domain/usecases/ChangeUserRoleInWorkspace';
 import DeleteUserInWorkspace from 'domain/usecases/DeleteUserInWorkspace';
 import DeleteWorkspace from 'domain/usecases/DeleteWorkspace';
 import LeaveWorkspace from 'domain/usecases/LeaveWorkspace';
@@ -20,7 +21,6 @@ import GetWorkspacesController from 'presentation/controllers/GetWorkspacesContr
 import PatchWorkspaceController from 'presentation/controllers/PatchWorkspaceController';
 import PostUserToWorkspaceController from 'presentation/controllers/PostUserToWorkspaceController';
 import PostWorkspaceController from 'presentation/controllers/PostWorkspaceController';
-import PutUserRoleInWorkspaceController from 'presentation/controllers/PutUserRoleInWorkspaceController';
 import AuthMiddleware from 'presentation/middleware/AuthMiddleware';
 
 const accountRepository = new AccountPrismaRepository();
@@ -86,14 +86,14 @@ const deleteLeaveWorkspaceController = new DeleteLeaveWorkspaceController(
   leaveWorkspace,
 );
 
-const changeUserRoleInWorkspace = new ChangeUserRoleInWorkspace(
+const updateWorkspaceUserRole = new UpdateWorkspaceUserRole(
   workspaceRepository,
   workspaceRepository,
   accountRepository,
   workspaceRepository,
 );
-const putUserRoleInWorkspaceController = new PutUserRoleInWorkspaceController(
-  changeUserRoleInWorkspace,
+const putWorkspaceUserRoleController = new PutWorkspaceUserRoleController(
+  updateWorkspaceUserRole,
 );
 
 export default async function (app: FastifyInstance) {
@@ -111,7 +111,7 @@ export default async function (app: FastifyInstance) {
   );
   app.put(
     '/workspace/:workspaceId/user',
-    adaptRoute(putUserRoleInWorkspaceController),
+    adaptRoute(putWorkspaceUserRoleController),
   );
   app.delete(
     '/workspace/:workspaceId/user',

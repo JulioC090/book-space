@@ -2,30 +2,30 @@ import { User } from '@/domain/models/User';
 import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
-import IChangeUserRoleRepository from '@/infra/protocols/repositories/IChangeUserRoleRepository';
 import { ILoadAccountByEmailRepository } from '@/infra/protocols/repositories/ILoadAccountByEmailRepository';
 import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
 import ILoadWorkspaceById from '@/infra/protocols/repositories/ILoadWorkspaceById';
+import IUpdateWorkspaceUserRoleRepository from '@/infra/protocols/repositories/IUpdateWorkspaceUserRoleRepository';
 
-export default class ChangeUserRoleInWorkspace {
+export default class UpdateWorkspaceUserRole {
   private loadUserRoleRepository: ILoadUserRoleRepository;
   private loadWorkspaceByIdRepository: ILoadWorkspaceById;
   private loadAccountByEmailRepository: ILoadAccountByEmailRepository;
-  private changeUserRoleRepository: IChangeUserRoleRepository;
+  private updateWorkspaceUserRoleRepository: IUpdateWorkspaceUserRoleRepository;
 
   constructor(
     loadUserRoleRepository: ILoadUserRoleRepository,
     loadWorkspaceByIdRepository: ILoadWorkspaceById,
     loadAccountByEmailRepository: ILoadAccountByEmailRepository,
-    changeUserRoleRepository: IChangeUserRoleRepository,
+    updateWorkspaceUserRoleRepository: IUpdateWorkspaceUserRoleRepository,
   ) {
     this.loadUserRoleRepository = loadUserRoleRepository;
     this.loadWorkspaceByIdRepository = loadWorkspaceByIdRepository;
     this.loadAccountByEmailRepository = loadAccountByEmailRepository;
-    this.changeUserRoleRepository = changeUserRoleRepository;
+    this.updateWorkspaceUserRoleRepository = updateWorkspaceUserRoleRepository;
   }
 
-  async changeRole(
+  async updateUserRole(
     authenticatedUser: Omit<User, 'password'>,
     workspaceId: string,
     user: { email: string; role: WorkspaceRoles },
@@ -72,9 +72,12 @@ export default class ChangeUserRoleInWorkspace {
     )
       return false;
 
-    return await this.changeUserRoleRepository.changeRole(workspace.id, {
-      userId: changedUser.id,
-      role: user.role,
-    });
+    return await this.updateWorkspaceUserRoleRepository.updateUserRole(
+      workspace.id,
+      {
+        userId: changedUser.id,
+        role: user.role,
+      },
+    );
   }
 }

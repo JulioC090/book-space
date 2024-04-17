@@ -1,6 +1,6 @@
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
+import UpdateWorkspaceUserRole from '@/domain/usecases/UpdateWorkspaceUserRole';
 import { User } from '@prisma/client';
-import ChangeUserRoleInWorkspace from 'domain/usecases/ChangeUserRoleInWorkspace';
 import { badRequest, forbidden, ok } from 'presentation/helpers/httpCodes';
 import { Controller } from 'presentation/protocols/Controller';
 import { IHttpRequest, IHttpResponse } from 'presentation/protocols/Http';
@@ -15,11 +15,11 @@ const requestBodySchema = z.object({
   role: z.nativeEnum(WorkspaceRoles).default(WorkspaceRoles.DEFAULT),
 });
 
-export default class PutUserRoleInWorkspaceController implements Controller {
-  private changeUserRoleInWorkspace: ChangeUserRoleInWorkspace;
+export default class PutWorkspaceUserRoleController implements Controller {
+  private updateWorkspaceUserRole: UpdateWorkspaceUserRole;
 
-  constructor(changeUserRoleInWorkspace: ChangeUserRoleInWorkspace) {
-    this.changeUserRoleInWorkspace = changeUserRoleInWorkspace;
+  constructor(updateWorkspaceUserRole: UpdateWorkspaceUserRole) {
+    this.updateWorkspaceUserRole = updateWorkspaceUserRole;
   }
 
   async handle(request: IHttpRequest): Promise<IHttpResponse> {
@@ -35,7 +35,7 @@ export default class PutUserRoleInWorkspaceController implements Controller {
 
     const { account } = request as { account: User };
 
-    const response = await this.changeUserRoleInWorkspace.changeRole(
+    const response = await this.updateWorkspaceUserRole.updateUserRole(
       account,
       validatedRequestParams.data.workspaceId,
       {

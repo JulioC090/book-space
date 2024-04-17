@@ -1,6 +1,6 @@
 import { User } from '@/domain/models/User';
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
-import ChangeUserRoleInWorkspace from '@/domain/usecases/ChangeUserRoleInWorkspace';
+import UpdateWorkspaceUserRole from '@/domain/usecases/UpdateWorkspaceUserRole';
 
 const mockLoadUserRoleRepository = {
   loadUserRole: jest.fn(),
@@ -14,19 +14,19 @@ const mockLoadAccountByEmailRepository = {
   loadByEmail: jest.fn(),
 };
 
-const mockChangeUserRoleRepository = {
-  changeRole: jest.fn(),
+const mockUpdateWorkspaceUserRoleRepository = {
+  updateUserRole: jest.fn(),
 };
 
-describe('ChangeUserRoleInWorkspace', () => {
-  let changeUserRoleInWorkspace: ChangeUserRoleInWorkspace;
+describe('UpdateWorkspaceUserRole', () => {
+  let updateWorkspaceUserRole: UpdateWorkspaceUserRole;
 
   beforeEach(() => {
-    changeUserRoleInWorkspace = new ChangeUserRoleInWorkspace(
+    updateWorkspaceUserRole = new UpdateWorkspaceUserRole(
       mockLoadUserRoleRepository,
       mockLoadWorkspaceByIdRepository,
       mockLoadAccountByEmailRepository,
-      mockChangeUserRoleRepository,
+      mockUpdateWorkspaceUserRoleRepository,
     );
   });
 
@@ -50,9 +50,11 @@ describe('ChangeUserRoleInWorkspace', () => {
       name: 'User Name',
       email: user.email,
     });
-    mockChangeUserRoleRepository.changeRole.mockResolvedValue(true);
+    mockUpdateWorkspaceUserRoleRepository.updateUserRole.mockResolvedValue(
+      true,
+    );
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -72,7 +74,7 @@ describe('ChangeUserRoleInWorkspace', () => {
 
     mockLoadWorkspaceByIdRepository.loadById.mockResolvedValue(null);
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -95,7 +97,7 @@ describe('ChangeUserRoleInWorkspace', () => {
     });
     mockLoadUserRoleRepository.loadUserRole.mockResolvedValueOnce(null);
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -120,7 +122,7 @@ describe('ChangeUserRoleInWorkspace', () => {
       WorkspaceRoles.DEFAULT,
     );
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -149,9 +151,11 @@ describe('ChangeUserRoleInWorkspace', () => {
       name: 'User Name',
       email: user.email,
     });
-    mockChangeUserRoleRepository.changeRole.mockResolvedValue(true);
+    mockUpdateWorkspaceUserRoleRepository.updateUserRole.mockResolvedValue(
+      true,
+    );
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -180,9 +184,11 @@ describe('ChangeUserRoleInWorkspace', () => {
       name: 'User Name',
       email: user.email,
     });
-    mockChangeUserRoleRepository.changeRole.mockResolvedValue(true);
+    mockUpdateWorkspaceUserRoleRepository.updateUserRole.mockResolvedValue(
+      true,
+    );
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -208,7 +214,7 @@ describe('ChangeUserRoleInWorkspace', () => {
     );
     mockLoadAccountByEmailRepository.loadByEmail.mockResolvedValue(null);
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -238,7 +244,7 @@ describe('ChangeUserRoleInWorkspace', () => {
       email: user.email,
     });
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -268,7 +274,7 @@ describe('ChangeUserRoleInWorkspace', () => {
       email: user.email,
     });
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
@@ -297,9 +303,11 @@ describe('ChangeUserRoleInWorkspace', () => {
       name: 'User Name',
       email: user.email,
     });
-    mockChangeUserRoleRepository.changeRole.mockResolvedValue(false);
+    mockUpdateWorkspaceUserRoleRepository.updateUserRole.mockResolvedValue(
+      false,
+    );
 
-    const result = await changeUserRoleInWorkspace.changeRole(
+    const result = await updateWorkspaceUserRole.updateUserRole(
       authenticatedUser,
       workspaceId,
       user,
