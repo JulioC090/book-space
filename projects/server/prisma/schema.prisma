@@ -24,6 +24,7 @@ model Workspace {
   ownerId String
   name    String
   tag     String
+  spaces  Space[]
   owner   User               @relation(fields: [ownerId], references: [id])
   users   UsersOnWorkspace[]
 
@@ -34,12 +35,22 @@ model UsersOnWorkspace {
   userId      String
   workspaceId String
   role        UsersOnWorkspaceRole @default(DEFAULT)
-
-  user      User      @relation(fields: [userId], references: [id])
-  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  user        User                 @relation(fields: [userId], references: [id])
+  workspace   Workspace            @relation(fields: [workspaceId], references: [id])
 
   @@id([userId, workspaceId])
   @@map("workspaces_users")
+}
+
+model Space {
+  id                String     @id @default(uuid())
+  name              String
+  description       String
+  maxAmountOfPeople Int?
+  workspaceId       String?
+  Workspace         Workspace? @relation(fields: [workspaceId], references: [id])
+
+  @@map("workspace_spaces")
 }
 
 enum UsersOnWorkspaceRole {
