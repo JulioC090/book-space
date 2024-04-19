@@ -1,127 +1,52 @@
-import UpdateWorkspaceUserRole from '@/domain/usecases/UpdateWorkspaceUserRole';
+import { makeDeleteLeaveWorkspaceController } from '@/main/factories/controllers/DeleteLeaveWorkspaceControllerFactory';
 import { makeDeleteSpaceController } from '@/main/factories/controllers/DeleteSpaceControllerFactory';
+import { makeDeleteUserInWorkspaceController } from '@/main/factories/controllers/DeleteUserInWorkspaceControllerFactory';
+import { makeDeleteWorkspaceController } from '@/main/factories/controllers/DeleteWorkspaceControllerFactory';
+import { makeGetWorkspaceDetailsController } from '@/main/factories/controllers/GetWorkspaceDetailsControllerFactory';
+import { makeGetWorkspacesController } from '@/main/factories/controllers/GetWorkspacesControllerFactory';
+import { makePatchWorkspaceController } from '@/main/factories/controllers/PatchWorkspaceControllerFactory';
 import { makePostSpaceController } from '@/main/factories/controllers/PostSpaceControllerFactory';
-import PutWorkspaceUserRoleController from '@/presentation/controllers/PutWorkspaceUserRoleController';
-import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
-import AddWorkspace from 'domain/usecases/AddWorkspace';
-import DeleteUserInWorkspace from 'domain/usecases/DeleteUserInWorkspace';
-import DeleteWorkspace from 'domain/usecases/DeleteWorkspace';
-import LeaveWorkspace from 'domain/usecases/LeaveWorkspace';
-import LoadWorkspaceDetails from 'domain/usecases/LoadWorkspaceDetails';
-import LoadWorkspaces from 'domain/usecases/LoadWorkspaces';
-import UpdateWorkspace from 'domain/usecases/UpdateWorkspace';
+import { makePostUserToWorkspaceController } from '@/main/factories/controllers/PostUserToWorkspaceControllerFactory';
+import { makePostWorkspaceController } from '@/main/factories/controllers/PostWorkspaceControllerFactory';
+import { makePutWorkspaceUserRoleControllerFactory } from '@/main/factories/controllers/PutWorkspaceUserRoleControllerFactory';
+import { makeAuthMiddleware } from '@/main/factories/middlewares/AuthMiddlewareFactory';
 import { FastifyInstance } from 'fastify';
-import AccountPrismaRepository from 'infra/database/prisma/AccountPrismaRepository';
-import WorkspacePrimaRepository from 'infra/database/prisma/WorkspacePrismaRepository';
 import { adaptMiddleware } from 'main/adapters/fastifyMiddlewareAdapter';
 import { adaptRoute } from 'main/adapters/fastifyRouteAdapter';
-import DeleteLeaveWorkspaceController from 'presentation/controllers/DeleteLeaveWorkspaceController';
-import DeleteUserInWorkspaceController from 'presentation/controllers/DeleteUserInWorkspaceController';
-import DeleteWorkspaceController from 'presentation/controllers/DeleteWorkspaceController';
-import GetWorkspaceDetailsController from 'presentation/controllers/GetWorkspaceDetailsController';
-import GetWorkspacesController from 'presentation/controllers/GetWorkspacesController';
-import PatchWorkspaceController from 'presentation/controllers/PatchWorkspaceController';
-import PostUserToWorkspaceController from 'presentation/controllers/PostUserToWorkspaceController';
-import PostWorkspaceController from 'presentation/controllers/PostWorkspaceController';
-import AuthMiddleware from 'presentation/middleware/AuthMiddleware';
-
-const accountRepository = new AccountPrismaRepository();
-const authMiddleware = new AuthMiddleware(accountRepository);
-
-const workspaceRepository = new WorkspacePrimaRepository();
-
-const loadWorkspaces = new LoadWorkspaces(workspaceRepository);
-const getWorkspacesController = new GetWorkspacesController(loadWorkspaces);
-
-const addWorkspace = new AddWorkspace(workspaceRepository);
-const postWorkspaceController = new PostWorkspaceController(addWorkspace);
-
-const updateWorkspace = new UpdateWorkspace(
-  workspaceRepository,
-  workspaceRepository,
-);
-const patchWorkspaceController = new PatchWorkspaceController(updateWorkspace);
-
-const deleteWorkspace = new DeleteWorkspace(
-  workspaceRepository,
-  workspaceRepository,
-);
-const deleteWorkspaceController = new DeleteWorkspaceController(
-  deleteWorkspace,
-);
-
-const loadWorkspaceDetails = new LoadWorkspaceDetails(
-  workspaceRepository,
-  workspaceRepository,
-  workspaceRepository,
-);
-const getWorkspaceDetailsController = new GetWorkspaceDetailsController(
-  loadWorkspaceDetails,
-);
-
-const addUserToWorkspace = new AddUserToWorkspace(
-  workspaceRepository,
-  workspaceRepository,
-  accountRepository,
-  workspaceRepository,
-  workspaceRepository,
-);
-const postUserToWorkspaceController = new PostUserToWorkspaceController(
-  addUserToWorkspace,
-);
-
-const deleteUserInWorkspace = new DeleteUserInWorkspace(
-  workspaceRepository,
-  workspaceRepository,
-  accountRepository,
-  workspaceRepository,
-);
-const deleteUserInWorkspaceController = new DeleteUserInWorkspaceController(
-  deleteUserInWorkspace,
-);
-
-const leaveWorkspace = new LeaveWorkspace(
-  workspaceRepository,
-  workspaceRepository,
-);
-const deleteLeaveWorkspaceController = new DeleteLeaveWorkspaceController(
-  leaveWorkspace,
-);
-
-const updateWorkspaceUserRole = new UpdateWorkspaceUserRole(
-  workspaceRepository,
-  workspaceRepository,
-  accountRepository,
-  workspaceRepository,
-);
-const putWorkspaceUserRoleController = new PutWorkspaceUserRoleController(
-  updateWorkspaceUserRole,
-);
 
 export default async function (app: FastifyInstance) {
-  app.addHook('preHandler', adaptMiddleware(authMiddleware));
+  app.addHook('preHandler', adaptMiddleware(makeAuthMiddleware()));
 
-  app.get('/workspaces', adaptRoute(getWorkspacesController));
-  app.get('/workspace/:workspaceId', adaptRoute(getWorkspaceDetailsController));
-  app.post('/workspace', adaptRoute(postWorkspaceController));
-  app.patch('/workspace/:workspaceId', adaptRoute(patchWorkspaceController));
-  app.delete('/workspace/:workspaceId', adaptRoute(deleteWorkspaceController));
+  app.get('/workspaces', adaptRoute(makeGetWorkspacesController()));
+  app.get(
+    '/workspace/:workspaceId',
+    adaptRoute(makeGetWorkspaceDetailsController()),
+  );
+  app.post('/workspace', adaptRoute(makePostWorkspaceController()));
+  app.patch(
+    '/workspace/:workspaceId',
+    adaptRoute(makePatchWorkspaceController()),
+  );
+  app.delete(
+    '/workspace/:workspaceId',
+    adaptRoute(makeDeleteWorkspaceController()),
+  );
 
   app.post(
     '/workspace/:workspaceId/user',
-    adaptRoute(postUserToWorkspaceController),
+    adaptRoute(makePostUserToWorkspaceController()),
   );
   app.put(
     '/workspace/:workspaceId/user',
-    adaptRoute(putWorkspaceUserRoleController),
+    adaptRoute(makePutWorkspaceUserRoleControllerFactory()),
   );
   app.delete(
     '/workspace/:workspaceId/user',
-    adaptRoute(deleteUserInWorkspaceController),
+    adaptRoute(makeDeleteUserInWorkspaceController()),
   );
   app.delete(
     '/workspace/:workspaceId/leave',
-    adaptRoute(deleteLeaveWorkspaceController),
+    adaptRoute(makeDeleteLeaveWorkspaceController()),
   );
 
   app.post(
