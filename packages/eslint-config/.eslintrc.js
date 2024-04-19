@@ -19,7 +19,7 @@ module.exports = {
   },
   overrides: [
     {
-      files: ['tests/**'],
+      files: ['**/tests/**'],
       plugins: ['jest'],
       extends: ['plugin:jest/recommended', 'plugin:jest/style'],
     },
