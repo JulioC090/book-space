@@ -7,6 +7,7 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
       findFirst: jest.fn(),
       create: jest.fn(),
       deleteMany: jest.fn(),
+      updateMany: jest.fn(),
     },
   },
 }));
@@ -14,6 +15,7 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
 const mockFindFirst = prisma.space.findFirst as jest.Mock;
 const mockCreate = prisma.space.create as jest.Mock;
 const mockDeleteMany = prisma.space.deleteMany as jest.Mock;
+const mockUpdateMany = prisma.space.updateMany as jest.Mock;
 
 const spaceRepository = new SpacePrismaRepository();
 
@@ -105,6 +107,36 @@ describe('SpacePrismaRepository', () => {
     });
     expect(result?.maxAmountOfPeople).toBeDefined();
     expect(result).toEqual({ id: spaceId, workspaceId, ...space });
+  });
+
+  test('It should update space successfully', async () => {
+    const spaceId = 'spaceId';
+    const partialSpace = { name: 'newName' };
+
+    mockUpdateMany.mockResolvedValue({ count: 1 });
+
+    const result = await spaceRepository.update(spaceId, partialSpace);
+
+    expect(prisma.space.updateMany).toHaveBeenCalledWith({
+      where: { id: spaceId },
+      data: { ...partialSpace },
+    });
+    expect(result).toBeTruthy();
+  });
+
+  test('It should return false if failed to update space', async () => {
+    const spaceId = 'spaceId';
+    const partialSpace = { name: 'newName' };
+
+    mockUpdateMany.mockResolvedValue({ count: 0 });
+
+    const result = await spaceRepository.update(spaceId, partialSpace);
+
+    expect(prisma.space.updateMany).toHaveBeenCalledWith({
+      where: { id: spaceId },
+      data: { ...partialSpace },
+    });
+    expect(result).toBeFalsy();
   });
 
   test('It should delete space', async () => {

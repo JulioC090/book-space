@@ -3,11 +3,13 @@ import { prisma } from '@/infra/database/prisma/prismaClient';
 import IAddSpaceRepository from '@/infra/protocols/repositories/IAddSpaceRepository';
 import ICheckSpaceIsInWorkspaceRepository from '@/infra/protocols/repositories/ICheckSpaceIsInWorkspaceRepository';
 import IDeleteSpaceRepository from '@/infra/protocols/repositories/IDeleteSpaceRepository';
+import IUpdateSpaceRepository from '@/infra/protocols/repositories/IUpdateSpaceRepository';
 
 export default class SpacePrismaRepository
   implements
     ICheckSpaceIsInWorkspaceRepository,
     IAddSpaceRepository,
+    IUpdateSpaceRepository,
     IDeleteSpaceRepository
 {
   async isInWorkspace(workspaceId: string, spaceId: string): Promise<boolean> {
@@ -31,6 +33,18 @@ export default class SpacePrismaRepository
         ? addedSpace.maxAmountOfPeople
         : undefined,
     };
+  }
+
+  async update(
+    spaceId: string,
+    partialSpace: Partial<Omit<Space, 'id' | 'workspaceId'>>,
+  ): Promise<boolean> {
+    const updatedSpace = await prisma.space.updateMany({
+      where: { id: spaceId },
+      data: { ...partialSpace },
+    });
+
+    return updatedSpace.count > 0;
   }
 
   async delete(spaceId: string): Promise<boolean> {

@@ -15,6 +15,7 @@ const MANAGER = new Role<WorkspacePermissions>(
     WorkspacePermissions.REMOVE_USER_FROM_WORKSPACE,
     WorkspacePermissions.ADD_SPACE_TO_WORKSPACE,
     WorkspacePermissions.DELETE_SPACE_FROM_WORKSPACE,
+    WorkspacePermissions.UPDATE_SPACE,
   ],
   1,
 );
@@ -28,6 +29,7 @@ const OWNER = new Role<WorkspacePermissions>(
     WorkspacePermissions.DELETE_WORKSPACE,
     WorkspacePermissions.ADD_SPACE_TO_WORKSPACE,
     WorkspacePermissions.DELETE_SPACE_FROM_WORKSPACE,
+    WorkspacePermissions.UPDATE_SPACE,
   ],
   2,
 );

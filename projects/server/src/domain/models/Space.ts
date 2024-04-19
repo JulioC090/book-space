@@ -3,5 +3,5 @@ export default interface Space {
   workspaceId?: string;
   name: string;
   description: string;
-  maxAmountOfPeople?: number;
+  maxAmountOfPeople?: number | null;
 }
