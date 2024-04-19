@@ -1,4 +1,5 @@
 import UpdateWorkspaceUserRole from '@/domain/usecases/UpdateWorkspaceUserRole';
+import { makeDeleteSpaceController } from '@/main/factories/controllers/DeleteSpaceControllerFactory';
 import { makePostSpaceController } from '@/main/factories/controllers/PostSpaceControllerFactory';
 import PutWorkspaceUserRoleController from '@/presentation/controllers/PutWorkspaceUserRoleController';
 import AddUserToWorkspace from 'domain/usecases/AddUserToWorkspace';
@@ -126,5 +127,9 @@ export default async function (app: FastifyInstance) {
   app.post(
     '/workspace/:workspaceId/space',
     adaptRoute(makePostSpaceController()),
+  );
+  app.delete(
+    '/workspace/:workspaceId/space/:spaceId',
+    adaptRoute(makeDeleteSpaceController()),
   );
 }
