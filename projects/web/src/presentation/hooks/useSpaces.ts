@@ -22,6 +22,25 @@ export default function useSpaces() {
     return true;
   }
 
+  async function updateSpace(
+    workspaceId: string,
+    spaceId: string,
+    partialSpace: Partial<Omit<Space, 'id'>>,
+  ): Promise<boolean> {
+    if (!(await spaceService.update(workspaceId, spaceId, partialSpace)))
+      return false;
+    setSpaces((prevSpaces) =>
+      prevSpaces.map((space) => {
+        if (space.id !== spaceId) return space;
+        return {
+          ...space,
+          ...partialSpace,
+        };
+      }),
+    );
+    return true;
+  }
+
   async function deleteSpace(
     workspaceId: string,
     spaceId: string,
@@ -33,5 +52,5 @@ export default function useSpaces() {
     return true;
   }
 
-  return { spaces, loadSpaces, addSpace, deleteSpace };
+  return { spaces, loadSpaces, addSpace, updateSpace, deleteSpace };
 }

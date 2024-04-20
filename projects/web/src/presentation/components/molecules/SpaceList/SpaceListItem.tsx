@@ -1,14 +1,21 @@
 import Space from '@/models/Space';
 import Card from '@/presentation/components/atoms/Card';
 import { IconButton } from '@/presentation/components/atoms/IconButton';
-import { TrashSimple } from '@phosphor-icons/react/dist/ssr';
+import SpaceEditForm from '@/presentation/components/organism/Forms/SpaceEditForm';
+import Modal from '@/presentation/components/organism/Modal';
+import { NotePencil, TrashSimple } from '@phosphor-icons/react/dist/ssr';
 
 interface SpaceListItemProps {
   space: Space;
+  onUpdate(partialSpace: Omit<Space, 'id'>): Promise<boolean>;
   onDelete(spaceId: string): Promise<boolean>;
 }
 
-export default function SpaceListItem({ space, onDelete }: SpaceListItemProps) {
+export default function SpaceListItem({
+  space,
+  onUpdate,
+  onDelete,
+}: SpaceListItemProps) {
   return (
     <Card>
       <p className="text-lg font-bold">{space.name}</p>
@@ -21,6 +28,17 @@ export default function SpaceListItem({ space, onDelete }: SpaceListItemProps) {
       <IconButton onClick={() => onDelete(space.id)}>
         <TrashSimple />
       </IconButton>
+      <Modal
+        title="Editar espaço"
+        hasForm
+        trigger={
+          <IconButton>
+            <NotePencil />
+          </IconButton>
+        }
+      >
+        <SpaceEditForm space={space} onSpaceSubmit={onUpdate} />
+      </Modal>
     </Card>
   );
 }

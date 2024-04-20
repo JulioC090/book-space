@@ -11,13 +11,16 @@ interface SpaceListProps {
 }
 
 function SpaceList({ data, workspaceId }: SpaceListProps) {
-  const { deleteSpace } = useSpaces();
+  const { updateSpace, deleteSpace } = useSpaces();
   return (
     <GridList className="w-full max-h-128">
       {data.map((space) => (
         <SpaceListItem
           key={space.id}
           space={space}
+          onUpdate={(partialSpace) =>
+            updateSpace(workspaceId, space.id, partialSpace)
+          }
           onDelete={(space) => deleteSpace(workspaceId, space)}
         />
       ))}

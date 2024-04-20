@@ -16,18 +16,21 @@ export default class SpaceService implements ISpaceService {
   ): Promise<Space | null> {
     const newSpace: Omit<Space, 'id'> = {
       ...space,
-      maxAmountOfPeople: space.maxAmountOfPeople
-        ? Number(space.maxAmountOfPeople)
-        : undefined,
+      maxAmountOfPeople: Number(space.maxAmountOfPeople) || undefined,
     };
     return await this.spaceGateway.add(workspaceId, newSpace);
   }
 
   async update(
     workspaceId: string,
+    spaceId: string,
     partialSpace: Partial<Omit<Space, 'id'>>,
   ): Promise<boolean> {
-    throw new Error();
+    const updateSpace: Partial<Omit<Space, 'id'>> = {
+      ...partialSpace,
+      maxAmountOfPeople: Number(partialSpace.maxAmountOfPeople) || null,
+    };
+    return await this.spaceGateway.update(workspaceId, spaceId, updateSpace);
   }
 
   async delete(workspaceId: string, spaceId: string): Promise<boolean> {
