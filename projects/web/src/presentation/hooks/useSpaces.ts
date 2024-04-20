@@ -1,13 +1,16 @@
 import { makeSpaceService } from '@/main/factories/services/SpaceServiceFactory';
 import Space from '@/models/Space';
-import { useState } from 'react';
+import { spacesStore } from '@/presentation/stores/spacesStore';
+import { useRecoilState } from 'recoil';
 
 const spaceService = makeSpaceService();
 
-export default function useSpaces(defaultSpaces?: Array<Space>) {
-  const [spaces, setSpaces] = useState<Array<Space>>(
-    defaultSpaces ? defaultSpaces : [],
-  );
+export default function useSpaces() {
+  const [spaces, setSpaces] = useRecoilState(spacesStore);
+
+  function loadSpaces(spaces: Array<Space>) {
+    setSpaces(spaces);
+  }
 
   async function addSpace(
     workspaceId: string,
@@ -19,5 +22,5 @@ export default function useSpaces(defaultSpaces?: Array<Space>) {
     return true;
   }
 
-  return { spaces, setSpaces, addSpace };
+  return { spaces, loadSpaces, addSpace };
 }

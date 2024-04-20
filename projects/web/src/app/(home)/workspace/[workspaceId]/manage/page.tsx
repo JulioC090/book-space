@@ -19,12 +19,13 @@ export default function WorkspaceManager() {
   const { workspace, updateWorkspace, addUser } = useContext(
     WorkspaceDetailsContext,
   );
-  const { spaces, setSpaces, addSpace } = useSpaces(workspace?.spaces);
+  const { spaces, loadSpaces, addSpace } = useSpaces();
 
-  useEffect(
-    () => setSpaces(workspace ? workspace.spaces : []),
-    [workspace, setSpaces],
-  );
+  useEffect(() => {
+    if (!workspace) return;
+    loadSpaces(workspace.spaces);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [workspace]);
 
   if (!workspace) return;
 

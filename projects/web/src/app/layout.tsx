@@ -1,4 +1,5 @@
 import { AuthProvider } from '@/presentation/contexts/AuthContext';
+import RecoilProvider from '@/presentation/contexts/RecoilContext';
 import type { Metadata } from 'next';
 import { Poppins } from 'next/font/google';
 import './globals.css';
@@ -19,7 +20,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={poppins.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <RecoilProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </RecoilProvider>
       </body>
     </html>
   );
