@@ -4,8 +4,10 @@ import { useState } from 'react';
 
 const spaceService = makeSpaceService();
 
-export default function useSpaces() {
-  const [spaces, setSpaces] = useState<Array<Space>>([]);
+export default function useSpaces(defaultSpaces?: Array<Space>) {
+  const [spaces, setSpaces] = useState<Array<Space>>(
+    defaultSpaces ? defaultSpaces : [],
+  );
 
   async function addSpace(
     workspaceId: string,
@@ -17,5 +19,5 @@ export default function useSpaces() {
     return true;
   }
 
-  return { spaces, addSpace };
+  return { spaces, setSpaces, addSpace };
 }

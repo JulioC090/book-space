@@ -13,14 +13,21 @@ import ActionListTemplate from '@/presentation/components/templates/ActionListTe
 import { WorkspaceDetailsContext } from '@/presentation/contexts/WorkspaceDetailsContext';
 import useSpaces from '@/presentation/hooks/useSpaces';
 import { NotePencil } from '@phosphor-icons/react/dist/ssr';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 
 export default function WorkspaceManager() {
   const { workspace, updateWorkspace, addUser } = useContext(
     WorkspaceDetailsContext,
   );
-  const { spaces, addSpace } = useSpaces();
+  const { spaces, setSpaces, addSpace } = useSpaces(workspace?.spaces);
+
+  useEffect(
+    () => setSpaces(workspace ? workspace.spaces : []),
+    [workspace, setSpaces],
+  );
+
   if (!workspace) return;
+
   return (
     <Container>
       <div className="flex gap-2 pt-8">
