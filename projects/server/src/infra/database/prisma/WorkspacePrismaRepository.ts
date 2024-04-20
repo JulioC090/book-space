@@ -119,6 +119,14 @@ export default class WorkspacePrimaRepository
             role: true,
           },
         },
+        spaces: {
+          select: {
+            id: true,
+            name: true,
+            description: true,
+            maxAmountOfPeople: true,
+          },
+        },
       },
       where: { id: workspaceId },
     });
