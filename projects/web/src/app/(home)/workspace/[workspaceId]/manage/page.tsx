@@ -1,16 +1,17 @@
 'use client';
 
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
-import Card from '@/presentation/components/atoms/Card';
 import Container from '@/presentation/components/atoms/Container';
-import GridList from '@/presentation/components/atoms/GridList';
 import { IconButton } from '@/presentation/components/atoms/IconButton';
+import SpaceList from '@/presentation/components/molecules/SpaceList/SpaceList';
 import UserList from '@/presentation/components/molecules/UserList';
+import SpaceForm from '@/presentation/components/organism/Forms/SpaceForm';
 import WorkspaceAddUserForm from '@/presentation/components/organism/Forms/WorkspaceAddUserForm';
 import WorkspaceForm from '@/presentation/components/organism/Forms/WorkspaceForm';
 import Modal from '@/presentation/components/organism/Modal';
 import ActionListTemplate from '@/presentation/components/templates/ActionListTemplate';
 import { WorkspaceDetailsContext } from '@/presentation/contexts/WorkspaceDetailsContext';
+import useSpaces from '@/presentation/hooks/useSpaces';
 import { NotePencil } from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
@@ -18,6 +19,7 @@ export default function WorkspaceManager() {
   const { workspace, updateWorkspace, addUser } = useContext(
     WorkspaceDetailsContext,
   );
+  const { spaces, addSpace } = useSpaces();
   if (!workspace) return;
   return (
     <Container>
@@ -68,21 +70,13 @@ export default function WorkspaceManager() {
           title={<h2 className="text-xl font-bold mb-2">Espaços</h2>}
           action={{
             name: 'Adicionar Espaço',
-            form: 'Em desenvolvimento',
+            form: (
+              <SpaceForm
+                onSpaceSubmit={(space) => addSpace(workspace.id, space)}
+              />
+            ),
           }}
-          list={
-            <GridList className="w-full max-h-128">
-              <Card className="min-h-64 flex justify-center items-center">
-                Em desenvolvimento
-              </Card>
-              <Card className="min-h-64 flex justify-center items-center">
-                Em desenvolvimento
-              </Card>
-              <Card className="min-h-64 flex justify-center items-center">
-                Em desenvolvimento
-              </Card>
-            </GridList>
-          }
+          list={<SpaceList data={spaces} />}
         />
       </div>
     </Container>
