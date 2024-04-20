@@ -16,8 +16,8 @@ export default class SpaceGateway implements ISpaceGateway {
     space: Omit<Space, 'id'>,
   ): Promise<Space | null> {
     const response = await this.httpClient.post<Omit<Space, 'id'>, Space>({
-      params: { workspaceId },
       url: '/workspace/:workspaceId/space',
+      params: { workspaceId },
       body: { ...space },
     });
 
@@ -26,7 +26,11 @@ export default class SpaceGateway implements ISpaceGateway {
   }
 
   async delete(workspaceId: string, spaceId: string): Promise<boolean> {
-    throw new Error();
+    const response = await this.httpClient.delete({
+      url: '/workspace/:workspaceId/space/:spaceId',
+      params: { workspaceId, spaceId },
+    });
+    return response.status === HttpCode.OK;
   }
 
   async update(

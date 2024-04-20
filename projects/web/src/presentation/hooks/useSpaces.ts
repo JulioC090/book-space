@@ -22,5 +22,16 @@ export default function useSpaces() {
     return true;
   }
 
-  return { spaces, loadSpaces, addSpace };
+  async function deleteSpace(
+    workspaceId: string,
+    spaceId: string,
+  ): Promise<boolean> {
+    if (!(await spaceService.delete(workspaceId, spaceId))) return false;
+    setSpaces((prevSpaces) =>
+      prevSpaces.filter((space) => space.id !== spaceId),
+    );
+    return true;
+  }
+
+  return { spaces, loadSpaces, addSpace, deleteSpace };
 }

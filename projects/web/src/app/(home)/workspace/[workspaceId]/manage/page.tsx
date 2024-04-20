@@ -84,7 +84,7 @@ export default function WorkspaceManager() {
               />
             ),
           }}
-          list={<SpaceList data={spaces} />}
+          list={<SpaceList data={spaces} workspaceId={workspace.id} />}
         />
       </div>
     </Container>

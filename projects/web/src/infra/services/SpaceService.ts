@@ -31,6 +31,6 @@ export default class SpaceService implements ISpaceService {
   }
 
   async delete(workspaceId: string, spaceId: string): Promise<boolean> {
-    throw new Error();
+    return await this.spaceGateway.delete(workspaceId, spaceId);
   }
 }
