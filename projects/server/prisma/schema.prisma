@@ -20,15 +20,21 @@ model User {
 }
 
 model Workspace {
-  id      String             @id @default(uuid())
-  ownerId String
-  name    String
-  tag     String
-  spaces  Space[]
-  owner   User               @relation(fields: [ownerId], references: [id])
-  users   UsersOnWorkspace[]
+  id        String             @id @default(uuid())
+  ownerId   String
+  name      String
+  tag       String
+  resources Resource[]
+  spaces    Space[]
+  owner     User               @relation(fields: [ownerId], references: [id])
+  users     UsersOnWorkspace[]
 
   @@map("workspaces")
+}
+
+enum UsersOnWorkspaceRole {
+  MANAGER
+  DEFAULT
 }
 
 model UsersOnWorkspace {
@@ -42,18 +48,34 @@ model UsersOnWorkspace {
   @@map("workspaces_users")
 }
 
+model Resource {
+  id             String           @id @default(uuid())
+  name           String
+  Workspace      Workspace        @relation(fields: [workspaceId], references: [id])
+  workspaceId    String
+  SpaceResources SpaceResources[]
+
+  @@map("resource")
+}
+
 model Space {
-  id                String     @id @default(uuid())
+  id                String           @id @default(uuid())
   name              String
   description       String
   maxAmountOfPeople Int?
-  workspaceId       String?
-  Workspace         Workspace? @relation(fields: [workspaceId], references: [id])
+  workspaceId       String
+  Workspace         Workspace        @relation(fields: [workspaceId], references: [id])
+  resources         SpaceResources[]
 
   @@map("workspace_spaces")
 }
 
-enum UsersOnWorkspaceRole {
-  MANAGER
-  DEFAULT
+model SpaceResources {
+  spaceId    String
+  resourceId String
+  Space      Space    @relation(fields: [spaceId], references: [id])
+  Resource   Resource @relation(fields: [resourceId], references: [id])
+
+  @@id([spaceId, resourceId])
+  @@map("space_resources")
 }

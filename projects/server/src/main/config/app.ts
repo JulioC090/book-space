@@ -1,3 +1,4 @@
+import workspaceResourceRoute from '@/main/routes/workspaceResourceRoute';
 import workspaceSpaceRoute from '@/main/routes/workspaceSpaceRoute';
 import workspaceUserRoute from '@/main/routes/workspaceUserRoute';
 import cors from '@fastify/cors';
@@ -12,6 +13,7 @@ export default function setupApp(opts = {}) {
   app.register(workspaceRoute);
   app.register(workspaceUserRoute);
   app.register(workspaceSpaceRoute);
+  app.register(workspaceResourceRoute);
 
   return app;
 }
