@@ -2,9 +2,13 @@ import Resource from '@/domain/models/Resource';
 import { prisma } from '@/infra/database/prisma/prismaClient';
 import IAddWorkspaceResourceRepository from '@/infra/protocols/repositories/IAddWorkspaceResourceRepository';
 import ICheckResourceNameRepository from '@/infra/protocols/repositories/ICheckResourceNameRepository';
+import IDeleteWorkspaceResourceRepository from '@/infra/protocols/repositories/IDeleteWorkspaceResourceRepository';
 
 export default class WorkspaceResourcePrismaRepository
-  implements ICheckResourceNameRepository, IAddWorkspaceResourceRepository
+  implements
+    ICheckResourceNameRepository,
+    IAddWorkspaceResourceRepository,
+    IDeleteWorkspaceResourceRepository
 {
   async checkName(workspaceId: string, name: string): Promise<boolean> {
     const resource = await prisma.resource.findFirst({
@@ -21,5 +25,12 @@ export default class WorkspaceResourcePrismaRepository
       data: { workspaceId, ...resource },
     });
     return { id: addedResource.id, name: addedResource.name };
+  }
+
+  async delete(resourceId: string): Promise<boolean> {
+    const deletedResources = await prisma.resource.deleteMany({
+      where: { id: resourceId },
+    });
+    return deletedResources.count > 0;
   }
 }

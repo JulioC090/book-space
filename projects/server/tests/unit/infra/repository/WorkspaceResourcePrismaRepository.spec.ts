@@ -7,12 +7,14 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
     resource: {
       findFirst: jest.fn(),
       create: jest.fn(),
+      deleteMany: jest.fn(),
     },
   },
 }));
 
 const mockFindFirst = prisma.resource.findFirst as jest.Mock;
 const mockCreate = prisma.resource.create as jest.Mock;
+const mockDeleteMany = prisma.resource.deleteMany as jest.Mock;
 
 const workspaceResourceRepository = new WorkspaceResourcePrismaRepository();
 
@@ -67,5 +69,31 @@ describe('WorkspaceResourcePrismaRepository', () => {
       data: { workspaceId, ...resource },
     });
     expect(result).toEqual({ id: 'resourceId', ...resource });
+  });
+
+  test('It should delete the resource from the workspace', async () => {
+    const resourceId = 'resourceId';
+
+    mockDeleteMany.mockResolvedValue({ count: 1 });
+
+    const result = await workspaceResourceRepository.delete(resourceId);
+
+    expect(prisma.resource.deleteMany).toHaveBeenCalledWith({
+      where: { id: resourceId },
+    });
+    expect(result).toBeTruthy();
+  });
+
+  test('It should return false when delete operation fails', async () => {
+    const resourceId = 'resourceId';
+
+    mockDeleteMany.mockResolvedValue({ count: 0 });
+
+    const result = await workspaceResourceRepository.delete(resourceId);
+
+    expect(prisma.resource.deleteMany).toHaveBeenCalledWith({
+      where: { id: resourceId },
+    });
+    expect(result).toBeFalsy();
   });
 });
