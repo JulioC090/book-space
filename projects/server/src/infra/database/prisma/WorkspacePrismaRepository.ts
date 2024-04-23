@@ -127,6 +127,7 @@ export default class WorkspacePrimaRepository
             maxAmountOfPeople: true,
           },
         },
+        resources: { select: { id: true, name: true } },
       },
       where: { id: workspaceId },
     });

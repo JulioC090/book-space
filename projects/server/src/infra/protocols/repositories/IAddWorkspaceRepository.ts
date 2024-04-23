@@ -2,7 +2,7 @@ import Workspace from 'domain/models/Workspace';
 
 export type IAddWorkspaceRepositoryInput = Omit<
   Omit<Workspace, 'spaces'>,
-  'id' | 'role' | 'users'
+  'id' | 'role' | 'users' | 'resources'
 >;
 export type IAddWorkspaceRepositoryOutput = { workspaceId: string };
 
