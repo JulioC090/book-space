@@ -21,6 +21,7 @@ export default class AddSpace {
     authenticatedUser: User,
     workspaceId: string,
     space: Omit<Space, 'id'>,
+    resources?: Array<string>,
   ): Promise<Space | null> {
     const userRole = await this.loadUserRoleRepository.loadUserRole(
       authenticatedUser.id,
@@ -35,7 +36,11 @@ export default class AddSpace {
     )
       return null;
 
-    const addedSpace = await this.addSpaceRepository.add(workspaceId, space);
+    const addedSpace = await this.addSpaceRepository.add(
+      workspaceId,
+      space,
+      resources,
+    );
     if (!addedSpace) return null;
 
     return addedSpace;

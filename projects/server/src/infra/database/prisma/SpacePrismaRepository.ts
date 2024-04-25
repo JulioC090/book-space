@@ -22,9 +22,27 @@ export default class SpacePrismaRepository
   async add(
     workspaceId: string,
     space: Omit<Space, 'id'>,
+    resources?: Array<string>,
   ): Promise<Space | undefined> {
     const addedSpace = await prisma.space.create({
-      data: { workspaceId, ...space },
+      data: {
+        workspaceId,
+        ...space,
+        resources: {
+          createMany: {
+            data: resources
+              ? resources.map((resource) => ({
+                  resourceId: resource,
+                }))
+              : [],
+          },
+        },
+      },
+      include: {
+        resources: {
+          select: { Resource: { select: { id: true, name: true } } },
+        },
+      },
     });
     return {
       ...addedSpace,
@@ -32,6 +50,12 @@ export default class SpacePrismaRepository
       maxAmountOfPeople: addedSpace.maxAmountOfPeople
         ? addedSpace.maxAmountOfPeople
         : undefined,
+      resources: addedSpace.resources
+        ? addedSpace.resources.map((resource) => ({
+            id: resource.Resource.id,
+            name: resource.Resource.name,
+          }))
+        : [],
     };
   }
 

@@ -78,10 +78,24 @@ describe('SpacePrismaRepository', () => {
     const result = await spaceRepository.add(workspaceId, space);
 
     expect(mockCreate).toHaveBeenCalledWith({
-      data: { workspaceId: 'workspaceId', ...space },
+      data: {
+        workspaceId: 'workspaceId',
+        ...space,
+        resources: { createMany: { data: [] } },
+      },
+      include: {
+        resources: {
+          select: { Resource: { select: { id: true, name: true } } },
+        },
+      },
     });
     expect(result?.maxAmountOfPeople).toBeUndefined();
-    expect(result).toEqual({ id: spaceId, workspaceId, ...space });
+    expect(result).toEqual({
+      id: spaceId,
+      workspaceId,
+      ...space,
+      resources: [],
+    });
   });
 
   test('It should add space to workspace with maxAmountOfPeople', async () => {
@@ -103,10 +117,76 @@ describe('SpacePrismaRepository', () => {
     const result = await spaceRepository.add(workspaceId, space);
 
     expect(mockCreate).toHaveBeenCalledWith({
-      data: { workspaceId: 'workspaceId', ...space },
+      data: {
+        workspaceId: 'workspaceId',
+        ...space,
+        resources: { createMany: { data: [] } },
+      },
+      include: {
+        resources: {
+          select: { Resource: { select: { id: true, name: true } } },
+        },
+      },
     });
     expect(result?.maxAmountOfPeople).toBeDefined();
-    expect(result).toEqual({ id: spaceId, workspaceId, ...space });
+    expect(result).toEqual({
+      id: spaceId,
+      workspaceId,
+      ...space,
+      resources: [],
+    });
+  });
+
+  test('It should add space to workspace with resources', async () => {
+    const space = {
+      name: 'Sala 3',
+      description: 'Localizada no andar debaixo',
+    };
+
+    const resources = ['resource1', 'resource2'];
+
+    const spaceId = 'spaceId';
+    const workspaceId = 'workspaceId';
+
+    mockCreate.mockResolvedValueOnce({
+      id: spaceId,
+      workspaceId,
+      ...space,
+      resources: resources.map((resource) => ({
+        Resource: {
+          id: resource,
+          name: resource,
+        },
+      })),
+    });
+
+    const result = await spaceRepository.add(workspaceId, space, resources);
+
+    expect(mockCreate).toHaveBeenCalledWith({
+      data: {
+        workspaceId: 'workspaceId',
+        ...space,
+        resources: {
+          createMany: {
+            data: resources.map((resource) => ({ resourceId: resource })),
+          },
+        },
+      },
+      include: {
+        resources: {
+          select: { Resource: { select: { id: true, name: true } } },
+        },
+      },
+    });
+    expect(result).toEqual({
+      id: spaceId,
+      workspaceId,
+      ...space,
+      resources: resources.map((resource) => ({
+        id: resource,
+        name: resource,
+      })),
+    });
   });
 
   test('It should update space successfully', async () => {

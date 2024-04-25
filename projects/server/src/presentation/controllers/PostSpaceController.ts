@@ -17,6 +17,7 @@ const requestBodySchema = z.object({
   name: z.string().min(2),
   description: z.string().min(2),
   maxAmountOfPeople: z.number().positive().optional(),
+  resources: z.array(z.string()).optional(),
 });
 
 export default class PostSpaceController implements Controller {
@@ -42,7 +43,12 @@ export default class PostSpaceController implements Controller {
     const response = await this.addSpace.add(
       account,
       validatedRequestParams.data.workspaceId,
-      validatedRequestBody.data,
+      {
+        name: validatedRequestBody.data.name,
+        description: validatedRequestBody.data.description,
+        maxAmountOfPeople: validatedRequestBody.data.maxAmountOfPeople,
+      },
+      validatedRequestBody.data.resources,
     );
 
     if (!response) return forbidden();
