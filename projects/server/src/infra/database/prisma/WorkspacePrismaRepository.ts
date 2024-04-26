@@ -125,6 +125,9 @@ export default class WorkspacePrimaRepository
             name: true,
             description: true,
             maxAmountOfPeople: true,
+            resources: {
+              select: { Resource: { select: { id: true, name: true } } },
+            },
           },
         },
         resources: { select: { id: true, name: true } },
@@ -139,6 +142,13 @@ export default class WorkspacePrimaRepository
       users: workspace.users.map((user) => ({
         ...user.user,
         role: user.role as WorkspaceRoles,
+      })),
+      spaces: workspace.spaces.map((space) => ({
+        ...space,
+        resources: space.resources.map((resource) => ({
+          id: resource.Resource.id,
+          name: resource.Resource.name,
+        })),
       })),
     };
   }
