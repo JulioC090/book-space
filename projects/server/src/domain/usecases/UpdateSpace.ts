@@ -26,6 +26,7 @@ export default class UpdateSpace implements IUpdateSpace {
     workspaceId: string,
     spaceId: string,
     partialSpace: Partial<Omit<Space, 'id' | 'workspaceId'>>,
+    resources?: Array<string>,
   ): Promise<boolean> {
     const userRole = await this.loadUserRoleRepository.loadUserRole(
       authenticatedUserId,
@@ -48,6 +49,10 @@ export default class UpdateSpace implements IUpdateSpace {
     )
       return false;
 
-    return await this.updateSpaceRepository.update(spaceId, partialSpace);
+    return await this.updateSpaceRepository.update(
+      spaceId,
+      partialSpace,
+      resources,
+    );
   }
 }

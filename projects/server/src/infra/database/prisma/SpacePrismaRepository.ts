@@ -62,13 +62,27 @@ export default class SpacePrismaRepository
   async update(
     spaceId: string,
     partialSpace: Partial<Omit<Space, 'id' | 'workspaceId'>>,
+    resources?: Array<string>,
   ): Promise<boolean> {
-    const updatedSpace = await prisma.space.updateMany({
+    const updatedSpace = await prisma.space.update({
       where: { id: spaceId },
-      data: { ...partialSpace },
+      data: {
+        ...partialSpace,
+        resources: {
+          connect: resources
+            ? resources.map((resource) => ({
+                spaceId_resourceId: { spaceId, resourceId: resource },
+              }))
+            : [],
+          deleteMany: {
+            spaceId,
+            NOT: resources?.map((resource) => ({ resourceId: resource })),
+          },
+        },
+      },
     });
 
-    return updatedSpace.count > 0;
+    return !!updatedSpace;
   }
 
   async delete(spaceId: string): Promise<boolean> {

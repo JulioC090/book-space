@@ -14,6 +14,7 @@ const requestBodySchema = z.object({
   name: z.string().min(2),
   description: z.string().min(2),
   maxAmountOfPeople: z.number().positive().nullable().optional(),
+  resources: z.array(z.string()).optional(),
 });
 
 export default class PatchSpaceController implements Controller {
@@ -45,7 +46,12 @@ export default class PatchSpaceController implements Controller {
       account.id,
       validatedRequestParams.data.workspaceId,
       validatedRequestParams.data.spaceId,
-      validatedRequestBody.data,
+      {
+        name: validatedRequestBody.data.name,
+        description: validatedRequestBody.data.description,
+        maxAmountOfPeople: validatedRequestBody.data.maxAmountOfPeople,
+      },
+      validatedRequestBody.data.resources,
     );
 
     if (!response) return forbidden();

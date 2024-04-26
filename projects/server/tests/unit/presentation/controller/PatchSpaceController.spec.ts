@@ -76,6 +76,7 @@ describe('PatchSpaceController', () => {
       'workspaceId',
       'spaceId',
       { name: 'newName' },
+      undefined,
     );
     expect(result.status).toBe(403);
   });
@@ -96,6 +97,7 @@ describe('PatchSpaceController', () => {
       'workspaceId',
       'spaceId',
       { name: 'newName' },
+      undefined,
     );
     expect(result.status).toBe(200);
   });

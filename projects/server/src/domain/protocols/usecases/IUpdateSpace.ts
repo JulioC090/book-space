@@ -6,5 +6,6 @@ export default interface IUpdateSpace {
     workspaceId: string,
     spaceId: string,
     partialSpace: Partial<Omit<Space, 'id' | 'workspaceId'>>,
+    resources?: Array<string>,
   ): Promise<boolean>;
 }

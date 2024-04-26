@@ -7,7 +7,7 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
       findFirst: jest.fn(),
       create: jest.fn(),
       deleteMany: jest.fn(),
-      updateMany: jest.fn(),
+      update: jest.fn(),
     },
   },
 }));
@@ -15,7 +15,7 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
 const mockFindFirst = prisma.space.findFirst as jest.Mock;
 const mockCreate = prisma.space.create as jest.Mock;
 const mockDeleteMany = prisma.space.deleteMany as jest.Mock;
-const mockUpdateMany = prisma.space.updateMany as jest.Mock;
+const mockUpdate = prisma.space.update as jest.Mock;
 
 const spaceRepository = new SpacePrismaRepository();
 
@@ -192,14 +192,54 @@ describe('SpacePrismaRepository', () => {
   test('It should update space successfully', async () => {
     const spaceId = 'spaceId';
     const partialSpace = { name: 'newName' };
+    const resources = ['resource1', 'resource2'];
 
-    mockUpdateMany.mockResolvedValue({ count: 1 });
+    mockUpdate.mockResolvedValue({ count: 1 });
+
+    const result = await spaceRepository.update(
+      spaceId,
+      partialSpace,
+      resources,
+    );
+
+    expect(prisma.space.update).toHaveBeenCalledWith({
+      where: { id: spaceId },
+      data: {
+        ...partialSpace,
+        resources: {
+          connect: resources.map((resource) => ({
+            spaceId_resourceId: { spaceId, resourceId: resource },
+          })),
+          deleteMany: {
+            spaceId,
+            NOT: resources?.map((resource) => ({ resourceId: resource })),
+          },
+        },
+      },
+    });
+    expect(result).toBeTruthy();
+  });
+
+  test('It should update space with resources successfully', async () => {
+    const spaceId = 'spaceId';
+    const partialSpace = { name: 'newName' };
+
+    mockUpdate.mockResolvedValue({ count: 1 });
 
     const result = await spaceRepository.update(spaceId, partialSpace);
 
-    expect(prisma.space.updateMany).toHaveBeenCalledWith({
+    expect(prisma.space.update).toHaveBeenCalledWith({
       where: { id: spaceId },
-      data: { ...partialSpace },
+      data: {
+        ...partialSpace,
+        resources: {
+          connect: [],
+          deleteMany: {
+            spaceId,
+            NOT: undefined,
+          },
+        },
+      },
     });
     expect(result).toBeTruthy();
   });
@@ -208,13 +248,22 @@ describe('SpacePrismaRepository', () => {
     const spaceId = 'spaceId';
     const partialSpace = { name: 'newName' };
 
-    mockUpdateMany.mockResolvedValue({ count: 0 });
+    mockUpdate.mockResolvedValue(false);
 
     const result = await spaceRepository.update(spaceId, partialSpace);
 
-    expect(prisma.space.updateMany).toHaveBeenCalledWith({
+    expect(prisma.space.update).toHaveBeenCalledWith({
       where: { id: spaceId },
-      data: { ...partialSpace },
+      data: {
+        ...partialSpace,
+        resources: {
+          connect: [],
+          deleteMany: {
+            spaceId,
+            NOT: undefined,
+          },
+        },
+      },
     });
     expect(result).toBeFalsy();
   });
