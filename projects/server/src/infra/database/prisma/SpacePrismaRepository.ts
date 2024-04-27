@@ -69,9 +69,12 @@ export default class SpacePrismaRepository
       data: {
         ...partialSpace,
         resources: {
-          connect: resources
+          connectOrCreate: resources
             ? resources.map((resource) => ({
-                spaceId_resourceId: { spaceId, resourceId: resource },
+                where: {
+                  spaceId_resourceId: { spaceId, resourceId: resource },
+                },
+                create: { resourceId: resource },
               }))
             : [],
           deleteMany: {

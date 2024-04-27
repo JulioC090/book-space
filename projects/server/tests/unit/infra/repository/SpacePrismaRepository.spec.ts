@@ -192,6 +192,30 @@ describe('SpacePrismaRepository', () => {
   test('It should update space successfully', async () => {
     const spaceId = 'spaceId';
     const partialSpace = { name: 'newName' };
+
+    mockUpdate.mockResolvedValue({ count: 1 });
+
+    const result = await spaceRepository.update(spaceId, partialSpace);
+
+    expect(prisma.space.update).toHaveBeenCalledWith({
+      where: { id: spaceId },
+      data: {
+        ...partialSpace,
+        resources: {
+          connectOrCreate: [],
+          deleteMany: {
+            spaceId,
+            NOT: undefined,
+          },
+        },
+      },
+    });
+    expect(result).toBeTruthy();
+  });
+
+  test('It should update space with resources successfully', async () => {
+    const spaceId = 'spaceId';
+    const partialSpace = { name: 'newName' };
     const resources = ['resource1', 'resource2'];
 
     mockUpdate.mockResolvedValue({ count: 1 });
@@ -207,36 +231,15 @@ describe('SpacePrismaRepository', () => {
       data: {
         ...partialSpace,
         resources: {
-          connect: resources.map((resource) => ({
-            spaceId_resourceId: { spaceId, resourceId: resource },
+          connectOrCreate: resources.map((resource) => ({
+            where: {
+              spaceId_resourceId: { spaceId, resourceId: resource },
+            },
+            create: { resourceId: resource },
           })),
           deleteMany: {
             spaceId,
             NOT: resources?.map((resource) => ({ resourceId: resource })),
-          },
-        },
-      },
-    });
-    expect(result).toBeTruthy();
-  });
-
-  test('It should update space with resources successfully', async () => {
-    const spaceId = 'spaceId';
-    const partialSpace = { name: 'newName' };
-
-    mockUpdate.mockResolvedValue({ count: 1 });
-
-    const result = await spaceRepository.update(spaceId, partialSpace);
-
-    expect(prisma.space.update).toHaveBeenCalledWith({
-      where: { id: spaceId },
-      data: {
-        ...partialSpace,
-        resources: {
-          connect: [],
-          deleteMany: {
-            spaceId,
-            NOT: undefined,
           },
         },
       },
@@ -257,7 +260,7 @@ describe('SpacePrismaRepository', () => {
       data: {
         ...partialSpace,
         resources: {
-          connect: [],
+          connectOrCreate: [],
           deleteMany: {
             spaceId,
             NOT: undefined,
