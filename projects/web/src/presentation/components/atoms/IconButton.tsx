@@ -1,6 +1,7 @@
 import { Slot } from '@radix-ui/react-slot';
 import clsx from 'clsx';
 import { ButtonHTMLAttributes, forwardRef } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 export interface IconButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -11,9 +12,11 @@ export interface IconButtonProps
 export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   ({ children, className, ...rest }, ref) => (
     <button
-      className={clsx(
-        'rounded outline-none hover:bg-zinc-800 focus:bg-zinc-800 focus:ring-2 ring-zinc-200',
-        className,
+      className={twMerge(
+        clsx(
+          'rounded outline-none hover:bg-zinc-800 focus:bg-zinc-800 focus:ring-2 ring-zinc-200',
+          className,
+        ),
       )}
       {...rest}
       ref={ref}
