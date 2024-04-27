@@ -13,12 +13,13 @@ export default class SpaceService implements ISpaceService {
   async add(
     workspaceId: string,
     space: Omit<Space, 'id'>,
+    resources?: Array<string>,
   ): Promise<Space | null> {
     const newSpace: Omit<Space, 'id'> = {
       ...space,
       maxAmountOfPeople: Number(space.maxAmountOfPeople) || undefined,
     };
-    return await this.spaceGateway.add(workspaceId, newSpace);
+    return await this.spaceGateway.add(workspaceId, newSpace, resources);
   }
 
   async update(

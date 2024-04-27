@@ -12,6 +12,7 @@ import Modal from '@/presentation/components/organism/Modal';
 import ActionListTemplate from '@/presentation/components/templates/ActionListTemplate';
 import { WorkspaceDetailsContext } from '@/presentation/contexts/WorkspaceDetailsContext';
 import useSpaces from '@/presentation/hooks/useSpaces';
+import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
 import { NotePencil } from '@phosphor-icons/react/dist/ssr';
 import { useContext, useEffect } from 'react';
 
@@ -20,10 +21,15 @@ export default function WorkspaceManager() {
     WorkspaceDetailsContext,
   );
   const { spaces, loadSpaces, addSpace } = useSpaces();
+  const { loadResources } = useWorkspaceResource();
 
   useEffect(() => {
     if (!workspace) return;
     loadSpaces(workspace.spaces);
+    loadResources({
+      workspaceId: workspace.id,
+      resources: workspace.resources,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace]);
 
@@ -80,7 +86,17 @@ export default function WorkspaceManager() {
             name: 'Adicionar Espaço',
             form: (
               <SpaceForm
-                onSpaceSubmit={(space) => addSpace(workspace.id, space)}
+                onSpaceSubmit={(space) =>
+                  addSpace(
+                    workspace.id,
+                    {
+                      name: space.name,
+                      description: space.description,
+                      maxAmountOfPeople: space.maxAmountOfPeople,
+                    },
+                    space.resources,
+                  )
+                }
               />
             ),
           }}

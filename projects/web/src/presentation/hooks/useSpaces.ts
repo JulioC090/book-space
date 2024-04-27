@@ -15,8 +15,9 @@ export default function useSpaces() {
   async function addSpace(
     workspaceId: string,
     space: Omit<Space, 'id'>,
+    resources?: Array<string>,
   ): Promise<boolean> {
-    const newSpace = await spaceService.add(workspaceId, space);
+    const newSpace = await spaceService.add(workspaceId, space, resources);
     if (!newSpace) return false;
     setSpaces((prevSpaces) => [...prevSpaces, newSpace]);
     return true;

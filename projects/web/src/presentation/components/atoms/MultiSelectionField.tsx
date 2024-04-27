@@ -55,8 +55,8 @@ interface MultiSelectionFieldProps
   icon?: React.ReactNode;
   data: Array<ListData>;
   setValues?(values: Array<ListData>): void;
-  createItem?(value: string): Promise<ListData>;
-  onChange?(value: string): void;
+  createItem?(value: string): Promise<ListData | null>;
+  onChange?(value: Array<string>): void;
 }
 
 export const MultiSelectionField = forwardRef<
@@ -73,7 +73,9 @@ export const MultiSelectionField = forwardRef<
   const matches = useMemo(
     () =>
       matchSorter(
-        data.filter((value) => !selectedValues.includes(value)),
+        data.filter(
+          (value) => !selectedValues.find((v) => v.label === value.label),
+        ),
         searchValue,
         { keys: ['label'] },
       ),
@@ -81,7 +83,7 @@ export const MultiSelectionField = forwardRef<
   );
 
   const changeSelectedValues = (value: Array<ListData>) => {
-    onChange && onChange(value.map((v) => v.value).toString());
+    onChange && onChange(value.map((v) => v.value));
     setSelectedValues(value);
   };
 
@@ -121,6 +123,7 @@ export const MultiSelectionField = forwardRef<
         return;
       }
       if (comboboxRef.current?.dataset.activeItem && canCreateItem()) {
+        e.preventDefault();
         await addItem([...selectedValues.map((v) => v.value), searchValue]);
         setSearchValue('');
         return;

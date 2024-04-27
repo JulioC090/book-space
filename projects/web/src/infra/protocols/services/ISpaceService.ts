@@ -1,7 +1,11 @@
 import Space from '@/models/Space';
 
 export default interface ISpaceService {
-  add(workspaceId: string, space: Omit<Space, 'id'>): Promise<Space | null>;
+  add(
+    workspaceId: string,
+    space: Omit<Space, 'id'>,
+    resources?: Array<string>,
+  ): Promise<Space | null>;
   update(
     workspaceId: string,
     spaceId: string,

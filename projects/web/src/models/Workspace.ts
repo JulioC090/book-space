@@ -1,3 +1,4 @@
+import { Resource } from '@/models/Resource';
 import Space from '@/models/Space';
 import { User } from '@/models/User';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
@@ -9,4 +10,5 @@ export type Workspace = {
   role: WorkspaceRoles;
   users?: Array<Omit<User, 'password'> & { role: WorkspaceRoles }>;
   spaces?: Array<Space>;
+  resources?: Array<Resource>;
 };

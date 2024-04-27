@@ -14,11 +14,15 @@ export default class SpaceGateway implements ISpaceGateway {
   async add(
     workspaceId: string,
     space: Omit<Space, 'id'>,
+    resources?: Array<string>,
   ): Promise<Space | null> {
-    const response = await this.httpClient.post<Omit<Space, 'id'>, Space>({
+    const response = await this.httpClient.post<
+      Omit<Space, 'id' | 'resources'> & { resources?: Array<string> },
+      Space
+    >({
       url: '/workspace/:workspaceId/space',
       params: { workspaceId },
-      body: { ...space },
+      body: { ...space, resources },
     });
 
     if (response.status !== HttpCode.CREATED) return null;

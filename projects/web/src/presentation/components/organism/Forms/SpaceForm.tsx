@@ -1,14 +1,17 @@
 import Button from '@/presentation/components/atoms/Button';
 import FormError from '@/presentation/components/atoms/FormError';
+import { MultiSelectionField } from '@/presentation/components/atoms/MultiSelectionField';
 import TextInputController from '@/presentation/components/molecules/TextInputController';
+import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
 import { Notebook, UsersThree } from '@phosphor-icons/react';
-import { BookOpen } from '@phosphor-icons/react/dist/ssr';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { BookOpen, ListDashes } from '@phosphor-icons/react/dist/ssr';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 interface ISpaceFields {
   name: string;
   description: string;
   maxAmountOfPeople?: number;
+  resources?: Array<string>;
 }
 
 interface SpaceFormProps {
@@ -22,7 +25,9 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
     handleSubmit,
     formState: { errors },
     setError,
+    control,
   } = useForm<ISpaceFields>();
+  const { workspaceResources, addResource } = useWorkspaceResource();
 
   const handleWorkspaceSubmit: SubmitHandler<ISpaceFields> = async (data) => {
     const response = await onSpaceSubmit(data);
@@ -79,6 +84,29 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
         min={0}
         icon={<UsersThree />}
         error={errors.maxAmountOfPeople}
+      />
+
+      <Controller
+        control={control}
+        name="resources"
+        render={({ field }) => {
+          return (
+            <MultiSelectionField
+              onChange={field.onChange}
+              placeholder="Recursos"
+              icon={<ListDashes />}
+              data={workspaceResources.resources.map((resource) => ({
+                value: resource.id,
+                label: resource.name,
+              }))}
+              createItem={async (name) => {
+                const item = await addResource(name);
+                if (!item) return null;
+                return { value: item.id, label: item.name };
+              }}
+            />
+          );
+        }}
       />
 
       <FormError
