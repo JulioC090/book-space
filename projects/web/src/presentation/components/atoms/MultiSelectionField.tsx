@@ -51,21 +51,27 @@ MultiSelectionFieldItem.displayName = 'MultiSelectionFieldItem';
 type ListData = { label: string; value: string };
 
 interface MultiSelectionFieldProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+  extends Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    'onChange' | 'defaultValue'
+  > {
   icon?: React.ReactNode;
   data: Array<ListData>;
   setValues?(values: Array<ListData>): void;
   createItem?(value: string): Promise<ListData | null>;
   onChange?(value: Array<string>): void;
+  defaultValue?: Array<ListData>;
 }
 
 export const MultiSelectionField = forwardRef<
   HTMLInputElement,
   MultiSelectionFieldProps
->(({ icon, data, createItem, onChange, ...rest }, ref) => {
+>(({ icon, data, createItem, onChange, defaultValue, ...rest }, ref) => {
   const [isPending, startTransition] = useTransition();
   const [searchValue, setSearchValue] = useState('');
-  const [selectedValues, setSelectedValues] = useState<Array<ListData>>([]);
+  const [selectedValues, setSelectedValues] = useState<Array<ListData>>(
+    defaultValue || [],
+  );
   const comboboxRef = useRef<HTMLInputElement>(null);
 
   const mergedRefs = useMergeRefs(comboboxRef, ref);

@@ -10,6 +10,7 @@ export default interface ISpaceService {
     workspaceId: string,
     spaceId: string,
     partialSpace: Partial<Omit<Space, 'id'>>,
+    resources?: Array<string>,
   ): Promise<boolean>;
   delete(workspaceId: string, spaceId: string): Promise<boolean>;
 }

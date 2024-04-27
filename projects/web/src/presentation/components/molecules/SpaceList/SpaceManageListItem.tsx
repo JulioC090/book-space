@@ -3,6 +3,7 @@ import Card from '@/presentation/components/atoms/Card';
 import { IconButton } from '@/presentation/components/atoms/IconButton';
 import SpaceEditForm from '@/presentation/components/organism/Forms/SpaceEditForm';
 import Modal from '@/presentation/components/organism/Modal';
+import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
 import { NotePencil, TrashSimple } from '@phosphor-icons/react/dist/ssr';
 
 interface SpaceManageListItemProps {
@@ -16,6 +17,8 @@ export default function SpaceManageListItem({
   onUpdate,
   onDelete,
 }: SpaceManageListItemProps) {
+  const { workspaceResources } = useWorkspaceResource();
+
   return (
     <Card>
       <p className="text-lg font-bold">{space.name}</p>
@@ -37,7 +40,19 @@ export default function SpaceManageListItem({
           </IconButton>
         }
       >
-        <SpaceEditForm space={space} onSpaceSubmit={onUpdate} />
+        <SpaceEditForm
+          space={space}
+          onSpaceSubmit={(spaceField) =>
+            onUpdate({
+              name: spaceField.name,
+              description: spaceField.description,
+              maxAmountOfPeople: spaceField.maxAmountOfPeople,
+              resources: workspaceResources.resources.filter((resource) =>
+                spaceField.resources?.includes(resource.id),
+              ),
+            })
+          }
+        />
       </Modal>
     </Card>
   );

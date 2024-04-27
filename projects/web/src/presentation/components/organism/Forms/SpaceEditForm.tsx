@@ -1,15 +1,18 @@
 import Space from '@/models/Space';
 import Button from '@/presentation/components/atoms/Button';
 import FormError from '@/presentation/components/atoms/FormError';
+import { MultiSelectionField } from '@/presentation/components/atoms/MultiSelectionField';
 import TextInputController from '@/presentation/components/molecules/TextInputController';
-import { Notebook, UsersThree } from '@phosphor-icons/react';
+import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
+import { ListDashes, Notebook, UsersThree } from '@phosphor-icons/react';
 import { BookOpen } from '@phosphor-icons/react/dist/ssr';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
 interface ISpaceFields {
   name: string;
   description: string;
   maxAmountOfPeople?: number;
+  resources?: Array<string>;
 }
 
 interface SpaceEditFormProps {
@@ -28,9 +31,12 @@ export default function SpaceEditForm({
     handleSubmit,
     formState: { errors },
     setError,
+    control,
   } = useForm<ISpaceFields>();
+  const { workspaceResources, addResource } = useWorkspaceResource();
 
   const handleWorkspaceSubmit: SubmitHandler<ISpaceFields> = async (data) => {
+    console.log(data);
     const response = await onSpaceSubmit(data);
 
     if (!response) {
@@ -38,6 +44,7 @@ export default function SpaceEditForm({
       setError('name', formError);
       setError('description', formError);
       setError('maxAmountOfPeople', formError);
+      setError('resources', formError);
       return;
     }
 
@@ -88,6 +95,34 @@ export default function SpaceEditForm({
         min={0}
         icon={<UsersThree />}
         error={errors.maxAmountOfPeople}
+      />
+
+      <Controller
+        control={control}
+        name="resources"
+        defaultValue={space.resources?.map((v) => v.id)}
+        render={({ field }) => {
+          return (
+            <MultiSelectionField
+              placeholder="Recursos"
+              defaultValue={space.resources?.map((v) => ({
+                value: v.id,
+                label: v.name,
+              }))}
+              icon={<ListDashes />}
+              onChange={field.onChange}
+              data={workspaceResources.resources.map((resource) => ({
+                value: resource.id,
+                label: resource.name,
+              }))}
+              createItem={async (name) => {
+                const item = await addResource(name);
+                if (!item) return null;
+                return { value: item.id, label: item.name };
+              }}
+            />
+          );
+        }}
       />
 
       <FormError

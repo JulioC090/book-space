@@ -33,11 +33,19 @@ export default class SpaceGateway implements ISpaceGateway {
     workspaceId: string,
     spaceId: string,
     partialSpace: Partial<Omit<Space, 'id'>>,
+    resources?: Array<string>,
   ): Promise<boolean> {
-    const response = await this.httpClient.patch({
+    const response = await this.httpClient.patch<
+      Partial<Omit<Space, 'id' | 'resources'> & { resources: Array<string> }>
+    >({
       url: '/workspace/:workspaceId/space/:spaceId',
       params: { workspaceId, spaceId },
-      body: partialSpace,
+      body: {
+        name: partialSpace.name,
+        description: partialSpace.description,
+        maxAmountOfPeople: partialSpace.maxAmountOfPeople,
+        resources,
+      },
     });
 
     return response.status === HttpCode.OK;

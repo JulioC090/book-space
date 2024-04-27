@@ -28,7 +28,14 @@ export default function useSpaces() {
     spaceId: string,
     partialSpace: Partial<Omit<Space, 'id'>>,
   ): Promise<boolean> {
-    if (!(await spaceService.update(workspaceId, spaceId, partialSpace)))
+    if (
+      !(await spaceService.update(
+        workspaceId,
+        spaceId,
+        partialSpace,
+        partialSpace.resources?.map((v) => v.id),
+      ))
+    )
       return false;
     setSpaces((prevSpaces) =>
       prevSpaces.map((space) => {
