@@ -33,7 +33,8 @@ export default function SpaceEditForm({
     setError,
     control,
   } = useForm<ISpaceFields>();
-  const { workspaceResources, addResource } = useWorkspaceResource();
+  const { workspaceResources, addResource, deleteResource } =
+    useWorkspaceResource();
 
   const handleWorkspaceSubmit: SubmitHandler<ISpaceFields> = async (data) => {
     console.log(data);
@@ -120,6 +121,7 @@ export default function SpaceEditForm({
                 if (!item) return null;
                 return { value: item.id, label: item.name };
               }}
+              removeItem={(itemId) => deleteResource(itemId)}
             />
           );
         }}

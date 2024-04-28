@@ -27,7 +27,8 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
     setError,
     control,
   } = useForm<ISpaceFields>();
-  const { workspaceResources, addResource } = useWorkspaceResource();
+  const { workspaceResources, addResource, deleteResource } =
+    useWorkspaceResource();
 
   const handleWorkspaceSubmit: SubmitHandler<ISpaceFields> = async (data) => {
     const response = await onSpaceSubmit(data);
@@ -104,6 +105,7 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
                 if (!item) return null;
                 return { value: item.id, label: item.name };
               }}
+              removeItem={(itemId) => deleteResource(itemId)}
             />
           );
         }}

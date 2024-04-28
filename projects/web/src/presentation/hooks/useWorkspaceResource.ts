@@ -33,10 +33,20 @@ export default function useWorkspaceResource() {
 
   async function deleteResource(resourceId: string): Promise<boolean> {
     if (!workspaceResources.workspaceId) return false;
-    return await workspaceResourceService.remove(
+    const result = await workspaceResourceService.remove(
       workspaceResources.workspaceId,
       resourceId,
     );
+    if (!result) return false;
+    setWorkspaceResources((prevWorkspaceResources) => ({
+      ...prevWorkspaceResources,
+      resources: [
+        ...prevWorkspaceResources.resources.filter(
+          (resource) => resource.id !== resourceId,
+        ),
+      ],
+    }));
+    return true;
   }
 
   return { workspaceResources, loadResources, addResource, deleteResource };
