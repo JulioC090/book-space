@@ -1,4 +1,4 @@
-import { IHttpResponse } from 'presentation/protocols/Http';
+import { IHttpResponse } from '@/presentation/protocols/Http';
 
 export const ok = (data: unknown = ''): IHttpResponse => ({
   status: 200,
