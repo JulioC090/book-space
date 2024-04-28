@@ -9,6 +9,9 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
       create: jest.fn(),
       deleteMany: jest.fn(),
     },
+    spaceResources: {
+      deleteMany: jest.fn(),
+    },
   },
 }));
 
@@ -78,6 +81,9 @@ describe('WorkspaceResourcePrismaRepository', () => {
 
     const result = await workspaceResourceRepository.delete(resourceId);
 
+    expect(prisma.spaceResources.deleteMany).toHaveBeenCalledWith({
+      where: { resourceId },
+    });
     expect(prisma.resource.deleteMany).toHaveBeenCalledWith({
       where: { id: resourceId },
     });
