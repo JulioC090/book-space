@@ -1,7 +1,7 @@
-import AddAccount from 'domain/usecases/AddAccount';
-import { badRequest, created } from 'presentation/helpers/httpCodes';
-import { Controller } from 'presentation/protocols/Controller';
-import { IHttpRequest, IHttpResponse } from 'presentation/protocols/Http';
+import IAddAccount from '@/domain/protocols/usecases/IAddAccount';
+import { badRequest, created } from '@/presentation/helpers/httpCodes';
+import { Controller } from '@/presentation/protocols/Controller';
+import { IHttpRequest, IHttpResponse } from '@/presentation/protocols/Http';
 import { z } from 'zod';
 
 const requestBodySchema = z.object({
@@ -11,9 +11,9 @@ const requestBodySchema = z.object({
 });
 
 export default class SignUpController implements Controller {
-  private addAccount: AddAccount;
+  private addAccount: IAddAccount;
 
-  constructor(addAccount: AddAccount) {
+  constructor(addAccount: IAddAccount) {
     this.addAccount = addAccount;
   }
 

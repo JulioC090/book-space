@@ -1,9 +1,10 @@
-import { User } from 'domain/models/User';
-import { IHasher } from 'infra/protocols/cryptography/IHasher';
-import { IAddAccountRepository } from 'infra/protocols/repositories/IAddAccountRepository';
-import { ICheckAccountByEmailRepository } from 'infra/protocols/repositories/ICheckAccountByEmailRepository';
+import { User } from '@/domain/models/User';
+import IAddAccount from '@/domain/protocols/usecases/IAddAccount';
+import { IHasher } from '@/infra/protocols/cryptography/IHasher';
+import { IAddAccountRepository } from '@/infra/protocols/repositories/IAddAccountRepository';
+import { ICheckAccountByEmailRepository } from '@/infra/protocols/repositories/ICheckAccountByEmailRepository';
 
-export default class AddAccount {
+export default class AddAccount implements IAddAccount {
   private hasher: IHasher;
   private addAccountRepository: IAddAccountRepository;
   private checkEmailRepository: ICheckAccountByEmailRepository;
