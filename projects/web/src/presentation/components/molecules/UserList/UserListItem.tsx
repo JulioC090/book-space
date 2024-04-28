@@ -55,7 +55,8 @@ function RoleField({ user }: RoleFieldProps) {
 }
 
 export default function UserListItem({ user }: UserListItemProps) {
-  const { deleteUser } = useContext(WorkspaceDetailsContext);
+  const { userInfo } = useContext(AuthContext);
+  const { workspace, deleteUser } = useContext(WorkspaceDetailsContext);
 
   return (
     <div className="flex justify-between items-center w-full p-4 [&:not(:last-child)]:border-b border-b-zinc-900">
@@ -71,9 +72,12 @@ export default function UserListItem({ user }: UserListItemProps) {
       <div className="flex gap-4 items-center">
         <RoleField user={user} />
 
-        <IconButton onClick={() => deleteUser(user.email)}>
-          <TrashSimple />
-        </IconButton>
+        {userInfo?.email !== user.email &&
+          !isRoleAboveOrSame(workspace!.role, user.role) && (
+            <IconButton onClick={() => deleteUser(user.email)}>
+              <TrashSimple />
+            </IconButton>
+          )}
       </div>
     </div>
   );
