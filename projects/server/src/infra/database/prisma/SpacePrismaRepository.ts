@@ -89,6 +89,10 @@ export default class SpacePrismaRepository
   }
 
   async delete(spaceId: string): Promise<boolean> {
+    await prisma.spaceResources.deleteMany({
+      where: { spaceId },
+    });
+
     const deletedSpace = await prisma.space.deleteMany({
       where: { id: spaceId },
     });

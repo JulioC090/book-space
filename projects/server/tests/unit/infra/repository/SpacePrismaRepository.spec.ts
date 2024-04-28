@@ -9,6 +9,9 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
       deleteMany: jest.fn(),
       update: jest.fn(),
     },
+    spaceResources: {
+      deleteMany: jest.fn(),
+    },
   },
 }));
 
@@ -16,6 +19,9 @@ const mockFindFirst = prisma.space.findFirst as jest.Mock;
 const mockCreate = prisma.space.create as jest.Mock;
 const mockDeleteMany = prisma.space.deleteMany as jest.Mock;
 const mockUpdate = prisma.space.update as jest.Mock;
+
+const mockSpaceResourcesDeleteMany = prisma.spaceResources
+  .deleteMany as jest.Mock;
 
 const spaceRepository = new SpacePrismaRepository();
 
@@ -278,6 +284,9 @@ describe('SpacePrismaRepository', () => {
 
     const result = await spaceRepository.delete(spaceId);
 
+    expect(mockSpaceResourcesDeleteMany).toHaveBeenCalledWith({
+      where: { spaceId },
+    });
     expect(mockDeleteMany).toHaveBeenCalledWith({
       where: { id: spaceId },
     });
