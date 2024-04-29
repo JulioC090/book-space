@@ -1,9 +1,9 @@
+import { User } from '@/domain/models/User';
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
-import UpdateWorkspaceUserRole from '@/domain/usecases/UpdateWorkspaceUserRole';
-import { User } from '@prisma/client';
-import { badRequest, forbidden, ok } from 'presentation/helpers/httpCodes';
-import { Controller } from 'presentation/protocols/Controller';
-import { IHttpRequest, IHttpResponse } from 'presentation/protocols/Http';
+import IUpdateWorkspaceUserRole from '@/domain/protocols/usecases/IUpdateWorkspaceUserRole';
+import { badRequest, forbidden, ok } from '@/presentation/helpers/httpCodes';
+import { Controller } from '@/presentation/protocols/Controller';
+import { IHttpRequest, IHttpResponse } from '@/presentation/protocols/Http';
 import { z } from 'zod';
 
 const requestParamsSchema = z.object({
@@ -16,9 +16,9 @@ const requestBodySchema = z.object({
 });
 
 export default class PutWorkspaceUserRoleController implements Controller {
-  private updateWorkspaceUserRole: UpdateWorkspaceUserRole;
+  private updateWorkspaceUserRole: IUpdateWorkspaceUserRole;
 
-  constructor(updateWorkspaceUserRole: UpdateWorkspaceUserRole) {
+  constructor(updateWorkspaceUserRole: IUpdateWorkspaceUserRole) {
     this.updateWorkspaceUserRole = updateWorkspaceUserRole;
   }
 

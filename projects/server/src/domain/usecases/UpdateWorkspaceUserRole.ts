@@ -2,12 +2,15 @@ import { User } from '@/domain/models/User';
 import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
+import IUpdateWorkspaceUserRole from '@/domain/protocols/usecases/IUpdateWorkspaceUserRole';
 import { ILoadAccountByEmailRepository } from '@/infra/protocols/repositories/ILoadAccountByEmailRepository';
 import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
 import ILoadWorkspaceById from '@/infra/protocols/repositories/ILoadWorkspaceById';
 import IUpdateWorkspaceUserRoleRepository from '@/infra/protocols/repositories/IUpdateWorkspaceUserRoleRepository';
 
-export default class UpdateWorkspaceUserRole {
+export default class UpdateWorkspaceUserRole
+  implements IUpdateWorkspaceUserRole
+{
   private loadUserRoleRepository: ILoadUserRoleRepository;
   private loadWorkspaceByIdRepository: ILoadWorkspaceById;
   private loadAccountByEmailRepository: ILoadAccountByEmailRepository;
