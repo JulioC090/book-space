@@ -1,19 +1,13 @@
+import IAuthentication, {
+  IAuthenticationInput,
+  IAuthenticationOutput,
+} from '@/domain/protocols/usecases/IAuthentication';
 import { IEncrypter } from 'infra/protocols/cryptography/IEncrypter';
 import { IHashComparer } from 'infra/protocols/cryptography/IHashComparer';
 import { ILoadAccountByEmailRepository } from 'infra/protocols/repositories/ILoadAccountByEmailRepository';
 import { IUpdateAccessTokenRepository } from 'infra/protocols/repositories/IUpdateAccessTokenRepository';
 
-export type AuthenticationInput = {
-  email: string;
-  password: string;
-};
-
-export type AuthenticationOutput = {
-  token: string;
-  name: string;
-} | null;
-
-export default class Authentication {
+export default class Authentication implements IAuthentication {
   private hashComparer: IHashComparer;
   private encrypter: IEncrypter;
   private loadAccountByEmailRepository: ILoadAccountByEmailRepository;
@@ -31,7 +25,7 @@ export default class Authentication {
     this.updateAccessTokenRepository = updateAccessTokenRepository;
   }
 
-  async auth(user: AuthenticationInput): Promise<AuthenticationOutput> {
+  async auth(user: IAuthenticationInput): Promise<IAuthenticationOutput> {
     const account = await this.loadAccountByEmailRepository.loadByEmail(
       user.email,
     );

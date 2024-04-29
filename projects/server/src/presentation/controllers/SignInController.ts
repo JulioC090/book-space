@@ -1,7 +1,7 @@
-import Authentication from 'domain/usecases/Authentication';
-import { badRequest, ok, unauthorized } from 'presentation/helpers/httpCodes';
-import { Controller } from 'presentation/protocols/Controller';
-import { IHttpRequest, IHttpResponse } from 'presentation/protocols/Http';
+import IAuthentication from '@/domain/protocols/usecases/IAuthentication';
+import { badRequest, ok, unauthorized } from '@/presentation/helpers/httpCodes';
+import { Controller } from '@/presentation/protocols/Controller';
+import { IHttpRequest, IHttpResponse } from '@/presentation/protocols/Http';
 import { z } from 'zod';
 
 const requestBodySchema = z.object({
@@ -10,9 +10,9 @@ const requestBodySchema = z.object({
 });
 
 export default class SignInController implements Controller {
-  private authentication: Authentication;
+  private authentication: IAuthentication;
 
-  constructor(authentication: Authentication) {
+  constructor(authentication: IAuthentication) {
     this.authentication = authentication;
   }
 
@@ -22,7 +22,7 @@ export default class SignInController implements Controller {
       return badRequest(validatedRequest.error.issues);
 
     const result = await this.authentication.auth(validatedRequest.data);
-    if (result === null) return unauthorized();
+    if (!result) return unauthorized();
 
     return ok(result);
   }
