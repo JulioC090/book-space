@@ -37,3 +37,7 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-zinc-600
 }
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
