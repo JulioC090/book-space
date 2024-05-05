@@ -1,5 +1,6 @@
 import SpacePrismaRepository from '@/infra/database/prisma/SpacePrismaRepository';
 import { prisma } from '@/infra/database/prisma/prismaClient';
+import timeToDateConverter from '@/presentation/helpers/timeToDateConverter';
 
 jest.mock('@/infra/database/prisma/prismaClient', () => ({
   prisma: {
@@ -230,10 +231,6 @@ describe('SpacePrismaRepository', () => {
       where: { id: spaceId },
       data: {
         ...partialSpace,
-        availabilityRange: {
-          deleteMany: { spaceId },
-          createMany: { data: [] },
-        },
         resources: {
           connectOrCreate: [],
           deleteMany: {
@@ -263,9 +260,52 @@ describe('SpacePrismaRepository', () => {
       where: { id: spaceId },
       data: {
         ...partialSpace,
+        resources: {
+          connectOrCreate: resources.map((resource) => ({
+            where: {
+              spaceId_resourceId: { spaceId, resourceId: resource },
+            },
+            create: { resourceId: resource },
+          })),
+          deleteMany: {
+            spaceId,
+            NOT: resources?.map((resource) => ({ resourceId: resource })),
+          },
+        },
+      },
+    });
+    expect(result).toBeTruthy();
+  });
+
+  test('It should update space with availability successfully', async () => {
+    const spaceId = 'spaceId';
+    const partialSpace = {
+      name: 'newName',
+      availabilityRange: [
+        {
+          weekday: 1,
+          startTime: timeToDateConverter('08:00:00'),
+          endTime: timeToDateConverter('12:00:00'),
+        },
+      ],
+    };
+    const resources = ['resource1', 'resource2'];
+
+    mockUpdate.mockResolvedValue({ count: 1 });
+
+    const result = await spaceRepository.update(
+      spaceId,
+      partialSpace,
+      resources,
+    );
+
+    expect(prisma.space.update).toHaveBeenCalledWith({
+      where: { id: spaceId },
+      data: {
+        ...partialSpace,
         availabilityRange: {
           deleteMany: { spaceId },
-          createMany: { data: [] },
+          createMany: { data: partialSpace.availabilityRange },
         },
         resources: {
           connectOrCreate: resources.map((resource) => ({

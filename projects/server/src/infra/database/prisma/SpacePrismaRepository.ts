@@ -74,9 +74,9 @@ export default class SpacePrismaRepository
       where: { id: spaceId },
       data: {
         ...partialSpace,
-        availabilityRange: {
+        availabilityRange: partialSpace.availabilityRange && {
           deleteMany: { spaceId },
-          createMany: { data: partialSpace.availabilityRange || [] },
+          createMany: { data: partialSpace.availabilityRange },
         },
         resources: {
           connectOrCreate: resources

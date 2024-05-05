@@ -1,4 +1,5 @@
 import PatchSpaceController from '@/presentation/controllers/PatchSpaceController';
+import timeToDateConverter from '@/presentation/helpers/timeToDateConverter';
 
 const mockUpdateSpace = {
   update: jest.fn(),
@@ -60,6 +61,21 @@ describe('PatchSpaceController', () => {
     expect(result.status).toBe(400);
   });
 
+  test('It should return 400 if availability range is invalid', async () => {
+    const request = {
+      params: { workspaceId: 'workspaceId', spaceId: 'spaceId' },
+      body: {
+        name: 'SpaceName',
+        description: 'SpaceDescription',
+        availabilityRange: [
+          { weekday: 1, startTime: '12:00:00', endTime: '08:00:00' },
+        ],
+      },
+    };
+    const result = await patchSpaceController.handle(request);
+    expect(result.status).toBe(400);
+  });
+
   test('It should return 403 if updateSpace operation fails', async () => {
     const request = {
       params: { workspaceId: 'workspaceId', spaceId: 'spaceId' },
@@ -84,7 +100,12 @@ describe('PatchSpaceController', () => {
   test('It should return 200 if updateSpace operation succeeds', async () => {
     const request = {
       params: { workspaceId: 'workspaceId', spaceId: 'spaceId' },
-      body: { name: 'newName' },
+      body: {
+        name: 'newName',
+        availabilityRange: [
+          { weekday: 1, startTime: '08:00:00', endTime: '12:00:00' },
+        ],
+      },
       account: { id: 'userId' },
     };
 
@@ -96,7 +117,16 @@ describe('PatchSpaceController', () => {
       'userId',
       'workspaceId',
       'spaceId',
-      { name: 'newName' },
+      {
+        name: 'newName',
+        availabilityRange: [
+          {
+            weekday: 1,
+            startTime: timeToDateConverter('08:00:00'),
+            endTime: timeToDateConverter('12:00:00'),
+          },
+        ],
+      },
       undefined,
     );
     expect(result.status).toBe(200);
