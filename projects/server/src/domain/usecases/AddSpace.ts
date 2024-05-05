@@ -2,10 +2,11 @@ import Space from '@/domain/models/Space';
 import { User } from '@/domain/models/User';
 import { WorkspacePermissions } from '@/domain/models/WorkspacePermissions';
 import { workspaceRolesPermissions } from '@/domain/models/WorkspaceRolesPermissions';
+import IAddSpace from '@/domain/protocols/usecases/IAddSpace';
 import IAddSpaceRepository from '@/infra/protocols/repositories/IAddSpaceRepository';
 import ILoadUserRoleRepository from '@/infra/protocols/repositories/ILoadUserRoleRepository';
 
-export default class AddSpace {
+export default class AddSpace implements IAddSpace {
   private loadUserRoleRepository: ILoadUserRoleRepository;
   private addSpaceRepository: IAddSpaceRepository;
 
@@ -18,7 +19,7 @@ export default class AddSpace {
   }
 
   async add(
-    authenticatedUser: User,
+    authenticatedUser: Omit<User, 'password'>,
     workspaceId: string,
     space: Omit<Space, 'id'>,
     resources?: Array<string>,

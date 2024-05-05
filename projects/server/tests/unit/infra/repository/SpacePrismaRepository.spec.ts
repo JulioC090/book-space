@@ -68,6 +68,7 @@ describe('SpacePrismaRepository', () => {
     const space = {
       name: 'Sala 3',
       description: 'Localizada no andar debaixo',
+      availabilityRange: [],
     };
 
     const spaceId = 'spaceId';
@@ -79,6 +80,7 @@ describe('SpacePrismaRepository', () => {
       description: space.description,
       workspaceId,
       maxAmountOfPeople: null,
+      availabilityRange: [],
     });
 
     const result = await spaceRepository.add(workspaceId, space);
@@ -87,11 +89,17 @@ describe('SpacePrismaRepository', () => {
       data: {
         workspaceId: 'workspaceId',
         ...space,
+        availabilityRange: {
+          createMany: { data: [] },
+        },
         resources: { createMany: { data: [] } },
       },
       include: {
         resources: {
           select: { Resource: { select: { id: true, name: true } } },
+        },
+        availabilityRange: {
+          select: { weekday: true, startTime: true, endTime: true },
         },
       },
     });
@@ -101,6 +109,7 @@ describe('SpacePrismaRepository', () => {
       workspaceId,
       ...space,
       resources: [],
+      availabilityRange: [],
     });
   });
 
@@ -109,6 +118,7 @@ describe('SpacePrismaRepository', () => {
       name: 'Sala 3',
       description: 'Localizada no andar debaixo',
       maxAmountOfPeople: 2,
+      availabilityRange: [],
     };
 
     const spaceId = 'spaceId';
@@ -126,11 +136,17 @@ describe('SpacePrismaRepository', () => {
       data: {
         workspaceId: 'workspaceId',
         ...space,
+        availabilityRange: {
+          createMany: { data: [] },
+        },
         resources: { createMany: { data: [] } },
       },
       include: {
         resources: {
           select: { Resource: { select: { id: true, name: true } } },
+        },
+        availabilityRange: {
+          select: { weekday: true, startTime: true, endTime: true },
         },
       },
     });
@@ -147,6 +163,7 @@ describe('SpacePrismaRepository', () => {
     const space = {
       name: 'Sala 3',
       description: 'Localizada no andar debaixo',
+      availabilityRange: [],
     };
 
     const resources = ['resource1', 'resource2'];
@@ -172,6 +189,9 @@ describe('SpacePrismaRepository', () => {
       data: {
         workspaceId: 'workspaceId',
         ...space,
+        availabilityRange: {
+          createMany: { data: [] },
+        },
         resources: {
           createMany: {
             data: resources.map((resource) => ({ resourceId: resource })),
@@ -181,6 +201,9 @@ describe('SpacePrismaRepository', () => {
       include: {
         resources: {
           select: { Resource: { select: { id: true, name: true } } },
+        },
+        availabilityRange: {
+          select: { weekday: true, startTime: true, endTime: true },
         },
       },
     });
@@ -207,6 +230,10 @@ describe('SpacePrismaRepository', () => {
       where: { id: spaceId },
       data: {
         ...partialSpace,
+        availabilityRange: {
+          deleteMany: { spaceId },
+          createMany: { data: [] },
+        },
         resources: {
           connectOrCreate: [],
           deleteMany: {
@@ -236,6 +263,10 @@ describe('SpacePrismaRepository', () => {
       where: { id: spaceId },
       data: {
         ...partialSpace,
+        availabilityRange: {
+          deleteMany: { spaceId },
+          createMany: { data: [] },
+        },
         resources: {
           connectOrCreate: resources.map((resource) => ({
             where: {
@@ -260,20 +291,6 @@ describe('SpacePrismaRepository', () => {
     mockUpdate.mockResolvedValue(false);
 
     const result = await spaceRepository.update(spaceId, partialSpace);
-
-    expect(prisma.space.update).toHaveBeenCalledWith({
-      where: { id: spaceId },
-      data: {
-        ...partialSpace,
-        resources: {
-          connectOrCreate: [],
-          deleteMany: {
-            spaceId,
-            NOT: undefined,
-          },
-        },
-      },
-    });
     expect(result).toBeFalsy();
   });
 

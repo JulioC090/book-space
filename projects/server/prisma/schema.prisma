@@ -59,12 +59,13 @@ model Resource {
 }
 
 model Space {
-  id                String           @id @default(uuid())
+  id                String              @id @default(uuid())
   name              String
   description       String
   maxAmountOfPeople Int?
+  availabilityRange SpaceAvailability[]
   workspaceId       String
-  Workspace         Workspace        @relation(fields: [workspaceId], references: [id])
+  Workspace         Workspace           @relation(fields: [workspaceId], references: [id])
   resources         SpaceResources[]
 
   @@map("workspace_spaces")
@@ -78,4 +79,15 @@ model SpaceResources {
 
   @@id([spaceId, resourceId])
   @@map("space_resources")
+}
+
+model SpaceAvailability {
+  spaceId   String
+  weekday   Int
+  startTime DateTime @db.Time()
+  endTime   DateTime @db.Time()
+  Space     Space    @relation(fields: [spaceId], references: [id])
+
+  @@id([spaceId, weekday])
+  @@map("space_availability")
 }

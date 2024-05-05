@@ -128,6 +128,9 @@ export default class WorkspacePrimaRepository
             resources: {
               select: { Resource: { select: { id: true, name: true } } },
             },
+            availabilityRange: {
+              select: { weekday: true, startTime: true, endTime: true },
+            },
           },
         },
         resources: { select: { id: true, name: true } },

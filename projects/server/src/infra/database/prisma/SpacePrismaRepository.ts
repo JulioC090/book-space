@@ -28,6 +28,9 @@ export default class SpacePrismaRepository
       data: {
         workspaceId,
         ...space,
+        availabilityRange: {
+          createMany: { data: space.availabilityRange },
+        },
         resources: {
           createMany: {
             data: resources
@@ -41,6 +44,9 @@ export default class SpacePrismaRepository
       include: {
         resources: {
           select: { Resource: { select: { id: true, name: true } } },
+        },
+        availabilityRange: {
+          select: { weekday: true, startTime: true, endTime: true },
         },
       },
     });
@@ -68,6 +74,10 @@ export default class SpacePrismaRepository
       where: { id: spaceId },
       data: {
         ...partialSpace,
+        availabilityRange: {
+          deleteMany: { spaceId },
+          createMany: { data: partialSpace.availabilityRange || [] },
+        },
         resources: {
           connectOrCreate: resources
             ? resources.map((resource) => ({
