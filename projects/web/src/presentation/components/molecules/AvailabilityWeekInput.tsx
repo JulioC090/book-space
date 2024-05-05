@@ -1,3 +1,5 @@
+import { Availability } from '@/models/Availability';
+import { SpaceAvailability } from '@/models/SpaceAvailability';
 import { ArrowRight } from '@phosphor-icons/react/dist/ssr';
 import clsx from 'clsx';
 import { InputHTMLAttributes, forwardRef, useRef, useState } from 'react';
@@ -21,11 +23,6 @@ const TimeInput = forwardRef<
 
 TimeInput.displayName = 'TimeInput';
 
-type Availability = {
-  startTime?: string;
-  endTime?: string;
-};
-
 export interface AvailabilityInputProps {
   children: React.ReactNode;
   onToggle?(): void;
@@ -47,8 +44,10 @@ function AvailabilityInput({
   };
 
   const handleOnChange = () => {
-    const startTime = startTimeInput.current?.value;
-    const endTime = endTimeInput.current?.value;
+    const startTime =
+      startTimeInput.current?.value && `${startTimeInput.current.value}:00`;
+    const endTime =
+      endTimeInput.current?.value && `${endTimeInput.current.value}:00`;
 
     onChange &&
       onChange({
@@ -85,42 +84,42 @@ function AvailabilityInput({
 }
 
 interface AvailabilityWeekInputProps {
-  onChange?: (value: Array<Availability & { weekDay: number }>) => void;
+  onChange?: (value: Array<SpaceAvailability>) => void;
 }
 
 export default function AvailabilityWeekInput({
   onChange,
 }: AvailabilityWeekInputProps) {
   const [availabilityRanges, setAvailabilityRanges] = useState<
-    Array<Availability & { weekDay: number }>
+    Array<SpaceAvailability>
   >([]);
 
-  const handleToggleAvailability = (weekDay: number) => {
+  const handleToggleAvailability = (weekday: number) => {
     const weekDayIndex = availabilityRanges.findIndex(
-      (value) => weekDay === value.weekDay,
+      (value) => weekday === value.weekday,
     );
 
     if (weekDayIndex === -1) {
       setAvailabilityRanges((prevAvailability) => [
         ...prevAvailability,
-        { weekDay, startTime: '', endTime: '' },
+        { weekday, startTime: '', endTime: '' },
       ]);
+      onChange &&
+        onChange([
+          ...availabilityRanges,
+          { weekday, startTime: '', endTime: '' },
+        ]);
     } else {
       availabilityRanges.splice(weekDayIndex, 1);
       setAvailabilityRanges((prevAvailability) => [...prevAvailability]);
+      onChange && onChange([...availabilityRanges]);
     }
-
-    onChange &&
-      onChange([
-        ...availabilityRanges,
-        { weekDay, startTime: '', endTime: '' },
-      ]);
   };
 
-  const handleOnChange = (weekDay: number, availability: Availability) => {
+  const handleOnChange = (weekday: number, availability: Availability) => {
     const updatedRanges = [...availabilityRanges];
     const weekDayIndex = updatedRanges.findIndex(
-      (value) => weekDay === value.weekDay,
+      (value) => weekday === value.weekday,
     );
     updatedRanges[weekDayIndex] = {
       ...updatedRanges[weekDayIndex],

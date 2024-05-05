@@ -93,6 +93,7 @@ export default function WorkspaceManager() {
                       name: space.name,
                       description: space.description,
                       maxAmountOfPeople: space.maxAmountOfPeople,
+                      availabilityRange: space.availability,
                     },
                     space.resources,
                   )

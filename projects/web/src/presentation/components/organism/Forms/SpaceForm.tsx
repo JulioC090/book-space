@@ -1,6 +1,8 @@
+import { SpaceAvailability } from '@/models/SpaceAvailability';
 import Button from '@/presentation/components/atoms/Button';
 import FormError from '@/presentation/components/atoms/FormError';
 import { MultiSelectionField } from '@/presentation/components/atoms/MultiSelectionField';
+import AvailabilityWeekInput from '@/presentation/components/molecules/AvailabilityWeekInput';
 import TextInputController from '@/presentation/components/molecules/TextInputController';
 import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
 import { Notebook, UsersThree } from '@phosphor-icons/react';
@@ -12,6 +14,7 @@ interface ISpaceFields {
   description: string;
   maxAmountOfPeople?: number;
   resources?: Array<string>;
+  availability?: Array<SpaceAvailability>;
 }
 
 interface SpaceFormProps {
@@ -61,6 +64,7 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
         icon={<Notebook />}
         error={errors.name}
       />
+
       <TextInputController
         {...register('description', {
           required: { value: true, message: 'A descrição é obrigatória' },
@@ -73,6 +77,7 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
         icon={<BookOpen />}
         error={errors.description}
       />
+
       <TextInputController
         {...register('maxAmountOfPeople', {
           min: {
@@ -108,6 +113,13 @@ export default function SpaceForm({ onSpaceSubmit, onSubmit }: SpaceFormProps) {
               removeItem={(itemId) => deleteResource(itemId)}
             />
           );
+        }}
+      />
+      <Controller
+        control={control}
+        name="availability"
+        render={({ field }) => {
+          return <AvailabilityWeekInput onChange={field.onChange} />;
         }}
       />
 
