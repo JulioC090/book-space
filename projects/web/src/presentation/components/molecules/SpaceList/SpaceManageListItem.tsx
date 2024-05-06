@@ -5,7 +5,9 @@ import ActionCard from '@/presentation/components/molecules/ActionCard';
 import BadgeList from '@/presentation/components/molecules/BadgeList';
 import SpaceEditForm from '@/presentation/components/organism/Forms/SpaceEditForm';
 import Modal from '@/presentation/components/organism/Modal';
+import { weekDayList } from '@/presentation/constants/weekDayList';
 import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
+import toTime from '@/presentation/utils/toTime';
 import { NotePencil, TrashSimple } from '@phosphor-icons/react/dist/ssr';
 
 interface SpaceManageListItemProps {
@@ -59,12 +61,32 @@ export default function SpaceManageListItem({
         <p className="text-lg font-bold">{space.name}</p>
         <p className="text-sm text-zinc-400">{space.description}</p>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         {space.maxAmountOfPeople && (
           <p className="text-sm text-zinc-400">
-            Máximo de pessoas: {space.maxAmountOfPeople}
+            <span className="font-semibold text-zinc-50">
+              Máximo de pessoas:{' '}
+            </span>
+            {space.maxAmountOfPeople}
           </p>
         )}
+        {space.availabilityRange!.length > 0 && (
+          <div className="flex flex-col gap-1">
+            <p className="text-sm font-semibold">Disponibilidade:</p>
+            <ul className="list-disc ml-4">
+              {space.availabilityRange &&
+                [...space.availabilityRange]
+                  .sort((a, b) => a.weekday - b.weekday)
+                  .map(({ weekday, startTime, endTime }) => (
+                    <li key={weekday} className="text-sm text-zinc-400">
+                      {weekDayList[weekday as keyof typeof weekDayList]}, das{' '}
+                      {toTime(startTime!)} às {toTime(endTime!)}
+                    </li>
+                  ))}
+            </ul>
+          </div>
+        )}
+
         <BadgeList>
           {space.resources?.map((resource) => (
             <Badge key={resource.id}>{resource.name}</Badge>

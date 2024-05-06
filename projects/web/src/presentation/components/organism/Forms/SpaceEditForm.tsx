@@ -6,11 +6,10 @@ import { MultiSelectionField } from '@/presentation/components/atoms/MultiSelect
 import AvailabilityWeekInput from '@/presentation/components/molecules/AvailabilityWeekInput';
 import TextInputController from '@/presentation/components/molecules/TextInputController';
 import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
+import toTime from '@/presentation/utils/toTime';
 import { ListDashes, Notebook, UsersThree } from '@phosphor-icons/react';
 import { BookOpen } from '@phosphor-icons/react/dist/ssr';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-
-const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
 interface ISpaceFields {
   name: string;
@@ -136,24 +135,16 @@ export default function SpaceEditForm({
         name="availability"
         defaultValue={space.availabilityRange?.map((value) => ({
           weekday: value.weekday,
-          startTime: timeRegex.test(value.startTime!)
-            ? value.startTime!
-            : new Date(value.startTime!).toTimeString().substring(0, 5),
-          endTime: timeRegex.test(value.endTime!)
-            ? value.endTime!
-            : new Date(value.endTime!).toTimeString().substring(0, 5),
+          startTime: toTime(value.startTime!),
+          endTime: toTime(value.endTime!),
         }))}
         render={({ field }) => {
           return (
             <AvailabilityWeekInput
               defaultValue={space.availabilityRange?.map((value) => ({
                 weekday: value.weekday,
-                startTime: timeRegex.test(value.startTime!)
-                  ? value.startTime!
-                  : new Date(value.startTime!).toTimeString().substring(0, 5),
-                endTime: timeRegex.test(value.endTime!)
-                  ? value.endTime!
-                  : new Date(value.endTime!).toTimeString().substring(0, 5),
+                startTime: toTime(value.startTime!),
+                endTime: toTime(value.endTime!),
               }))}
               onChange={field.onChange}
             />
