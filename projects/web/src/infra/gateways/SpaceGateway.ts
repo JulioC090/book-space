@@ -44,6 +44,7 @@ export default class SpaceGateway implements ISpaceGateway {
         name: partialSpace.name,
         description: partialSpace.description,
         maxAmountOfPeople: partialSpace.maxAmountOfPeople,
+        availabilityRange: partialSpace.availabilityRange,
         resources,
       },
     });

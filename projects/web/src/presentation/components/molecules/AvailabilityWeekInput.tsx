@@ -13,7 +13,7 @@ const TimeInput = forwardRef<
 >(({ ...rest }, ref) => {
   return (
     <input
-      className="bg-zinc-900 border-2 px-3 rounded border-zinc-800 w-full hover:bg-zinc-800 hover:border-zinc-700 focus:border-zinc-400 focus:bg-zinc-800 outline-none"
+      className="grow bg-zinc-900 border-2 px-3 rounded border-zinc-800 hover:bg-zinc-800 hover:border-zinc-700 focus:border-zinc-400 focus:bg-zinc-800 outline-none"
       type="time"
       ref={ref}
       {...rest}
@@ -25,16 +25,20 @@ TimeInput.displayName = 'TimeInput';
 
 export interface AvailabilityInputProps {
   children: React.ReactNode;
+  defaultValue?: Availability;
+  toggle?: boolean;
   onToggle?(): void;
   onChange?(value: Availability): void;
 }
 
 function AvailabilityInput({
   children,
+  defaultValue,
+  toggle = false,
   onToggle,
   onChange,
 }: AvailabilityInputProps) {
-  const [isToggle, setIsToggle] = useState<boolean>(false);
+  const [isToggle, setIsToggle] = useState<boolean>(toggle);
   const startTimeInput = useRef<HTMLInputElement>(null);
   const endTimeInput = useRef<HTMLInputElement>(null);
 
@@ -44,10 +48,8 @@ function AvailabilityInput({
   };
 
   const handleOnChange = () => {
-    const startTime =
-      startTimeInput.current?.value && `${startTimeInput.current.value}:00`;
-    const endTime =
-      endTimeInput.current?.value && `${endTimeInput.current.value}:00`;
+    const startTime = startTimeInput.current?.value;
+    const endTime = endTimeInput.current?.value;
 
     onChange &&
       onChange({
@@ -74,9 +76,19 @@ function AvailabilityInput({
       </button>
       {isToggle && (
         <>
-          <TimeInput ref={startTimeInput} onChange={handleOnChange} required />
-          <ArrowRight size={32} />
-          <TimeInput ref={endTimeInput} onChange={handleOnChange} required />
+          <TimeInput
+            ref={startTimeInput}
+            onChange={handleOnChange}
+            required
+            defaultValue={defaultValue?.startTime}
+          />
+          <ArrowRight size={16} />
+          <TimeInput
+            ref={endTimeInput}
+            onChange={handleOnChange}
+            required
+            defaultValue={defaultValue?.endTime}
+          />
         </>
       )}
     </div>
@@ -84,15 +96,23 @@ function AvailabilityInput({
 }
 
 interface AvailabilityWeekInputProps {
+  defaultValue?: Array<SpaceAvailability>;
   onChange?: (value: Array<SpaceAvailability>) => void;
 }
 
 export default function AvailabilityWeekInput({
+  defaultValue,
   onChange,
 }: AvailabilityWeekInputProps) {
   const [availabilityRanges, setAvailabilityRanges] = useState<
     Array<SpaceAvailability>
-  >([]);
+  >(
+    defaultValue?.map((value) => ({
+      ...value,
+      startTime: value.startTime,
+      endTime: value.endTime,
+    })) || [],
+  );
 
   const handleToggleAvailability = (weekday: number) => {
     const weekDayIndex = availabilityRanges.findIndex(
@@ -136,15 +156,23 @@ export default function AvailabilityWeekInput({
         'flex-col': availabilityRanges.length > 0,
       })}
     >
-      {weekDay.map((day, index) => (
-        <AvailabilityInput
-          key={`${day}-${index}`}
-          onToggle={() => handleToggleAvailability(index)}
-          onChange={(value) => handleOnChange(index, value)}
-        >
-          {day}
-        </AvailabilityInput>
-      ))}
+      {weekDay.map((day, index) => {
+        const defaultInputValue = defaultValue?.find(
+          (availability) => availability.weekday === index,
+        );
+
+        return (
+          <AvailabilityInput
+            key={`${day}-${index}`}
+            defaultValue={defaultInputValue}
+            toggle={!!defaultInputValue}
+            onToggle={() => handleToggleAvailability(index)}
+            onChange={(value) => handleOnChange(index, value)}
+          >
+            {day}
+          </AvailabilityInput>
+        );
+      })}
     </div>
   );
 }

@@ -210,7 +210,7 @@ export const MultiSelectionField = forwardRef<
         {(matches.length > 0 || canCreateItem()) && (
           <ComboboxPopover
             gutter={32}
-            className="border-zinc-800 border-2 bg-zinc-900 rounded max-h-72 overflow-y-auto min-w-32"
+            className="border-zinc-800 border-2 bg-zinc-900 rounded max-h-72 overflow-y-auto min-w-32 z-10"
             aria-busy={isPending}
           >
             {matches.map((value) => (

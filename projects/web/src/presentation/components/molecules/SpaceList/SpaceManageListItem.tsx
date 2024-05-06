@@ -41,6 +41,7 @@ export default function SpaceManageListItem({
                   name: spaceField.name,
                   description: spaceField.description,
                   maxAmountOfPeople: spaceField.maxAmountOfPeople,
+                  availabilityRange: spaceField.availability,
                   resources: workspaceResources.resources.filter((resource) =>
                     spaceField.resources?.includes(resource.id),
                   ),

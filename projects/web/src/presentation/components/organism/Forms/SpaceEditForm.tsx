@@ -1,18 +1,23 @@
 import Space from '@/models/Space';
+import { SpaceAvailability } from '@/models/SpaceAvailability';
 import Button from '@/presentation/components/atoms/Button';
 import FormError from '@/presentation/components/atoms/FormError';
 import { MultiSelectionField } from '@/presentation/components/atoms/MultiSelectionField';
+import AvailabilityWeekInput from '@/presentation/components/molecules/AvailabilityWeekInput';
 import TextInputController from '@/presentation/components/molecules/TextInputController';
 import useWorkspaceResource from '@/presentation/hooks/useWorkspaceResource';
 import { ListDashes, Notebook, UsersThree } from '@phosphor-icons/react';
 import { BookOpen } from '@phosphor-icons/react/dist/ssr';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 
+const timeRegex = /^([01]\d|2[0-3]):([0-5]\d)$/;
+
 interface ISpaceFields {
   name: string;
   description: string;
   maxAmountOfPeople?: number;
   resources?: Array<string>;
+  availability?: Array<SpaceAvailability>;
 }
 
 interface SpaceEditFormProps {
@@ -37,7 +42,6 @@ export default function SpaceEditForm({
     useWorkspaceResource();
 
   const handleWorkspaceSubmit: SubmitHandler<ISpaceFields> = async (data) => {
-    console.log(data);
     const response = await onSpaceSubmit(data);
 
     if (!response) {
@@ -122,6 +126,36 @@ export default function SpaceEditForm({
                 return { value: item.id, label: item.name };
               }}
               removeItem={(itemId) => deleteResource(itemId)}
+            />
+          );
+        }}
+      />
+
+      <Controller
+        control={control}
+        name="availability"
+        defaultValue={space.availabilityRange?.map((value) => ({
+          weekday: value.weekday,
+          startTime: timeRegex.test(value.startTime!)
+            ? value.startTime!
+            : new Date(value.startTime!).toTimeString().substring(0, 5),
+          endTime: timeRegex.test(value.endTime!)
+            ? value.endTime!
+            : new Date(value.endTime!).toTimeString().substring(0, 5),
+        }))}
+        render={({ field }) => {
+          return (
+            <AvailabilityWeekInput
+              defaultValue={space.availabilityRange?.map((value) => ({
+                weekday: value.weekday,
+                startTime: timeRegex.test(value.startTime!)
+                  ? value.startTime!
+                  : new Date(value.startTime!).toTimeString().substring(0, 5),
+                endTime: timeRegex.test(value.endTime!)
+                  ? value.endTime!
+                  : new Date(value.endTime!).toTimeString().substring(0, 5),
+              }))}
+              onChange={field.onChange}
             />
           );
         }}

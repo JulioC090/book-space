@@ -18,6 +18,11 @@ export default class SpaceService implements ISpaceService {
     const newSpace: Omit<Space, 'id'> = {
       ...space,
       maxAmountOfPeople: Number(space.maxAmountOfPeople) || undefined,
+      availabilityRange: space.availabilityRange?.map((value) => ({
+        ...value,
+        startTime: `${value.startTime}:00`,
+        endTime: `${value.endTime}:00`,
+      })),
     };
     return await this.spaceGateway.add(workspaceId, newSpace, resources);
   }
@@ -31,6 +36,11 @@ export default class SpaceService implements ISpaceService {
     const updateSpace: Partial<Omit<Space, 'id'>> = {
       ...partialSpace,
       maxAmountOfPeople: Number(partialSpace.maxAmountOfPeople) || null,
+      availabilityRange: partialSpace.availabilityRange?.map((value) => ({
+        ...value,
+        startTime: `${value.startTime}:00`,
+        endTime: `${value.endTime}:00`,
+      })),
     };
     return await this.spaceGateway.update(
       workspaceId,
