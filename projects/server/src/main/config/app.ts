@@ -1,3 +1,4 @@
+import spaceBookingRoute from '@/main/routes/spaceBookingRoute';
 import workspaceResourceRoute from '@/main/routes/workspaceResourceRoute';
 import workspaceSpaceRoute from '@/main/routes/workspaceSpaceRoute';
 import workspaceUserRoute from '@/main/routes/workspaceUserRoute';
@@ -14,6 +15,7 @@ export default function setupApp(opts = {}) {
   app.register(workspaceUserRoute);
   app.register(workspaceSpaceRoute);
   app.register(workspaceResourceRoute);
+  app.register(spaceBookingRoute);
 
   return app;
 }

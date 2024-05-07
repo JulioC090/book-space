@@ -15,6 +15,7 @@ model User {
   password      String
   ownWorkspaces Workspace[]
   workspaces    UsersOnWorkspace[]
+  bookings      Booking[]
 
   @@map("users")
 }
@@ -67,6 +68,7 @@ model Space {
   workspaceId       String
   Workspace         Workspace           @relation(fields: [workspaceId], references: [id])
   resources         SpaceResources[]
+  bookings          Booking[]
 
   @@map("workspace_spaces")
 }
@@ -90,4 +92,17 @@ model SpaceAvailability {
 
   @@id([spaceId, weekday])
   @@map("space_availability")
+}
+
+model Booking {
+  id        String   @id() @default(uuid())
+  userId    String
+  spaceId   String
+  day       DateTime @db.Date
+  startTime DateTime @db.Time()
+  endTime   DateTime @db.Time()
+  User      User     @relation(fields: [userId], references: [id])
+  Space     Space    @relation(fields: [spaceId], references: [id])
+
+  @@map("bookings")
 }

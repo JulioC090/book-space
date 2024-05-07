@@ -1,13 +1,18 @@
 import Space from '@/domain/models/Space';
+import SpaceAvailability from '@/domain/models/SpaceAvailability';
 import { prisma } from '@/infra/database/prisma/prismaClient';
 import IAddSpaceRepository from '@/infra/protocols/repositories/IAddSpaceRepository';
 import ICheckSpaceIsInWorkspaceRepository from '@/infra/protocols/repositories/ICheckSpaceIsInWorkspaceRepository';
+import ICheckUserSpaceAccessRepository from '@/infra/protocols/repositories/ICheckUserSpaceAccessRepository';
 import IDeleteSpaceRepository from '@/infra/protocols/repositories/IDeleteSpaceRepository';
+import ILoadSpaceAvailabilityRepository from '@/infra/protocols/repositories/ILoadSpaceAvailabilityRepository';
 import IUpdateSpaceRepository from '@/infra/protocols/repositories/IUpdateSpaceRepository';
 
 export default class SpacePrismaRepository
   implements
     ICheckSpaceIsInWorkspaceRepository,
+    ICheckUserSpaceAccessRepository,
+    ILoadSpaceAvailabilityRepository,
     IAddSpaceRepository,
     IUpdateSpaceRepository,
     IDeleteSpaceRepository
@@ -17,6 +22,33 @@ export default class SpacePrismaRepository
       where: { AND: [{ workspaceId }, { id: spaceId }] },
     });
     return !!space;
+  }
+
+  async verifyUserAccess(userId: string, spaceId: string): Promise<boolean> {
+    const workspace = await prisma.space.findFirst({
+      where: { id: spaceId },
+      select: { Workspace: true },
+    });
+
+    if (!workspace) return false;
+    if (workspace.Workspace.ownerId === userId) return true;
+
+    const user = await prisma.workspace.findFirst({
+      where: {
+        id: workspace.Workspace.id,
+        users: { some: { userId } },
+      },
+    });
+
+    return !!user;
+  }
+
+  async loadSpaceAvailability(spaceId: string): Promise<SpaceAvailability[]> {
+    const space = await prisma.space.findFirst({
+      where: { id: spaceId },
+      select: { availabilityRange: true },
+    });
+    return space!.availabilityRange;
   }
 
   async add(
