@@ -6,6 +6,7 @@ import ICheckSpaceIsInWorkspaceRepository from '@/infra/protocols/repositories/I
 import ICheckUserSpaceAccessRepository from '@/infra/protocols/repositories/ICheckUserSpaceAccessRepository';
 import IDeleteSpaceRepository from '@/infra/protocols/repositories/IDeleteSpaceRepository';
 import ILoadSpaceAvailabilityRepository from '@/infra/protocols/repositories/ILoadSpaceAvailabilityRepository';
+import ILoadUserSpacesRepository from '@/infra/protocols/repositories/ILoadUserSpacesRepository';
 import IUpdateSpaceRepository from '@/infra/protocols/repositories/IUpdateSpaceRepository';
 
 export default class SpacePrismaRepository
@@ -13,6 +14,7 @@ export default class SpacePrismaRepository
     ICheckSpaceIsInWorkspaceRepository,
     ICheckUserSpaceAccessRepository,
     ILoadSpaceAvailabilityRepository,
+    ILoadUserSpacesRepository,
     IAddSpaceRepository,
     IUpdateSpaceRepository,
     IDeleteSpaceRepository
@@ -49,6 +51,46 @@ export default class SpacePrismaRepository
       select: { availabilityRange: true },
     });
     return space!.availabilityRange;
+  }
+
+  async loadUserSpaces(userId: string): Promise<Space[]> {
+    const workspaces = await prisma.workspace.findMany({
+      where: {
+        OR: [{ ownerId: userId }, { users: { some: { userId } } }],
+      },
+      select: {
+        id: true,
+        name: true,
+        tag: true,
+        spaces: {
+          include: {
+            availabilityRange: true,
+            resources: {
+              select: { Resource: { select: { id: true, name: true } } },
+            },
+          },
+        },
+      },
+    });
+
+    return workspaces.flatMap((workspace) =>
+      workspace.spaces.map((space) => ({
+        id: space.id,
+        name: space.name,
+        description: space.description,
+        maxAmountOfPeople: space.maxAmountOfPeople,
+        resources: space.resources.map((r) => ({
+          id: r.Resource.id,
+          name: r.Resource.name,
+        })),
+        availabilityRange: space.availabilityRange,
+        workspace: {
+          id: workspace.id,
+          name: workspace.name,
+          tag: workspace.tag,
+        },
+      })),
+    );
   }
 
   async add(
