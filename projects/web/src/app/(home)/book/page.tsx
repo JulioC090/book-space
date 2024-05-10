@@ -5,15 +5,22 @@ import Container from '@/presentation/components/atoms/Container';
 import BookSpaceList from '@/presentation/components/molecules/BookSpaceList';
 import ListTemplate from '@/presentation/components/templates/ListTemplate';
 import useSpaces from '@/presentation/hooks/useSpaces';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 export default function SpaceListPage() {
   const { spaces, loadAllSpaces } = useSpaces();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    loadAllSpaces();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    async function fetch() {
+      await loadAllSpaces();
+      setIsLoading(false);
+    }
+
+    fetch(); // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  if (isLoading) return null;
 
   return (
     <Container>
