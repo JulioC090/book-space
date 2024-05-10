@@ -10,6 +10,10 @@ export default class SpaceService implements ISpaceService {
     this.spaceGateway = spaceGateway;
   }
 
+  async loadAll(): Promise<Array<Required<Space>>> {
+    return await this.spaceGateway.loadAll();
+  }
+
   async add(
     workspaceId: string,
     space: Omit<Space, 'id'>,

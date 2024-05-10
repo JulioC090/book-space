@@ -1,6 +1,7 @@
 import Space from '@/models/Space';
 
 export default interface ISpaceService {
+  loadAll(): Promise<Array<Required<Space>>>;
   add(
     workspaceId: string,
     space: Omit<Space, 'id'>,

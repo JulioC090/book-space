@@ -1,5 +1,6 @@
 import { Resource } from '@/models/Resource';
 import { SpaceAvailability } from '@/models/SpaceAvailability';
+import { Workspace } from '@/models/Workspace';
 
 export default interface Space {
   id: string;
@@ -8,4 +9,5 @@ export default interface Space {
   maxAmountOfPeople?: number | null;
   resources?: Array<Resource>;
   availabilityRange?: Array<SpaceAvailability>;
+  workspace?: Omit<Workspace, 'role'>;
 }

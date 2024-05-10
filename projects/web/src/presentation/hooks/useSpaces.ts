@@ -12,6 +12,11 @@ export default function useSpaces() {
     setSpaces(spaces);
   }
 
+  async function loadAllSpaces() {
+    const allSpaces = await spaceService.loadAll();
+    setSpaces(allSpaces);
+  }
+
   async function addSpace(
     workspaceId: string,
     space: Omit<Space, 'id'>,
@@ -60,5 +65,12 @@ export default function useSpaces() {
     return true;
   }
 
-  return { spaces, loadSpaces, addSpace, updateSpace, deleteSpace };
+  return {
+    spaces,
+    loadSpaces,
+    loadAllSpaces,
+    addSpace,
+    updateSpace,
+    deleteSpace,
+  };
 }

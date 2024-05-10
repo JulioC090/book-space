@@ -10,6 +10,14 @@ export default class SpaceGateway implements ISpaceGateway {
   constructor(httpClient: IHttpClient) {
     this.httpClient = httpClient;
   }
+  async loadAll(): Promise<Array<Required<Space>>> {
+    const response = await this.httpClient.get<Array<Required<Space>>>({
+      url: '/spaces',
+    });
+
+    if (!response.body) return [];
+    return response.body!;
+  }
 
   async add(
     workspaceId: string,
