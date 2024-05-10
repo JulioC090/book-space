@@ -1,5 +1,6 @@
 import { User } from '@/domain/models/User';
 import IAddBook from '@/domain/protocols/usecases/IAddBook';
+import { isTimeAfter } from '@/presentation/helpers/compareTime';
 import {
   badRequest,
   created,
@@ -42,7 +43,7 @@ export default class PostBookController implements Controller {
     const startTime = timeToDateConverter(validatedRequestBody.data.startTime);
     const endTime = timeToDateConverter(validatedRequestBody.data.endTime);
 
-    if (startTime.getTime() > endTime.getTime())
+    if (isTimeAfter(startTime, endTime))
       return badRequest({ error: 'Invalid time range' });
 
     const { account } = request as { account: User };
