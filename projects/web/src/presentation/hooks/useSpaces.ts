@@ -1,4 +1,5 @@
 import { makeSpaceService } from '@/main/factories/services/SpaceServiceFactory';
+import Booking from '@/models/Booking';
 import Space from '@/models/Space';
 import { spacesStore } from '@/presentation/stores/spacesStore';
 import { useRecoilState } from 'recoil';
@@ -65,6 +66,13 @@ export default function useSpaces() {
     return true;
   }
 
+  async function bookSpace(
+    spaceId: string,
+    booking: Booking,
+  ): Promise<boolean> {
+    return !!(await spaceService.bookSpace(spaceId, booking));
+  }
+
   return {
     spaces,
     loadSpaces,
@@ -72,5 +80,6 @@ export default function useSpaces() {
     addSpace,
     updateSpace,
     deleteSpace,
+    bookSpace,
   };
 }

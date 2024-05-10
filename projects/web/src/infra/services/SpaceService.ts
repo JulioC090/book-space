@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import ISpaceGateway from '@/infra/protocols/gateways/ISpaceGateway';
 import ISpaceService from '@/infra/protocols/services/ISpaceService';
+import Booking from '@/models/Booking';
 import Space from '@/models/Space';
 
 export default class SpaceService implements ISpaceService {
@@ -56,5 +57,17 @@ export default class SpaceService implements ISpaceService {
 
   async delete(workspaceId: string, spaceId: string): Promise<boolean> {
     return await this.spaceGateway.delete(workspaceId, spaceId);
+  }
+  async bookSpace(
+    spaceId: string,
+    booking: Booking,
+  ): Promise<Required<Booking> | null> {
+    const newBooking: Booking = {
+      ...booking,
+      startTime: `${booking.startTime}:00`,
+      endTime: `${booking.endTime}:00`,
+    };
+
+    return await this.spaceGateway.bookSpace(spaceId, newBooking);
   }
 }

@@ -2,6 +2,7 @@
 import ISpaceGateway from '@/infra/protocols/gateways/ISpaceGateway';
 import IHttpClient from '@/infra/protocols/http/IHttpClient';
 import { HttpCode } from '@/infra/protocols/http/httpCodes';
+import Booking from '@/models/Booking';
 import Space from '@/models/Space';
 
 export default class SpaceGateway implements ISpaceGateway {
@@ -66,5 +67,19 @@ export default class SpaceGateway implements ISpaceGateway {
       params: { workspaceId, spaceId },
     });
     return response.status === HttpCode.OK;
+  }
+
+  async bookSpace(
+    spaceId: string,
+    booking: Booking,
+  ): Promise<Required<Booking> | null> {
+    const response = await this.httpClient.post<Booking, Required<Booking>>({
+      url: '/space/:spaceId/book',
+      params: { spaceId },
+      body: booking,
+    });
+
+    if (response.status !== HttpCode.CREATED) return null;
+    return response.body!;
   }
 }

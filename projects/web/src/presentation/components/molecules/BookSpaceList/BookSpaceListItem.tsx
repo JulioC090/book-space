@@ -1,8 +1,10 @@
 import Space from '@/models/Space';
 import Badge from '@/presentation/components/atoms/Badge';
+import Button from '@/presentation/components/atoms/Button';
 import Card from '@/presentation/components/atoms/Card';
-import LinkButton from '@/presentation/components/atoms/LinkButton';
 import BadgeList from '@/presentation/components/molecules/BadgeList';
+import BookForm from '@/presentation/components/organism/Forms/BookForm';
+import Modal from '@/presentation/components/organism/Modal';
 import { Users } from '@phosphor-icons/react/dist/ssr';
 
 interface BookSpaceListItemProps {
@@ -32,13 +34,13 @@ export default function BookSpaceListItem({ space }: BookSpaceListItemProps) {
             ))}
           </BadgeList>
         </div>
-        <LinkButton
-          href={`/book/${space.id}`}
-          variant="unstyled"
-          className="bg-green-haze-600 text-zinc-200 px-4 py-2 rounded min-w-fit hover:bg-green-haze-500 default-focus focus:bg-green-haze-500"
+        <Modal
+          trigger={<Button>Agendar</Button>}
+          hasForm
+          title={`Agendar ${space.name}`}
         >
-          Agendar
-        </LinkButton>
+          <BookForm spaceId={space.id} availability={space.availabilityRange} />
+        </Modal>
       </Card>
     </li>
   );

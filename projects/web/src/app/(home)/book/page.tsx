@@ -12,7 +12,8 @@ export default function SpaceListPage() {
 
   useEffect(() => {
     loadAllSpaces();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <Container>

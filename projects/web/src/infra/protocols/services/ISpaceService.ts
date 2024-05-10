@@ -1,3 +1,4 @@
+import Booking from '@/models/Booking';
 import Space from '@/models/Space';
 
 export default interface ISpaceService {
@@ -14,4 +15,8 @@ export default interface ISpaceService {
     resources?: Array<string>,
   ): Promise<boolean>;
   delete(workspaceId: string, spaceId: string): Promise<boolean>;
+  bookSpace(
+    spaceId: string,
+    booking: Booking,
+  ): Promise<Required<Booking> | null>;
 }
