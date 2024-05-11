@@ -13,6 +13,12 @@ jest.mock('@/infra/database/prisma/prismaClient', () => ({
     spaceResources: {
       deleteMany: jest.fn(),
     },
+    spaceAvailability: {
+      deleteMany: jest.fn(),
+    },
+    booking: {
+      deleteMany: jest.fn(),
+    },
   },
 }));
 
