@@ -1,7 +1,12 @@
 import { SideMenu } from '@/presentation/components/molecules/SideMenu';
 import SideMenuActionItem from '@/presentation/components/molecules/SideMenu/SideMenuActionItem';
 import { AuthContext } from '@/presentation/contexts/AuthContext';
-import { BookOpen, HouseSimple, SignOut } from '@phosphor-icons/react/dist/ssr';
+import {
+  BookOpen,
+  HouseSimple,
+  Notebook,
+  SignOut,
+} from '@phosphor-icons/react/dist/ssr';
 import { useContext } from 'react';
 
 export default function NavBar() {
@@ -17,6 +22,11 @@ export default function NavBar() {
           icon={<BookOpen />}
           link="/book"
           label="Agendar espaço"
+        />
+        <SideMenu.LinkItem
+          icon={<Notebook />}
+          link="/bookings"
+          label="Agendamentos"
         />
       </SideMenu.List>
       <SideMenu.Footer>
