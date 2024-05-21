@@ -10,7 +10,7 @@ export default class BookingPrismaRepository
   async loadAll(accountId: string): Promise<Booking[]> {
     const bookings = await prisma.booking.findMany({
       where: {
-        AND: [{ userId: accountId }, { startTime: { gte: new Date() } }],
+        AND: [{ userId: accountId }, { day: { gte: new Date() } }],
       },
       orderBy: [{ day: 'asc' }, { startTime: 'asc' }],
       include: {
