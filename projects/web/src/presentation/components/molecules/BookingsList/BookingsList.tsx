@@ -9,6 +9,8 @@ interface BookingsListProps {
 
 const formatDate = (date: string) => {
   const eventDate = new Date(date);
+  eventDate.setDate(eventDate.getDate() + 1);
+
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
