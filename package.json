@@ -5,14 +5,22 @@
   "keywords": [],
   "license": "MIT",
   "scripts": {
-    "pre-commit": "pnpm run --filter \"@book-space/*\" pre-commit",
-    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
-    "lint:fix": "eslint . --fix",
-    "test": "jest --passWithNoTests --runInBand",
-    "test:watch": "npm test -- --detectOpenHandles --watch",
-    "test:staged": "npm test -- --detectOpenHandles --findRelatedTests --forceExit",
-    "test:coverage": "npm test -- --detectOpenHandles --coverage --forceExit",
-    "prepare": "husky"
+    "prepare": "husky",
+    "pre-commit": "turbo run precommit",
+    "start": "turbo run start --parallel",
+    "start:server": "turbo run start --filter=@book-space/server",
+    "start:web": "turbo run start --filter=@book-space/web",
+    "dev": "turbo run dev --parallel",
+    "dev:server": "turbo run dev --filter=@book-space/server",
+    "dev:web": "turbo run dev --filter=@book-space/web",
+    "build": "turbo run build",
+    "build:server": "turbo run build --filter=@book-space/server",
+    "build:web": "turbo run build --filter=@book-space/web",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix --filter=[HEAD]",
+    "test": "turbo run test",
+    "test:watch": "turbo run test:watch",
+    "test:coverage": "turbo run test:coverage"
   },
   "workspaces": [
     "projects/*",
@@ -26,7 +34,8 @@
     "jest": "^29.7.0",
     "jest-mock-extended": "^3.0.6",
     "lint-staged": "^15.2.2",
-    "ts-jest": "^29.1.2"
+    "ts-jest": "^29.1.2",
+    "turbo": "^2.5.3"
   },
   "packageManager": "pnpm@8.15.7"
 }

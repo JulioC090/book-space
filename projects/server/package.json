@@ -4,15 +4,16 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "pre-commit": "npm run typecheck",
     "start": "node ./dist/main/",
-    "dev": "tsx watch ./src/main/index.ts",
     "build": "tsc -p tsconfig.build.json && tsc-alias",
+    "dev": "tsx watch ./src/main/index.ts",
+    "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
+    "lint:fix": "eslint . --fix",
     "test": "jest --passWithNoTests --runInBand",
     "test:watch": "npm test -- --detectOpenHandles --watch",
-    "test:staged": "npm test -- --detectOpenHandles --findRelatedTests --forceExit",
     "test:coverage": "npm test -- --detectOpenHandles --coverage --forceExit",
-    "typecheck": "tsc --noEmit -p .",
-    "pre-commit": "npm run typecheck"
+    "typecheck": "tsc --noEmit -p ."
   },
   "author": "",
   "license": "MIT",
