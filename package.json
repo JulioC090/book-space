@@ -25,7 +25,8 @@
     "db:migrate:dev": "turbo run db:migrate:dev",
     "db:push": "turbo run db:push",
     "db:generate": "turbo run db:generate",
-    "db:studio": "turbo run db:studio"
+    "db:studio": "turbo run db:studio",
+    "typecheck": "turbo run typecheck"
   },
   "workspaces": [
     "projects/*",
