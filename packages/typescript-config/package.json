@@ -1,0 +1,11 @@
+{
+  "name": "@book-space/typescript-config",
+  "version": "1.0.0",
+  "private": true,
+  "exports": {
+    ".": {
+      "default": "./tsconfig.base.json"
+    }
+  },
+  "license": "MIT"
+}

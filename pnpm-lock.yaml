@@ -72,6 +72,8 @@ importers:
         specifier: ^8.32.1
         version: 8.32.1(eslint@9.27.0)(typescript@5.4.5)
 
+  packages/typescript-config: {}
+
   projects/server:
     dependencies:
       '@fastify/cors':
@@ -102,6 +104,9 @@ importers:
       '@book-space/eslint-config':
         specifier: workspace:^
         version: link:../../packages/eslint-config
+      '@book-space/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/bcrypt':
         specifier: ^5.0.2
         version: 5.0.2
@@ -181,6 +186,9 @@ importers:
       '@book-space/eslint-config':
         specifier: workspace:^
         version: link:../../packages/eslint-config
+      '@book-space/typescript-config':
+        specifier: workspace:^
+        version: link:../../packages/typescript-config
       '@types/js-cookie':
         specifier: ^3.0.6
         version: 3.0.6
