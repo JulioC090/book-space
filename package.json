@@ -27,7 +27,6 @@
     "packages/*"
   ],
   "devDependencies": {
-    "@book-space/eslint-config": "workspace:^",
     "@types/jest": "^29.5.12",
     "git-commit-msg-linter": "^5.0.7",
     "husky": "^9.0.11",

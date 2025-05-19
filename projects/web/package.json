@@ -6,7 +6,7 @@
     "start": "next start",
     "build": "next build",
     "dev": "next dev",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc --noEmit -p .",
     "pre-commit": "npm run typecheck"
   },
@@ -20,6 +20,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "axios": "^1.6.8",
     "clsx": "^2.1.0",
+
     "js-cookie": "^3.0.5",
     "match-sorter": "^6.3.4",
     "next": "14.1.4",
@@ -30,6 +31,8 @@
     "tailwind-merge": "^2.3.0"
   },
   "devDependencies": {
+    "@book-space/eslint-config": "workspace:^",
+    "eslint": "^9.27.0",
     "@types/js-cookie": "^3.0.6",
     "@types/node": "^20",
     "@types/react": "^18",
