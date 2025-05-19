@@ -3,7 +3,7 @@
 import { ISignInGatewayInput } from '@/infra/protocols/gateways/ISignInGateway';
 import { makeAuthService } from '@/main/factories/services/AuthServiceFactory';
 import { User } from '@/models/User';
-import useLocalStorage from '@/presentation/hooks/useLocalStorage';
+import { useLocalStorage } from '@/presentation/hooks/useLocalStorage';
 import Cookie from 'js-cookie';
 import { useRouter } from 'next/navigation';
 import { createContext } from 'react';
@@ -24,8 +24,9 @@ const authService = makeAuthService();
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const router = useRouter();
-  const [userInfo, setUserInfo] =
-    useLocalStorage<Omit<User, 'id' | 'password'>>('userInfo');
+  const [userInfo, setUserInfo] = useLocalStorage<
+    Omit<User, 'id' | 'password'> | undefined
+  >('userInfo', undefined);
 
   async function signIn(user: ISignInGatewayInput) {
     const response = await authService.signIn(user);
@@ -39,7 +40,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   async function logout() {
     await authService.logout();
-    setUserInfo();
+    setUserInfo(undefined);
     Cookie.remove('auth_token');
     router.push('/login');
   }

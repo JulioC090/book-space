@@ -1,3 +1,10 @@
 packages:
-  - "packages/**"
-  - "projects/**"
+  - packages/**
+  - projects/**
+onlyBuiltDependencies:
+  - '@prisma/client'
+  - '@prisma/engines'
+  - bcrypt
+  - esbuild
+  - prisma
+  - unrs-resolver
