@@ -48,6 +48,23 @@
     "typecheck": {
       "dependsOn": ["^transit"],
       "cache": true
+    },
+    "db:migrate:deploy": {
+      "cache": false
+    },
+     "db:migrate:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:generate": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
     }
   }
 }

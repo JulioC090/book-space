@@ -1,0 +1,13 @@
+{
+  "extends": "@book-space/typescript-config",
+  "compilerOptions": {
+    "baseUrl": "src",
+    "rootDirs": ["src"],
+    "outDir": "dist",
+    "paths": {
+      "@/*": ["*"]
+    },
+  },
+  "include": ["src"],
+  "exclude": []
+}

@@ -1,6 +1,6 @@
 import { WorkspaceRoles } from '@/domain/models/WorkspaceRoles';
 import IUpdateWorkspaceUserRoleRepository from '@/infra/protocols/repositories/IUpdateWorkspaceUserRoleRepository';
-import { UsersOnWorkspaceRole } from '@prisma/client';
+import { UsersOnWorkspaceRole } from '@book-space/database';
 import Workspace from 'domain/models/Workspace';
 import { prisma } from 'infra/database/prisma/prismaClient';
 import IAddUserToWorkspaceRepository from 'infra/protocols/repositories/IAddUserToWorkspaceRepository';

@@ -2,7 +2,7 @@ import IDeleteSpace from '@/domain/protocols/usecases/IDeleteSpace';
 import { badRequest, forbidden, ok } from '@/presentation/helpers/httpCodes';
 import { Controller } from '@/presentation/protocols/Controller';
 import { IHttpRequest, IHttpResponse } from '@/presentation/protocols/Http';
-import { User } from '@prisma/client';
+import { User } from '@book-space/database';
 import { z } from 'zod';
 
 const requestParamsSchema = z.object({
