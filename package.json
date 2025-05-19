@@ -1,8 +1,6 @@
 {
   "name": "book-space",
   "version": "1.0.0",
-  "description": "",
-  "keywords": [],
   "license": "MIT",
   "scripts": {
     "prepare": "husky",
@@ -28,10 +26,6 @@
     "db:studio": "turbo run db:studio",
     "typecheck": "turbo run typecheck"
   },
-  "workspaces": [
-    "projects/*",
-    "packages/*"
-  ],
   "devDependencies": {
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
