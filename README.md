@@ -1,5 +1,9 @@
 <h1 align="center">Book Space</h1>
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/c2fe8e78-ee77-48f7-9799-dc8aba582158">
+</p>
+
 Um aplicativo de gestão de espaços projetado para simplificar a reserva de diferentes tipos de ambientes em instituições, tais como: salas de reunião, salas de conferências, salas de aula, laboratórios, auditórios, áreas de recreação, salas de estudo, salas de prova e salas de co-working. Os usuários podem verificar a disponibilidade do espaço e efetuar reservas diretamente através do aplicativo, eliminando a necessidade de comunicações complicadas ou planilhas confusas.
 
 ## 📕 Sumário
