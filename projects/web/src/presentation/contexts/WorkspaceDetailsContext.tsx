@@ -6,7 +6,13 @@ import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { WorkspaceContext } from '@/presentation/contexts/WorkspacesContext';
 import { useParams, useRouter } from 'next/navigation';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 interface WorkspaceDetailsContextType {
   workspace?: Required<Workspace>;
@@ -17,6 +23,7 @@ interface WorkspaceDetailsContextType {
   addUser: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   updateUserRole: (userEmail: string, role: WorkspaceRoles) => Promise<boolean>;
   deleteUser: (userEmail: string) => Promise<boolean>;
+  invalidate(): void;
 }
 
 interface WorkspaceDetailsProviderProps {
@@ -34,7 +41,8 @@ export function WorkspaceDetailProvider({
   children,
 }: WorkspaceDetailsProviderProps) {
   const [workspace, setWorkspace] = useState<Required<Workspace>>();
-  const { setIsValid } = useContext(WorkspaceContext);
+  const { setIsValid: setWorkspacesValid } = useContext(WorkspaceContext);
+  const [isValid, setIsValid] = useState<boolean>(false);
   const params = useParams<{ workspaceId: string }>();
   const router = useRouter();
 
@@ -43,10 +51,12 @@ export function WorkspaceDetailProvider({
       const response = await workspaceService.load(params.workspaceId);
       if (!response) router.push('/');
       setWorkspace(response);
+      setIsValid(true);
     }
 
+    if (isValid) return;
     fetchData();
-  }, [params, router]);
+  }, [params, router, isValid]);
 
   async function updateWorkspace(
     workspaceId: string,
@@ -59,7 +69,7 @@ export function WorkspaceDetailProvider({
       ...prevWorkspace!,
       ...partialWorkspace,
     }));
-    setIsValid(false);
+    setWorkspacesValid(false);
     return true;
   }
 
@@ -117,6 +127,10 @@ export function WorkspaceDetailProvider({
     return true;
   }
 
+  const invalidate = useCallback(() => {
+    setIsValid(false);
+  }, [setIsValid]);
+
   return (
     <WorkspaceDetailsContext.Provider
       value={{
@@ -125,6 +139,7 @@ export function WorkspaceDetailProvider({
         addUser,
         updateUserRole,
         deleteUser,
+        invalidate,
       }}
     >
       {children}

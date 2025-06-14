@@ -1,13 +1,16 @@
 import { makeSpaceService } from '@/main/factories/services/SpaceServiceFactory';
 import Booking from '@/models/Booking';
 import Space from '@/models/Space';
+import { WorkspaceDetailsContext } from '@/presentation/contexts/WorkspaceDetailsContext';
 import { spacesStore } from '@/presentation/stores/spacesStore';
+import { useContext } from 'react';
 import { useRecoilState } from 'recoil';
 
 const spaceService = makeSpaceService();
 
 export default function useSpaces() {
   const [spaces, setSpaces] = useRecoilState(spacesStore);
+  const { invalidate } = useContext(WorkspaceDetailsContext);
 
   function loadSpaces(spaces: Array<Space>) {
     setSpaces(spaces);
@@ -26,6 +29,7 @@ export default function useSpaces() {
     const newSpace = await spaceService.add(workspaceId, space, resources);
     if (!newSpace) return false;
     setSpaces((prevSpaces) => [...prevSpaces, newSpace]);
+    invalidate();
     return true;
   }
 
@@ -52,6 +56,7 @@ export default function useSpaces() {
         };
       }),
     );
+    invalidate();
     return true;
   }
 
@@ -63,6 +68,7 @@ export default function useSpaces() {
     setSpaces((prevSpaces) =>
       prevSpaces.filter((space) => space.id !== spaceId),
     );
+    invalidate();
     return true;
   }
 
