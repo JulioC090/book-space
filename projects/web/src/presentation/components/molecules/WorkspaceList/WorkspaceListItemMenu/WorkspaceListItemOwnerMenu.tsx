@@ -3,10 +3,12 @@
 import { Workspace } from '@/models/Workspace';
 import { WorkspaceRoles } from '@/models/WorkspaceRoles';
 import { FloatingMenu } from '@/presentation/components/molecules/FloatingMenu';
+import SpaceForm from '@/presentation/components/organism/Forms/SpaceForm';
 import WorkspaceAddUserForm from '@/presentation/components/organism/Forms/WorkspaceAddUserForm';
 import WorkspaceForm from '@/presentation/components/organism/Forms/WorkspaceForm';
 import Modal from '@/presentation/components/organism/Modal';
 import { WorkspaceContext } from '@/presentation/contexts/WorkspacesContext';
+import useSpaces from '@/presentation/hooks/useSpaces';
 import {
   BookmarkSimple,
   Cards,
@@ -27,6 +29,7 @@ export default function WorkspaceListItemOwnerMenu({
 }: WorkspaceListItemOwnerMenuProps) {
   const { updateWorkspace, deleteWorkspace, addUser } =
     useContext(WorkspaceContext);
+  const { addSpace } = useSpaces();
 
   return (
     <>
@@ -67,10 +70,30 @@ export default function WorkspaceListItemOwnerMenu({
           role={workspace.role}
         />
       </Modal>
-
-      <FloatingMenu.Item icon={<HouseSimple />}>
-        Adicionar Espaço
-      </FloatingMenu.Item>
+      <Modal
+        title="Adicionar Espaço"
+        hasForm
+        trigger={
+          <FloatingMenu.Item icon={<HouseSimple />} hasModal>
+            Adicionar Espaço
+          </FloatingMenu.Item>
+        }
+      >
+        <SpaceForm
+          onSpaceSubmit={(space) =>
+            addSpace(
+              workspace.id,
+              {
+                name: space.name,
+                description: space.description,
+                maxAmountOfPeople: space.maxAmountOfPeople,
+                availabilityRange: space.availability,
+              },
+              space.resources,
+            )
+          }
+        />
+      </Modal>
 
       <FloatingMenu.Separator />
 
