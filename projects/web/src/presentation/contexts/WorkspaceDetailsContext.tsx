@@ -41,7 +41,7 @@ export function WorkspaceDetailProvider({
   useEffect(() => {
     async function fetchData() {
       const response = await workspaceService.load(params.workspaceId);
-      if (!response || response?.role === 'DEFAULT') router.push('/');
+      if (!response) router.push('/');
       setWorkspace(response);
     }
 
