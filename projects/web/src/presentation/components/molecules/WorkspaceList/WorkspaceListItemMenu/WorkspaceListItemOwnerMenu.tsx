@@ -10,10 +10,8 @@ import Modal from '@/presentation/components/organism/Modal';
 import { WorkspaceContext } from '@/presentation/contexts/WorkspacesContext';
 import useSpaces from '@/presentation/hooks/useSpaces';
 import {
-  BookmarkSimple,
   Cards,
   HouseSimple,
-  LinkSimple,
   Notebook,
   TrashSimple,
   User,
@@ -94,13 +92,6 @@ export default function WorkspaceListItemOwnerMenu({
           }
         />
       </Modal>
-
-      <FloatingMenu.Separator />
-
-      <FloatingMenu.Item icon={<LinkSimple />}>Obter Link</FloatingMenu.Item>
-      <FloatingMenu.Item icon={<BookmarkSimple />}>
-        Adicionar Anotação
-      </FloatingMenu.Item>
 
       <FloatingMenu.Separator />
 
